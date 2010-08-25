@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.jboss.weld.BeanManagerImpl;
+import org.jboss.weld.manager.BeanManagerImpl;
 import org.jboss.weld.mock.MockBeanDeploymentArchive;
 import org.jboss.weld.mock.MockDeployment;
 import org.jboss.weld.mock.MockServletLifecycle;

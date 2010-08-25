@@ -93,7 +93,7 @@ public class QuartzStarter implements Extension
      * stored and retrieved from the job details.
      */
     public static final String MANAGER_NAME = "manager";
-    private static final String BEANMAN_CLASSNAME_WEBBEANS = "org.jboss.weld.BeanManagerImpl";
+    private static final String BEANMAN_CLASSNAME_WEBBEANS = "org.jboss.weld.manager.BeanManagerImpl";
     private Scheduler scheduler;
     private Logger log = LoggerFactory.getLogger(QuartzStarter.class);
 
@@ -157,6 +157,7 @@ public class QuartzStarter implements Extension
 
     }
 
+    
     /**
      * Shutdown the scheduler on application close.
      */
