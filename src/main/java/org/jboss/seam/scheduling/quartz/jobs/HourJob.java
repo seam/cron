@@ -34,6 +34,6 @@ public class HourJob extends AbstractTimeEventJob
      */
     protected AbstractTimeEvent createEventPayload()
     {
-        return new Hour(System.currentTimeMillis(), gc.get(GregorianCalendar.MINUTE));
+        return new Hour(System.currentTimeMillis(), gc.get(GregorianCalendar.HOUR_OF_DAY));
     }
 }
