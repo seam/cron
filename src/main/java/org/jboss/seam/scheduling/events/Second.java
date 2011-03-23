@@ -26,6 +26,7 @@ public class Second extends AbstractTimeEvent
     /**
      * Creates an instance of Second using the given value of timeFired.
      * @param timeFired The time at which the event was fired.
+     * @param second The second upon which the event was fired
      */
     public Second(long timeFired, int second)
     {

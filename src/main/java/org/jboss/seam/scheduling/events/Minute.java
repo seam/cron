@@ -26,10 +26,11 @@ public class Minute extends AbstractTimeEvent
     /**
      * Creates an instance of Minute using the given value of timeFired.
      * @param timeFired The time at which the event was fired.
+     * @param minute The minute upon which the event was fired
      */
-    public Minute(long timeFired, int second)
+    public Minute(long timeFired, int minute)
     {
         super(timeFired);
-        this.value = second;
+        this.value = minute;
     }
 }

@@ -26,11 +26,12 @@ public class Hour extends AbstractTimeEvent
     /**
      * Creates an instance of Hour using the given value of timeFired.
      * @param timeFired The time at which the event was fired.
+     * @param hour The hour upon which the event was fired
      */
-    public Hour(long timeFired, int second)
+    public Hour(long timeFired, int hour)
     {
         super(timeFired);
-        this.value = second;
+        this.value = hour;
     }
     
 }
