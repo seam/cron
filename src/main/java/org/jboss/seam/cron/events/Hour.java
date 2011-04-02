@@ -14,33 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.scheduling.exception;
+package org.jboss.seam.cron.events;
+
 
 /**
- * Exception which is thrown when there is a problem with the configuration of
- * the application using Seam Scheduling.
- *
+ * Event that fires every hour.
  * @author Peter Royle
  */
-public class SchedulerConfigurationException extends RuntimeException
+public class Hour
+    extends AbstractTimeEvent
 {
-
     /**
-     * Create a new instance of SchedulerConfigurationException with the given error message.
-     * @param message The error message.
+     * Creates an instance of Hour using the given value of timeFired.
+     * @param timeFired The time at which the event was fired.
+     * @param hour The hour upon which the event was fired
      */
-    public SchedulerConfigurationException(String message)
+    public Hour( long timeFired, int hour )
     {
-        super(message);
-    }
-
-    /**
-     * Create a new instance of ScheudlerConfigurationException with the given error message and cause.
-     * @param message The error message.
-     * @param cause The orginal cause.
-     */
-    public SchedulerConfigurationException(String message, Throwable cause)
-    {
-        super(message, cause);
+        super( timeFired );
+        this.value = hour;
     }
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.scheduling.annotations;
+package org.jboss.seam.cron.annotations;
 
 import javax.enterprise.util.AnnotationLiteral;
 
@@ -22,8 +22,10 @@ import javax.enterprise.util.AnnotationLiteral;
  *
  * @author Peter Royle
  */
-public class ScheduledBinding extends AnnotationLiteral<Scheduled> implements Scheduled {
-
+public class ScheduledBinding
+    extends AnnotationLiteral<Scheduled>
+    implements Scheduled
+{
     private final String value;
 
     /**
@@ -31,7 +33,7 @@ public class ScheduledBinding extends AnnotationLiteral<Scheduled> implements Sc
      * this defaulted 'value' is an invalid scheudle/name and will cause errors
      * during setting up of the schedules if used.
      */
-    public ScheduledBinding()
+    public ScheduledBinding(  )
     {
         value = "unspecified schedule";
     }
@@ -41,11 +43,10 @@ public class ScheduledBinding extends AnnotationLiteral<Scheduled> implements Sc
      * specification/name.
      * @param value The value to be used as the schedule specification/name.
      */
-    public ScheduledBinding(String value)
+    public ScheduledBinding( String value )
     {
         this.value = value;
     }
-
 
     /**
      * The schedule specification (in cron format) or name. If the value is a name,
@@ -53,9 +54,8 @@ public class ScheduledBinding extends AnnotationLiteral<Scheduled> implements Sc
      * /scheduler.properties file on the classpath using the name as the property key.
      * @return the value.
      */
-    public String value()
+    public String value(  )
     {
         return value;
     }
-
 }

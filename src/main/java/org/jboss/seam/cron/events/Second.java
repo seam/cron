@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.scheduling.quartz.jobs;
+package org.jboss.seam.cron.events;
 
-import org.jboss.seam.scheduling.events.AbstractTimeEvent;
-import org.jboss.seam.scheduling.events.Event;
 
 /**
- * Fires the 'Event' event with the current system time.
+ * Event that fires every second.
  * @author Peter Royle
  */
-public class ScheduledEventJob extends AbstractTimeEventJob
+public class Second
+    extends AbstractTimeEvent
 {
-
     /**
-     * Create an event payload instance of type Event with the current system time.
-     * @return an instance of Event.
+     * Creates an instance of Second using the given value of timeFired.
+     * @param timeFired The time at which the event was fired.
+     * @param second The second upon which the event was fired
      */
-    protected AbstractTimeEvent createEventPayload()
+    public Second( long timeFired, int second )
     {
-        return new Event(System.currentTimeMillis());
+        super( timeFired );
+        this.value = second;
     }
 }

@@ -1,1 +1,1 @@
-org.jboss.seam.scheduling.quartz.QuartzStarter
+org.jboss.seam.cron.quartz.QuartzStarter

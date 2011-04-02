@@ -14,7 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.scheduling.events;
+package org.jboss.seam.cron.events;
+
 
 /**
  * Superclass of all scheduled events, be they arbitrarily scheduled or one of the
@@ -29,8 +30,8 @@ package org.jboss.seam.scheduling.events;
  */
 public abstract class AbstractTimeEvent
 {
-
     private long timeFired;
+
     // the value of the second, miute or hour, as the case may be
     protected int value;
 
@@ -38,7 +39,7 @@ public abstract class AbstractTimeEvent
      * Create an instance of some subclass of AbstractTimeEvent using the given timeFired.
      * @param timeFired Represents the time at which the event represented by this instance fired.
      */
-    protected AbstractTimeEvent(long timeFired)
+    protected AbstractTimeEvent( long timeFired )
     {
         this.timeFired = timeFired;
     }
@@ -47,7 +48,7 @@ public abstract class AbstractTimeEvent
      *
      * @return The time at which the event was fired.
      */
-    public long getTimeFired()
+    public long getTimeFired(  )
     {
         return timeFired;
     }
@@ -55,9 +56,9 @@ public abstract class AbstractTimeEvent
     /**
      * @return The value of the second, minute or hour fired.
      */
-    public int getValue()
+    public int getValue(  )
     {
-       return value;
+        return value;
     }
 
     /**
@@ -66,8 +67,8 @@ public abstract class AbstractTimeEvent
      * time at which the event was fired (epoch).
      */
     @Override
-    public String toString()
+    public String toString(  )
     {
-        return getClass().getName() + " fired at " + Long.toString(timeFired);
+        return getClass(  ).getName(  ) + " fired at " + Long.toString( timeFired );
     }
 }

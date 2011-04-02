@@ -14,24 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.scheduling.events;
+package org.jboss.seam.cron.exception;
+
 
 /**
- * Event that fires every second.
+ * Exception thrown when there is a problem starting the Seam Scheduling module.
  * @author Peter Royle
  */
-public class Second extends AbstractTimeEvent
+public class SchedulerInitialisationException
+    extends RuntimeException
 {
-
     /**
-     * Creates an instance of Second using the given value of timeFired.
-     * @param timeFired The time at which the event was fired.
-     * @param second The second upon which the event was fired
+     * Create a new instance of SchedulerInitialisationException with the given error message.
+     * @param message The error message.
      */
-    public Second(long timeFired, int second)
+    public SchedulerInitialisationException( String message )
     {
-        super(timeFired);
-        this.value = second;
+        super( message );
     }
 
+    /**
+     * Create a new instance of SchedulerInitialisationException with the given error message and cause.
+     * @param message The error message.
+     * @param cause The orginal cause of the error.
+     */
+    public SchedulerInitialisationException( String message, Throwable cause )
+    {
+        super( message, cause );
+    }
 }

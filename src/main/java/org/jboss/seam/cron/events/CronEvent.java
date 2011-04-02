@@ -14,25 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.scheduling.quartz.jobs;
+package org.jboss.seam.cron.events;
 
-import java.util.GregorianCalendar;
-import org.jboss.seam.scheduling.events.AbstractTimeEvent;
-import org.jboss.seam.scheduling.events.Second;
 
 /**
- * Fires the Second event with the @Every binding.
+ * Event which fires for arbitrarily-scheduled events.
+ * @see org.jboss.seam.cron.annotations.Scheduled
  * @author Peter Royle
  */
-public class SecondJob extends AbstractTimeEventJob
+public class CronEvent
+    extends AbstractTimeEvent
 {
-
     /**
-     * Create an instance of the Event payload using the current system time.
-     * @return an instance of Event.
+     * Creates an instance of Event using the given value of timeFired.
+     * @param timeFired The time at which the event was fired.
      */
-    protected AbstractTimeEvent createEventPayload()
+    public CronEvent( long timeFired )
     {
-        return new Second(System.currentTimeMillis(), gc.get(GregorianCalendar.SECOND));
+        super( timeFired );
     }
 }
