@@ -14,13 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.scheduling.annotations;
+package org.jboss.seam.cron.quartz.jobs;
 
-import javax.enterprise.util.AnnotationLiteral;
+import org.jboss.seam.cron.events.AbstractTimeEvent;
+import org.jboss.seam.cron.events.CronEvent;
 
 /**
- *
+ * Fires the 'Event' event with the current system time.
  * @author Peter Royle
  */
-public class EveryBinding extends AnnotationLiteral<Every> implements Every {
+public class ScheduledEventJob
+    extends AbstractTimeEventJob
+{
+    /**
+     * Create an event payload instance of type Event with the current system time.
+     * @return an instance of Event.
+     */
+    protected AbstractTimeEvent createEventPayload(  )
+    {
+        return new CronEvent( System.currentTimeMillis(  ) );
+    }
 }

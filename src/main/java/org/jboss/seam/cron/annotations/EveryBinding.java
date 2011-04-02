@@ -14,26 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.scheduling.quartz.jobs;
+package org.jboss.seam.cron.annotations;
 
-import java.util.GregorianCalendar;
-import org.jboss.seam.scheduling.events.AbstractTimeEvent;
-import org.jboss.seam.scheduling.events.Hour;
-
+import javax.enterprise.util.AnnotationLiteral;
 
 /**
- * Fires the Hour event with the @Every binding.
+ *
  * @author Peter Royle
  */
-public class HourJob extends AbstractTimeEventJob
+public class EveryBinding
+    extends AnnotationLiteral<Every>
+    implements Every
 {
-
-    /**
-     * Create an event payload instance of type Hour with the current system time.
-     * @return an instance of Hour.
-     */
-    protected AbstractTimeEvent createEventPayload()
-    {
-        return new Hour(System.currentTimeMillis(), gc.get(GregorianCalendar.HOUR_OF_DAY));
-    }
 }

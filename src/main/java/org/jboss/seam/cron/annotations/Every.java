@@ -14,28 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.scheduling;
+package org.jboss.seam.cron.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
 import javax.inject.Qualifier;
-import org.jboss.seam.scheduling.annotations.Scheduled;
 
 /**
- * A typesafe representation of the schedule named "test.one" for use as a binding
- * type for observervers of Event (instead of using the @Scheduled annotation directly).
- * This is achieved by creating an otherwise standard binding type which is also annotated with the
- * @Scheduled anotation specifying the schedule specification in cron format or the name
- * of the schedule.
- * 
+ * The annotation which accompanies scheduled events which observe
+ * every event in a particular schedule. Eg:
+ * <code>public void doSomething( @Observes @Every Minute min )</code> will
+ * observe the event fired every minute.
  * @author Peter Royle
  */
-@Scheduled("test.one")
 @Qualifier
-@Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD, ElementType.TYPE })
-public @interface Frequent
+@Retention( RetentionPolicy.RUNTIME )
+@Target( {ElementType.PARAMETER,
+    ElementType.METHOD,
+    ElementType.FIELD,
+    ElementType.TYPE
+} )
+public @interface Every
 {
 }

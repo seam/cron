@@ -14,13 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.scheduling.util;
+package org.jboss.seam.cron.util;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * A singleton instance of the properties read from the /schedule.properties
@@ -29,29 +30,31 @@ import org.slf4j.LoggerFactory;
  */
 public class SchedulePropertiesManager
 {
-
     /**
      * The path on the classpath at which the properties file cotaining named schedules is expected to be found.
      */
     public static final String SCHEDULE_PROPERTIES_PATH = "/scheduler.properties";
-    
     private Properties scheduleProperties = null;
     private static SchedulePropertiesManager instance = null;
-    private Logger log = LoggerFactory.getLogger(SchedulePropertiesManager.class);
+    private Logger log = LoggerFactory.getLogger( SchedulePropertiesManager.class );
 
     /**
      * Return a singleton instance of this class, creating the instance if necessary.
      * @return the singleton instance of this class.
      */
-    public static SchedulePropertiesManager instance()
+    public static SchedulePropertiesManager instance(  )
     {
-        if (instance == null) {
-            synchronized (SCHEDULE_PROPERTIES_PATH) {
-                if (instance == null) {
-                    instance = new SchedulePropertiesManager();
+        if ( instance == null )
+        {
+            synchronized ( SCHEDULE_PROPERTIES_PATH )
+            {
+                if ( instance == null )
+                {
+                    instance = new SchedulePropertiesManager(  );
                 }
             }
         }
+
         return instance;
     }
 
@@ -59,19 +62,25 @@ public class SchedulePropertiesManager
      * Creates a new instance of SchedulePropertiesManager, reading the named schedules
      * properties file if found.
      */
-    public SchedulePropertiesManager()
+    public SchedulePropertiesManager(  )
     {
-        scheduleProperties = new Properties();
-        final InputStream schedPropsIS = this.getClass().getResourceAsStream(SCHEDULE_PROPERTIES_PATH);
-        if (schedPropsIS != null) {
-            try {
-                scheduleProperties.load(schedPropsIS);
-            } catch (IOException ex) {
-                log.error("Error loading properties file for named schedules at " + SCHEDULE_PROPERTIES_PATH, ex);
+        scheduleProperties = new Properties(  );
+
+        final InputStream schedPropsIS = this.getClass(  ).getResourceAsStream( SCHEDULE_PROPERTIES_PATH );
+
+        if ( schedPropsIS != null )
+        {
+            try
+            {
+                scheduleProperties.load( schedPropsIS );
+            } catch ( IOException ex )
+            {
+                log.error( "Error loading properties file for named schedules at " + SCHEDULE_PROPERTIES_PATH, ex );
             }
-        } else {
-            log.warn("No named schedule configurations found (" + SCHEDULE_PROPERTIES_PATH +
-                    " not found on classpath).");
+        } else
+        {
+            log.warn( "No named schedule configurations found (" + SCHEDULE_PROPERTIES_PATH +
+                      " not found on classpath)." );
         }
     }
 
@@ -79,7 +88,7 @@ public class SchedulePropertiesManager
      *
      * @return the scheduleProperties.
      */
-    public Properties getScheduleProperties()
+    public Properties getScheduleProperties(  )
     {
         return scheduleProperties;
     }

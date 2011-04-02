@@ -14,25 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.scheduling.quartz.jobs;
+package org.jboss.seam.cron.quartz.jobs;
+
+import org.jboss.seam.cron.events.AbstractTimeEvent;
+import org.jboss.seam.cron.events.Minute;
 
 import java.util.GregorianCalendar;
-import org.jboss.seam.scheduling.events.AbstractTimeEvent;
-import org.jboss.seam.scheduling.events.Minute;
 
 /**
  * Fires the Minute event with the @Every binding.
  * @author Peter Royle
  */
-public class MinuteJob extends AbstractTimeEventJob
+public class MinuteJob
+    extends AbstractTimeEventJob
 {
-
     /**
      *Create an event payload instance of type Minute with the current system time.
      * @return an instance of Minute.
      */
-    protected AbstractTimeEvent createEventPayload()
+    protected AbstractTimeEvent createEventPayload(  )
     {
-        return new Minute(System.currentTimeMillis(), gc.get(GregorianCalendar.MINUTE));
+        return new Minute( System.currentTimeMillis(  ),
+                           gc.get( GregorianCalendar.MINUTE ) );
     }
 }

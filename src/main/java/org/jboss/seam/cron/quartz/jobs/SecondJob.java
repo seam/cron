@@ -14,31 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.scheduling.exception;
+package org.jboss.seam.cron.quartz.jobs;
+
+import org.jboss.seam.cron.events.AbstractTimeEvent;
+import org.jboss.seam.cron.events.Second;
+
+import java.util.GregorianCalendar;
 
 /**
- * Exception thrown when there is a problem starting the Seam Scheduling module.
+ * Fires the Second event with the @Every binding.
  * @author Peter Royle
  */
-public class SchedulerInitialisationException extends RuntimeException
+public class SecondJob
+    extends AbstractTimeEventJob
 {
-
     /**
-     * Create a new instance of SchedulerInitialisationException with the given error message.
-     * @param message The error message.
+     * Create an instance of the Event payload using the current system time.
+     * @return an instance of Event.
      */
-    public SchedulerInitialisationException(String message)
+    protected AbstractTimeEvent createEventPayload(  )
     {
-        super(message);
-    }
-
-    /**
-     * Create a new instance of SchedulerInitialisationException with the given error message and cause.
-     * @param message The error message.
-     * @param cause The orginal cause of the error.
-     */
-    public SchedulerInitialisationException(String message, Throwable cause)
-    {
-        super(message, cause);
+        return new Second( System.currentTimeMillis(  ),
+                           gc.get( GregorianCalendar.SECOND ) );
     }
 }

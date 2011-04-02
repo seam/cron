@@ -14,23 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.scheduling.events;
+package org.jboss.seam.cron.events;
+
 
 /**
  * Event that fires every minute.
  * @author Peter Royle
  */
-public class Minute extends AbstractTimeEvent
+public class Minute
+    extends AbstractTimeEvent
 {
-
     /**
      * Creates an instance of Minute using the given value of timeFired.
      * @param timeFired The time at which the event was fired.
      * @param minute The minute upon which the event was fired
      */
-    public Minute(long timeFired, int minute)
+    public Minute( long timeFired, int minute )
     {
-        super(timeFired);
+        super( timeFired );
         this.value = minute;
     }
 }
