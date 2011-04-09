@@ -1,17 +1,17 @@
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jboss.seam.cron</groupId>
 	<artifactId>seam-cron</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>3.0.0-SNAPSHOT</version>
 	<name>Seam Scheduling Module</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
-		<!-- Current Arquillian version -->
+		<seam.version>3.0.0.Final</seam.version>
 		<arquillian.version>1.0.0.Alpha5</arquillian.version>
+		<slf4j.version>1.5.11</slf4j.version>
 	</properties>
 
 	<!-- Dependency management, including extra repositories if needed -->
@@ -42,10 +42,43 @@
 		</plugins>
 	</build>
 
+	<dependencyManagement>
+
+		<dependencies>
+			<dependency>
+				<groupId>org.jboss.seam</groupId>
+				<artifactId>seam-bom</artifactId>
+				<version>${seam.version}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
+
 		<dependency>
 			<groupId>javax.enterprise</groupId>
 			<artifactId>cdi-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.jboss.weld</groupId>
+			<artifactId>weld-api</artifactId>
+			<version>1.1.Final</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.5.11</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.spec.javax.interceptor</groupId>
+			<artifactId>jboss-interceptors-api_1.1_spec</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -60,8 +93,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
+			<groupId>org.jboss.seam.solder</groupId>
+			<artifactId>seam-solder</artifactId>
+			<version>3.0.0.CR1</version>
 		</dependency>
 
 		<dependency>
@@ -75,6 +109,7 @@
 		<dependency>
 			<groupId>org.jboss.weld.se</groupId>
 			<artifactId>weld-se</artifactId>
+			<version>1.1.0.Final</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -95,18 +130,6 @@
 			<version>${arquillian.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.jboss.weld</groupId>
-				<artifactId>weld-core-bom</artifactId>
-				<version>1.1.0.Final</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 </project>
 

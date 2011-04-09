@@ -29,6 +29,7 @@ import java.util.Date;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import javax.inject.Inject;
 
 /**
  * Test all events, but minute and hour (to shorten test time).
@@ -45,10 +46,14 @@ public class DummyBean
     private boolean firedCorrectly = true;
     private boolean everySecondEventObserved = false;
 
-    public void onSchedule( @Observes
-    @Scheduled( "*/5 * * ? * *" )
-    CronEvent event )
+    @Inject EmptySessionScopedBean sessionScopedBean;
+    @Inject EmptyRequestScopedBean requestScopedBean;
+    
+    public void onSchedule( @Observes  @Scheduled( "*/5 * * ? * *" ) CronEvent event )
     {
+    	sessionScopedBean.sayHello();
+    	requestScopedBean.sayHello();
+    	
         Calendar c = Calendar.getInstance(  );
         c.setTimeInMillis( event.getTimeFired(  ) );
         firedCorrectly = firedCorrectly & ( ( c.get( Calendar.SECOND ) % 5 ) == 0 );
@@ -56,10 +61,11 @@ public class DummyBean
         this.scheduledEventObserved = true;
     }
 
-    public void onNamedSchedule( @Observes
-    @Scheduled( "test.one" )
-    CronEvent event )
+    public void onNamedSchedule( @Observes  @Scheduled( "test.one" ) CronEvent event )
     {
+    	sessionScopedBean.sayHello();
+    	requestScopedBean.sayHello();
+    	
         Calendar c = Calendar.getInstance(  );
         c.setTimeInMillis( event.getTimeFired(  ) );
         firedCorrectly = firedCorrectly & ( ( c.get( Calendar.SECOND ) % 5 ) == 0 );
@@ -67,10 +73,11 @@ public class DummyBean
         this.namedEventObserved = true;
     }
 
-    public void onTypesafeSchedule( @Observes
-    @Frequent
-    CronEvent event )
+    public void onTypesafeSchedule( @Observes @Frequent CronEvent event )
     {
+    	sessionScopedBean.sayHello();
+    	requestScopedBean.sayHello();
+    	
         Calendar c = Calendar.getInstance(  );
         c.setTimeInMillis( event.getTimeFired(  ) );
         firedCorrectly = firedCorrectly & ( ( c.get( Calendar.SECOND ) % 5 ) == 0 );
@@ -78,10 +85,11 @@ public class DummyBean
         this.typesafeEventObserved = true;
     }
 
-    public void onEverySecondSchedule( @Observes
-    @Every
-    Second event )
+    public void onEverySecondSchedule( @Observes @Every Second event )
     {
+    	sessionScopedBean.sayHello();
+    	requestScopedBean.sayHello();
+    	
         log.info( "Every second event fired at " + new Date( event.getTimeFired(  ) ) );
         this.everySecondEventObserved = true;
     }
