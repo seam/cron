@@ -50,7 +50,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Observer;
 import java.util.Properties;
@@ -66,6 +65,8 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeShutdown;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ObserverMethod;
+import javax.enterprise.inject.spi.ProcessObserverMethod;
+import org.jboss.seam.cron.events.CronEvent;
 
 /**
  * Methods of this class are called at various stages of the JSR-299 initialisation
@@ -105,7 +106,9 @@ public class QuartzStarter
      * stored and retrieved from the job details.
      */
     public static final String MANAGER_NAME = "manager";
-    private static final String BEANMAN_CLASSNAME_WEBBEANS = "org.jboss.weld.manager.BeanManagerImpl";
+    
+    private final Set<ObserverMethod<? super CronEvent>> cronEventObservers = new HashSet<ObserverMethod<? super CronEvent>>();
+    
     private Scheduler scheduler;
     private Logger log = LoggerFactory.getLogger( QuartzStarter.class );
 
@@ -192,6 +195,10 @@ public class QuartzStarter
         }
     }
 
+    public void registerCronEventObserver(@Observes ProcessObserverMethod pom) {
+       cronEventObservers.add(pom.getObserverMethod());
+    }
+    
     /**
      * @return the scheduler
      */
@@ -199,32 +206,6 @@ public class QuartzStarter
     public Scheduler getScheduler(  )
     {
         return scheduler;
-    }
-
-    private List<ObserverMethod<?>> getRegisteredObservers( BeanManager manager )
-                                                    throws SchedulerInitialisationException
-    {
-        // TODO(PR): can we remove this compile-time dependency on WebBeans' EventObserver<?> using reflection? Also if we could loose ConcurrentSetMultiMap that would be good.
-        final List<ObserverMethod<?>> registeredObservers;
-
-        if ( manager.getClass(  ).getName(  ).equals( BEANMAN_CLASSNAME_WEBBEANS ) )
-        {
-            try
-            {
-                registeredObservers = (List<ObserverMethod<?>>) manager.getClass(  ).getDeclaredMethod( "getObservers" )
-                                                                       .invoke( manager );
-            } catch ( Exception ex )
-            {
-                throw new SchedulerInitialisationException( "Error gettng list of observers from BeanManager (Web Beans implementstion)",
-                                                            ex );
-            }
-        } else
-        {
-            throw new SchedulerInitialisationException( "Unknown BeanManager implementation: " + manager.getClass(  ) +
-                                                        ". Please raise this as a feature request, stating the JSR-299 implementation in use if possible." );
-        }
-
-        return registeredObservers;
     }
 
     private String lookupNamedScheduleIfNecessary( final String scheduleSpec )
@@ -338,11 +319,10 @@ public class QuartzStarter
     private void scheduleScheduledEvents( BeanManager manager, Date startTime )
                                   throws SchedulerException, SchedulerInitialisationException, ParseException
     {
-        final List<ObserverMethod<?>> registeredObservers = getRegisteredObservers( manager );
         Map<String, Set<Annotation>> schedulesFound = new HashMap<String, Set<Annotation>>(  );
 
         // collect the set of unique schedule specifications
-        for ( ObserverMethod<?> obsMeth : registeredObservers )
+        for ( ObserverMethod<?> obsMeth : cronEventObservers )
         {
             for ( Object bindingObj : obsMeth.getObservedQualifiers(  ) )
             {
@@ -363,7 +343,7 @@ public class QuartzStarter
                     }
                 }
 
-                // if we've found an arbitrarily scheduled event, record it's bindings against
+                // if we've found an arbitrarily scheduled event, record its bindings against
                 // the cron formatted schedule specification so that it can be fired according
                 // to the apropriate schedule.
                 if ( schedBinding != null )

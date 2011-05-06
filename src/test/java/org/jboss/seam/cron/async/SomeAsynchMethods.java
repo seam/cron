@@ -1,0 +1,53 @@
+/**
+ * JBoss, Home of Professional Open Source
+ * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * contributors by the @authors tag. See the copyright.txt in the
+ * distribution for a full listing of individual contributors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.jboss.seam.cron.async;
+
+import java.util.concurrent.atomic.AtomicInteger;
+import org.jboss.seam.cron.annotations.Asynchronous;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ *
+ * @author Peter Royle
+ */
+@Asynchronous
+public class SomeAsynchMethods
+{
+
+   public static AtomicInteger count = new AtomicInteger(0);
+   public static final int NUM_LOOPS = 2;
+   public static final int SLEEP_PER_LOOP = 1000;
+   private static Logger log = LoggerFactory.getLogger(SomeAsynchMethods.class);
+
+   public void increment()
+   {
+      for (int i = 0; i < NUM_LOOPS; i++)
+      {
+         int c = count.incrementAndGet();
+         System.out.println("Count: " + c);
+         try
+         {
+            Thread.sleep(SLEEP_PER_LOOP);
+         } catch (InterruptedException ex)
+         {
+            log.error("Interrupted while sleeping", ex);
+         }
+      }
+   }
+
+}

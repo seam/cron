@@ -30,7 +30,6 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.cron.quartz.QuartzStarter;
 import org.jboss.shrinkwrap.api.ArchivePaths;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.ByteArrayAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
