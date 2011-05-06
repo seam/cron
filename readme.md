@@ -20,14 +20,15 @@ Here's a glimpse of what's possible:
     {
     }
 
-Instead of `"00:00"` you could instead use full cron-style syntax (eg: `@Scheduled("0 0 0 ? * *")`)
+Instead of `"00:00"` you could use full cron-style syntax (eg: `@Scheduled("0 0 0 ? * *")`)
 or you could use an arbitrary name (eg: `@Scheduled("at.midnight")`), which would then 
 be resolved into a time using the `scheduler.properties` file at the root of your classpath:
 
+    # scheduler.properties
     at.midnight=00:00
 
-Alternatively you could just put the schedule definition directly into the @Scheduled 
-annotation, but that would be a rather masochistic thing to do.
+Alternatively you could just put the schedule definition directly into the `@Scheduled` 
+annotation on the method to be scheduled, but that would be a rather masochistic thing to do.
 
 ## MEH. What else you got?
 
