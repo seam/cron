@@ -6,19 +6,19 @@ Glad you asked. Seam Cron is a CDI portable extension which allows you to
 elegantly execute scheduled and asynchronous methods from your CDI project.
 Here's a glimpse of what's possible:
 
-public void howlAtTheMoon(@Observes @AtMidnight CronEvent event) {
+`public void howlAtTheMoon(@Observes @AtMidnight CronEvent event) {
     wolf.howl();
-}
+}`
 
-@AtMidnight is a CDI-style custom qualifier which might look a little like this:
+`@AtMidnight` is a CDI-style custom qualifier which might look a little like this:
 
-@Scheduled("00:00")
+`@Scheduled("00:00")
 @Qualifier
 @Retention( RUNTIME )
 @Target( { PARAMETER })
 public @interface AtMidnight
 {
-}
+}`
 
 Instead of "00:00" you could instead use full cron-style syntax (eg: @Scheduled("0 0 0 ? * *"))
 or you could use an arbitrary name (eg: @Scheduled("at.midnight")), which would then 
@@ -47,7 +47,7 @@ public void initiateRatherDrawnOutMissileLaunchSequence() {
     missile.launchViaSOAPWebServicesDeployedOnAPentiumIIRunningWindowsNTAndNortonAntiVirus();
 }
 
-## ENOUGH!! How do get it?
+## ENOUGH!! How do get I it?
 
 Well it's alpha software so it's not available in any Maven repository just yet.
 I know I know, it's a crime. But you can install it into your local maven repository in just

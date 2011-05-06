@@ -78,7 +78,7 @@ public class AsynchronousTest implements Serializable
       Assert.assertTrue(SomeAsynchMethods.count.get() >= 0);
       Assert.assertTrue(SomeAsynchMethods.count.get() < NUM_EXECUTIONS * SomeAsynchMethods.NUM_LOOPS);
 
-      // Now if we wait for long enough, all of the inrements should have been completed.
+      // Now if we wait for long enough, all of the increments should have been completed.
       try {
          Thread.sleep(SLEEP_PER_LOOP * NUM_LOOPS + 1000);
       } catch (InterruptedException ie) {

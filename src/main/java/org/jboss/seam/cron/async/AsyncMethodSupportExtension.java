@@ -30,7 +30,6 @@ public class AsyncMethodSupportExtension implements Extension
 
    public void startJobs(@Observes BeforeBeanDiscovery event, BeanManager manager)
    {
-      System.out.println("Registering interceptor");
       event.addAnnotatedType(manager.createAnnotatedType(AsynchronousInterceptor.class));
    }
 }
