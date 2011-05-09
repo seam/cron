@@ -16,6 +16,7 @@
  */
 package org.jboss.seam.cron.annotations;
 
+import java.lang.annotation.Inherited;
 import static java.lang.annotation.ElementType.*;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -29,6 +30,7 @@ import javax.interceptor.InterceptorBinding;
  * 
  * @author Peter Royle
  */
+@Inherited
 @InterceptorBinding
 @Retention( RUNTIME )
 @Target( {METHOD, TYPE} )
