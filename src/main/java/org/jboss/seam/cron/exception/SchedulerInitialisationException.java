@@ -19,27 +19,27 @@ package org.jboss.seam.cron.exception;
 
 /**
  * Exception thrown when there is a problem starting the Seam Scheduling module.
+ *
  * @author Peter Royle
  */
 public class SchedulerInitialisationException
-    extends RuntimeException
-{
+        extends RuntimeException {
     /**
      * Create a new instance of SchedulerInitialisationException with the given error message.
+     *
      * @param message The error message.
      */
-    public SchedulerInitialisationException( String message )
-    {
-        super( message );
+    public SchedulerInitialisationException(String message) {
+        super(message);
     }
 
     /**
      * Create a new instance of SchedulerInitialisationException with the given error message and cause.
+     *
      * @param message The error message.
-     * @param cause The orginal cause of the error.
+     * @param cause   The orginal cause of the error.
      */
-    public SchedulerInitialisationException( String message, Throwable cause )
-    {
-        super( message, cause );
+    public SchedulerInitialisationException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

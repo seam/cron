@@ -19,19 +19,19 @@ package org.jboss.seam.cron.events;
 
 /**
  * Event that fires every hour.
+ *
  * @author Peter Royle
  */
 public class Hour
-    extends AbstractTimeEvent
-{
+        extends AbstractTimeEvent {
     /**
      * Creates an instance of Hour using the given value of timeFired.
+     *
      * @param timeFired The time at which the event was fired.
-     * @param hour The hour upon which the event was fired
+     * @param hour      The hour upon which the event was fired
      */
-    public Hour( long timeFired, int hour )
-    {
-        super( timeFired );
+    public Hour(long timeFired, int hour) {
+        super(timeFired);
         this.value = hour;
     }
 }

@@ -24,24 +24,23 @@ package org.jboss.seam.cron.exception;
  * @author Peter Royle
  */
 public class SchedulerConfigurationException
-    extends RuntimeException
-{
+        extends RuntimeException {
     /**
      * Create a new instance of SchedulerConfigurationException with the given error message.
+     *
      * @param message The error message.
      */
-    public SchedulerConfigurationException( String message )
-    {
-        super( message );
+    public SchedulerConfigurationException(String message) {
+        super(message);
     }
 
     /**
      * Create a new instance of ScheudlerConfigurationException with the given error message and cause.
+     *
      * @param message The error message.
-     * @param cause The orginal cause.
+     * @param cause   The orginal cause.
      */
-    public SchedulerConfigurationException( String message, Throwable cause )
-    {
-        super( message, cause );
+    public SchedulerConfigurationException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

@@ -19,24 +19,25 @@ package org.jboss.seam.cron.async;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
+
 import org.jboss.seam.cron.annotations.Asynchronous;
 
 /**
  * Interceptor for asynchronous methods. Method may be directly marked as
- * @Asnychronous or may exist on a type marked as @Asynchronous.
- * 
+ *
  * @author Peter Royle
+ * @Asnychronous or may exist on a type marked as @Asynchronous.
  */
-@Asynchronous @Interceptor
-public class AsynchronousInterceptor
-{
+@Asynchronous
+@Interceptor
+public class AsynchronousInterceptor {
 
-   @AroundInvoke public Object executeAsynchronously(InvocationContext ctx) throws Exception
-   {
-      Thread thread = new Thread(new InvocationContextRunner(ctx));
-      thread.start();
-      //ctx.proceed();
-      // TODO: (PR): What to return here? The future?
-      return null;
-   }
+    @AroundInvoke
+    public Object executeAsynchronously(InvocationContext ctx) throws Exception {
+        Thread thread = new Thread(new InvocationContextRunner(ctx));
+        thread.start();
+        //ctx.proceed();
+        // TODO: (PR): What to return here? The future?
+        return null;
+    }
 }

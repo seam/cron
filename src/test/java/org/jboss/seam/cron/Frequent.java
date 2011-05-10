@@ -20,6 +20,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
 import javax.inject.Qualifier;
 
 import org.jboss.seam.cron.annotations.Scheduled;
@@ -28,15 +29,14 @@ import org.jboss.seam.cron.annotations.Scheduled;
  * A typesafe representation of the schedule named "test.one" for use as a binding
  * type for observervers of Event (instead of using the @Scheduled annotation directly).
  * This is achieved by creating an otherwise standard binding type which is also annotated with the
+ *
+ * @author Peter Royle
  * @Scheduled anotation specifying the schedule specification in cron format or the name
  * of the schedule.
- * 
- * @author Peter Royle
  */
 @Scheduled("test.one")
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD, ElementType.TYPE })
-public @interface Frequent
-{
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD, ElementType.TYPE})
+public @interface Frequent {
 }

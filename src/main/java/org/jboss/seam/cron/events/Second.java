@@ -19,19 +19,19 @@ package org.jboss.seam.cron.events;
 
 /**
  * Event that fires every second.
+ *
  * @author Peter Royle
  */
 public class Second
-    extends AbstractTimeEvent
-{
+        extends AbstractTimeEvent {
     /**
      * Creates an instance of Second using the given value of timeFired.
+     *
      * @param timeFired The time at which the event was fired.
-     * @param second The second upon which the event was fired
+     * @param second    The second upon which the event was fired
      */
-    public Second( long timeFired, int second )
-    {
-        super( timeFired );
+    public Second(long timeFired, int second) {
+        super(timeFired);
         this.value = second;
     }
 }

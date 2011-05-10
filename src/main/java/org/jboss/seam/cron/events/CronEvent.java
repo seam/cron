@@ -19,18 +19,18 @@ package org.jboss.seam.cron.events;
 
 /**
  * Event which fires for arbitrarily-scheduled events.
- * @see org.jboss.seam.cron.annotations.Scheduled
+ *
  * @author Peter Royle
+ * @see org.jboss.seam.cron.annotations.Scheduled
  */
 public class CronEvent
-    extends AbstractTimeEvent
-{
+        extends AbstractTimeEvent {
     /**
      * Creates an instance of Event using the given value of timeFired.
+     *
      * @param timeFired The time at which the event was fired.
      */
-    public CronEvent( long timeFired )
-    {
-        super( timeFired );
+    public CronEvent(long timeFired) {
+        super(timeFired);
     }
 }

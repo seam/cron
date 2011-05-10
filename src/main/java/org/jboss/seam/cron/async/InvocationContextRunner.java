@@ -17,35 +17,30 @@
 package org.jboss.seam.cron.async;
 
 import javax.interceptor.InvocationContext;
+
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.exception.AsynchronousMethodExecutionException;
 
 /**
- *
  * @author Peter Royle
  */
-public class InvocationContextRunner implements Runnable
-{
+public class InvocationContextRunner implements Runnable {
 
-   private InvocationContext ic;
-   private Logger log = Logger.getLogger(InvocationContextRunner.class);
+    private InvocationContext ic;
+    private Logger log = Logger.getLogger(InvocationContextRunner.class);
 
-   public InvocationContextRunner(InvocationContext ic)
-   {
-      log.info("New Invocation Context");
-      this.ic = ic;
-   }
+    public InvocationContextRunner(InvocationContext ic) {
+        log.info("New Invocation Context");
+        this.ic = ic;
+    }
 
-   public void run()
-   {
-      log.info("Running Invocation Context");
-      try
-      {
-         ic.proceed();
-         log.info("After proceed");
-      } catch (Exception ex)
-      {
-         throw new AsynchronousMethodExecutionException("Error executing @Asynchronous method", ex);
-      }
-   }
+    public void run() {
+        log.info("Running Invocation Context");
+        try {
+            ic.proceed();
+            log.info("After proceed");
+        } catch (Exception ex) {
+            throw new AsynchronousMethodExecutionException("Error executing @Asynchronous method", ex);
+        }
+    }
 }

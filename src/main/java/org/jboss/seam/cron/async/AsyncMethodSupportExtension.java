@@ -22,14 +22,11 @@ import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
 
 /**
- *
  * @author Peter Royle
  */
-public class AsyncMethodSupportExtension implements Extension
-{
+public class AsyncMethodSupportExtension implements Extension {
 
-   public void startJobs(@Observes BeforeBeanDiscovery event, BeanManager manager)
-   {
-      event.addAnnotatedType(manager.createAnnotatedType(AsynchronousInterceptor.class));
-   }
+    public void startJobs(@Observes BeforeBeanDiscovery event, BeanManager manager) {
+        event.addAnnotatedType(manager.createAnnotatedType(AsynchronousInterceptor.class));
+    }
 }

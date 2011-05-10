@@ -24,24 +24,23 @@ package org.jboss.seam.cron.exception;
  * @author Peter Royle
  */
 public class AsynchronousMethodExecutionException
-    extends RuntimeException
-{
+        extends RuntimeException {
     /**
      * Create a new instance of AsynchronousMethodExecutionException with the given error message.
+     *
      * @param message The error message.
      */
-    public AsynchronousMethodExecutionException( String message )
-    {
-        super( message );
+    public AsynchronousMethodExecutionException(String message) {
+        super(message);
     }
 
     /**
      * Create a new instance of AsynchronousMethodExecutionException with the given error message and cause.
+     *
      * @param message The error message.
-     * @param cause The original cause.
+     * @param cause   The original cause.
      */
-    public AsynchronousMethodExecutionException( String message, Throwable cause )
-    {
-        super( message, cause );
+    public AsynchronousMethodExecutionException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

@@ -16,20 +16,19 @@
  */
 package org.jboss.seam.cron.quartz.jobs;
 
-import org.jboss.seam.cron.events.AbstractTimeEvent;
-import org.jboss.seam.cron.quartz.*;
-
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-
 import java.lang.annotation.Annotation;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Set;
 
 import javax.enterprise.inject.spi.BeanManager;
+
 import org.jboss.logging.Logger;
+import org.jboss.seam.cron.events.AbstractTimeEvent;
+import org.jboss.seam.cron.quartz.QuartzStarter;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
 /**
  * Base class for quartz jobs which fire scheduled events (including the built-in
@@ -39,40 +38,39 @@ import org.jboss.logging.Logger;
  * @author Peter Royle
  */
 public abstract class AbstractTimeEventJob
-    implements Job
-{
+        implements Job {
     protected int value = 0;
-    protected final GregorianCalendar gc = new GregorianCalendar(  );
-    private Logger log = Logger.getLogger( SecondJob.class );
+    protected final GregorianCalendar gc = new GregorianCalendar();
+    private Logger log = Logger.getLogger(SecondJob.class);
 
     /**
      * Implement this to return an instance of the appropriate event payload
      * to be used when firing the event.
+     *
      * @return an instance of the appropriate event type.
      */
-    protected abstract AbstractTimeEvent createEventPayload(  );
+    protected abstract AbstractTimeEvent createEventPayload();
 
     /**
      * Executes the internally scheduled job by firing the appropriate event with the
      * appropriate binding annotation (to in turn execute the application-specific jobs
      * which observe those events).
+     *
      * @param context Details about the job.
      * @throws JobExecutionException
      */
-    public void execute( JobExecutionContext context )
-                 throws JobExecutionException
-    {
+    public void execute(JobExecutionContext context)
+            throws JobExecutionException {
         BeanManager manager =
-            (BeanManager) context.getJobDetail(  ).getJobDataMap(  ).get( QuartzStarter.MANAGER_NAME );
-        gc.setTime( new Date(  ) );
+                (BeanManager) context.getJobDetail().getJobDataMap().get(QuartzStarter.MANAGER_NAME);
+        gc.setTime(new Date());
 
-        final AbstractTimeEvent eventPayload = createEventPayload(  );
+        final AbstractTimeEvent eventPayload = createEventPayload();
 
-        for ( Annotation binding : (Set<Annotation>) context.getJobDetail(  ).getJobDataMap(  )
-                                                            .get( QuartzStarter.BINDINGS ) )
-        {
-            log.trace( "Firing time event for " + eventPayload + " with binding " + binding );
-            manager.fireEvent( eventPayload, binding );
+        for (Annotation binding : (Set<Annotation>) context.getJobDetail().getJobDataMap()
+                .get(QuartzStarter.BINDINGS)) {
+            log.trace("Firing time event for " + eventPayload + " with binding " + binding);
+            manager.fireEvent(eventPayload, binding);
         }
     }
 }

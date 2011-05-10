@@ -22,14 +22,13 @@ package org.jboss.seam.cron.events;
  * built-in Second, Minute or Hour events. Note that the presence of this superclass
  * implies that the following observation is possible:
  * <code>public void doSomething(@Observes @Every AbstractTimeEvent e)</code>
- * <p>
+ * <p/>
  * Such an observation is valid, and will respond to every single scheduled event
  * fired (including the built in events).
  *
  * @author Peter Royle
  */
-public abstract class AbstractTimeEvent
-{
+public abstract class AbstractTimeEvent {
     private long timeFired;
 
     // the value of the second, miute or hour, as the case may be
@@ -37,38 +36,33 @@ public abstract class AbstractTimeEvent
 
     /**
      * Create an instance of some subclass of AbstractTimeEvent using the given timeFired.
+     *
      * @param timeFired Represents the time at which the event represented by this instance fired.
      */
-    protected AbstractTimeEvent( long timeFired )
-    {
+    protected AbstractTimeEvent(long timeFired) {
         this.timeFired = timeFired;
     }
 
     /**
-     *
      * @return The time at which the event was fired.
      */
-    public long getTimeFired(  )
-    {
+    public long getTimeFired() {
         return timeFired;
     }
 
     /**
      * @return The value of the second, minute or hour fired.
      */
-    public int getValue(  )
-    {
+    public int getValue() {
         return value;
     }
 
     /**
-     *
      * @return a String representation of this instance, showing the event type and the
-     * time at which the event was fired (epoch).
+     *         time at which the event was fired (epoch).
      */
     @Override
-    public String toString(  )
-    {
-        return getClass(  ).getName(  ) + " fired at " + Long.toString( timeFired );
+    public String toString() {
+        return getClass().getName() + " fired at " + Long.toString(timeFired);
     }
 }

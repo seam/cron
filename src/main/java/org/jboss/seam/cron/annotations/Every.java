@@ -28,15 +28,15 @@ import javax.inject.Qualifier;
  * every event in a particular schedule. Eg:
  * <code>public void doSomething( @Observes @Every Minute min )</code> will
  * observe the event fired every minute.
+ *
  * @author Peter Royle
  */
 @Qualifier
-@Retention( RetentionPolicy.RUNTIME )
-@Target( {ElementType.PARAMETER,
-    ElementType.METHOD,
-    ElementType.FIELD,
-    ElementType.TYPE
-} )
-public @interface Every
-{
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER,
+        ElementType.METHOD,
+        ElementType.FIELD,
+        ElementType.TYPE
+})
+public @interface Every {
 }

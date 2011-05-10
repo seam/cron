@@ -25,44 +25,43 @@ import javax.inject.Qualifier;
 
 /**
  * A binding annotation for use observing the Event.class event.
- * <p>
+ * <p/>
  * The value can either be a schedule in Cron format, or a 'named schedule', whereby
  * the cron-formatted schedule appears in the /scheduler.properties file on the classpath
  * as the value of the property with the given name.
- * <p>
+ * <p/>
  * Example scheduled event observer:
  * <code>public void doSomething(@Observes @Scheduled("0 * * ? * *") Event e) { ... }</code>
- * <p>
+ * <p/>
  * Example named, scheduled event observer:
  * <code>public void doSomething(@Observes @Scheduled("after.hours") Event e) { ... }</code>
- * <p>
+ * <p/>
  * Where the 'after.hours' schedule would be specified in /scheduler.properties like so:
  * <code>after.hours=0 0 * ? * *
- * <p>
+ * <p/>
  * Scheduled bindings may be made typesafe using the following pattern:
  * <code>
+ *
+ * @author Peter Royle
  * @Scheduled("after.hours")
  * @BindingType
- * @Retention(RetentionPolicy.RUNTIME)
- * public @interface AfterHours { .. }
+ * @Retention(RetentionPolicy.RUNTIME) public @interface AfterHours { .. }
  * </code>
  * The schedule can then be observed like so:
  * <code>public void doSomething(@Observes @AfterHours Event e) { ... }</code>
- *
- * @author Peter Royle
  */
 @Qualifier
-@Retention( RetentionPolicy.RUNTIME )
-@Target( {ElementType.PARAMETER,
-    ElementType.METHOD,
-    ElementType.FIELD,
-    ElementType.TYPE
-} )
-public @interface Scheduled
-{
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER,
+        ElementType.METHOD,
+        ElementType.FIELD,
+        ElementType.TYPE
+})
+public @interface Scheduled {
     /**
      * The schedule specification (in cron format) or name.
+     *
      * @return the value.
      */
-    String value(  );
+    String value();
 }

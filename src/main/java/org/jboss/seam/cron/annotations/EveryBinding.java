@@ -19,11 +19,9 @@ package org.jboss.seam.cron.annotations;
 import javax.enterprise.util.AnnotationLiteral;
 
 /**
- *
  * @author Peter Royle
  */
 public class EveryBinding
-    extends AnnotationLiteral<Every>
-    implements Every
-{
+        extends AnnotationLiteral<Every>
+        implements Every {
 }

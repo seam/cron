@@ -17,37 +17,32 @@
 package org.jboss.seam.cron.async;
 
 import java.util.concurrent.atomic.AtomicInteger;
+
 import org.jboss.seam.cron.annotations.Asynchronous;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
  * @author Peter Royle
  */
 @Asynchronous
-public class SomeAsynchMethods
-{
+public class SomeAsynchMethods {
 
-   public static AtomicInteger count = new AtomicInteger(0);
-   public static final int NUM_LOOPS = 2;
-   public static final int SLEEP_PER_LOOP = 1000;
-   private static Logger log = LoggerFactory.getLogger(SomeAsynchMethods.class);
+    public static AtomicInteger count = new AtomicInteger(0);
+    public static final int NUM_LOOPS = 2;
+    public static final int SLEEP_PER_LOOP = 1000;
+    private static Logger log = LoggerFactory.getLogger(SomeAsynchMethods.class);
 
-   public void increment()
-   {
-      for (int i = 0; i < NUM_LOOPS; i++)
-      {
-         int c = count.incrementAndGet();
-         System.out.println("Count: " + c);
-         try
-         {
-            Thread.sleep(SLEEP_PER_LOOP);
-         } catch (InterruptedException ex)
-         {
-            log.error("Interrupted while sleeping", ex);
-         }
-      }
-   }
+    public void increment() {
+        for (int i = 0; i < NUM_LOOPS; i++) {
+            int c = count.incrementAndGet();
+            System.out.println("Count: " + c);
+            try {
+                Thread.sleep(SLEEP_PER_LOOP);
+            } catch (InterruptedException ex) {
+                log.error("Interrupted while sleeping", ex);
+            }
+        }
+    }
 
 }

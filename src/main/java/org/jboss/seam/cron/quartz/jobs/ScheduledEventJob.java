@@ -21,17 +21,17 @@ import org.jboss.seam.cron.events.CronEvent;
 
 /**
  * Fires the 'Event' event with the current system time.
+ *
  * @author Peter Royle
  */
 public class ScheduledEventJob
-    extends AbstractTimeEventJob
-{
+        extends AbstractTimeEventJob {
     /**
      * Create an event payload instance of type Event with the current system time.
+     *
      * @return an instance of Event.
      */
-    protected AbstractTimeEvent createEventPayload(  )
-    {
-        return new CronEvent( System.currentTimeMillis(  ) );
+    protected AbstractTimeEvent createEventPayload() {
+        return new CronEvent(System.currentTimeMillis());
     }
 }
