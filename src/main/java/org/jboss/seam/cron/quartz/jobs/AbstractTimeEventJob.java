@@ -23,15 +23,13 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.annotation.Annotation;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Set;
 
 import javax.enterprise.inject.spi.BeanManager;
+import org.jboss.logging.Logger;
 
 /**
  * Base class for quartz jobs which fire scheduled events (including the built-in
@@ -45,7 +43,7 @@ public abstract class AbstractTimeEventJob
 {
     protected int value = 0;
     protected final GregorianCalendar gc = new GregorianCalendar(  );
-    private Logger log = LoggerFactory.getLogger( SecondJob.class );
+    private Logger log = Logger.getLogger( SecondJob.class );
 
     /**
      * Implement this to return an instance of the appropriate event payload

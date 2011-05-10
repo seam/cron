@@ -41,9 +41,6 @@ import org.quartz.Trigger;
 
 import org.quartz.impl.StdSchedulerFactory;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.annotation.Annotation;
 import java.text.ParseException;
 import java.util.Date;
@@ -66,6 +63,8 @@ import javax.enterprise.inject.spi.BeforeShutdown;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ObserverMethod;
 import javax.enterprise.inject.spi.ProcessObserverMethod;
+import javax.inject.Inject;
+import org.jboss.logging.Logger;
 import org.jboss.seam.cron.events.CronEvent;
 
 /**
@@ -110,7 +109,8 @@ public class QuartzStarter
     private final Set<ObserverMethod<? super CronEvent>> cronEventObservers = new HashSet<ObserverMethod<? super CronEvent>>();
     
     private Scheduler scheduler;
-    private Logger log = LoggerFactory.getLogger( QuartzStarter.class );
+    private static final Logger log = Logger.getLogger(QuartzStarter.class);
+
 
     /**
      * Initialises the scheduler.

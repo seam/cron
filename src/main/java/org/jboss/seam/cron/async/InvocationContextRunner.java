@@ -17,9 +17,8 @@
 package org.jboss.seam.cron.async;
 
 import javax.interceptor.InvocationContext;
+import org.jboss.logging.Logger;
 import org.jboss.seam.cron.exception.AsynchronousMethodExecutionException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -29,7 +28,7 @@ public class InvocationContextRunner implements Runnable
 {
 
    private InvocationContext ic;
-   private Logger log = LoggerFactory.getLogger(InvocationContextRunner.class);
+   private Logger log = Logger.getLogger(InvocationContextRunner.class);
 
    public InvocationContextRunner(InvocationContext ic)
    {

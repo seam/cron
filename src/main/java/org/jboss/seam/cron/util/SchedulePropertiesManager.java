@@ -16,12 +16,10 @@
  */
 package org.jboss.seam.cron.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import org.jboss.logging.Logger;
 
 /**
  * A singleton instance of the properties read from the /schedule.properties
@@ -36,7 +34,7 @@ public class SchedulePropertiesManager
     public static final String SCHEDULE_PROPERTIES_PATH = "/scheduler.properties";
     private Properties scheduleProperties = null;
     private static SchedulePropertiesManager instance = null;
-    private Logger log = LoggerFactory.getLogger( SchedulePropertiesManager.class );
+    private Logger log = Logger.getLogger( SchedulePropertiesManager.class );
 
     /**
      * Return a singleton instance of this class, creating the instance if necessary.
