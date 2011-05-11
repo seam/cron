@@ -44,8 +44,70 @@ OK well, there's also this:
     }
 
     @Asynchronous
-    public void initiateRatherDrawnOutMissileLaunchSequence() {
-        missile.launchViaSOAPWebServicesDeployedOnAPentiumIIRunningWindowsNTAndNortonAntiVirus();
+    public MissileDeployment initiateRatherDrawnOutMissileLaunchSequence() {
+        return missile.launchViaSOAPWebServicesDeployedOnAPentiumIIRunningWindowsNTAndNortonAntiVirus();
+    }
+
+OK, so that asynchronous method returns an instance of `MissileDeployment`. 
+So how do you get your hands on it? Easy!
+
+    public void verifyDeployment(@Observes MissileDeployment deployment) {
+        if ("EPIC FAIL".equals(deployment.getStatus())) {
+            henchmen.head().fire();
+        } else {
+            champagne.pop();
+        }
+    }
+
+The rules concerning return types of @Asynchronous methods are as follows:
+
+* If method return type is void, no event will be fired
+* If the method invocation returns a value of null, no event will be fired. Be careful of this!
+
+You would typically want one dedicated return type per asynchronous method invocation
+for a one-to-one mapping between methods and their observers, but there may be use
+cases for having multiple asynchronous methods all reporting their results to a single
+observer, and Cron would be totally cool with that. Alternatively you might wish
+to introduce some additional CDI-style qualifiers like so:
+
+    @Asynchronous @Credit
+    public Balance addCredit(int dollars) {
+        ...
+        return new Ballance();
+    }
+
+    @Asynchronous @Debit
+    public Balance addDebit(int dollars) {
+        ...
+        return new Ballance();
+    }
+
+    public void reportNewBalance(@Observes Balance balance) {
+        log.report(balance.amount());
+    }
+
+    public void trackSpending(@Observes @Debit Balance balance) {
+        db.saveSomething();
+    }
+
+Finally, if you prefer a more traditional, EJB-esque approach then you can specify
+a return type of Future<Blah> and use the `AsyncResult` helper to return the result
+of your method call. Seam Cron will automatically wrap this in a legit Future<Blah>
+which the calling code can use as expected immediately.
+
+    @Asynchronous
+    public Future<Blah> doSomeHeavyLiftingInTheBackground() {
+        return new AsyncResult(new Blah());
+    }
+
+And the calling code:
+
+    @Inject LiftingBean liftingBean;
+
+    public void someMethod() {
+        Future<Blah> future = liftingBean.doSomeHeavyLiftingInTheBackground();
+        // blocks until asynch method returns or gives up
+        Blah result = future.get(10, SECONDS);
     }
 
 ## ENOUGH!! How do get I it?
