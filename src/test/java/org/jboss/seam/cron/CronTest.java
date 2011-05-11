@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import junit.framework.Assert;
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.logging.Logger;
 import org.jboss.seam.cron.quartz.QuartzStarter;
 import org.jboss.shrinkwrap.api.ArchivePaths;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -33,8 +34,6 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.quartz.SchedulerException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Test all kinds of events.
@@ -45,22 +44,22 @@ public class CronTest implements Serializable {
 
     private static final int MAX_TIME_TO_WAIT = 20000;
     private static final int SLEEP_TIME = 2000;
-    private static Logger log = LoggerFactory.getLogger(CronTest.class);
+    private static Logger log = Logger.getLogger(CronTest.class);
 
     @Deployment
-    public static JavaArchive createTestArchive() {
-        JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
-                .addPackages(true, "org.jboss.seam.cron")
-                .addAsManifestResource(
-                        new File("src/main/resources/META-INF/beans.xml"),
-                        ArchivePaths.create("beans.xml"))
-                .addAsManifestResource(
-                        new File("src/main/resources/META-INF/services/javax.enterprise.inject.spi.Extension"),
-                        ArchivePaths.create("services/javax.enterprise.inject.spi.Extension"));
-
-        if (log.isDebugEnabled())
-            log.debug(archive.toString(true));
-        return archive;
+    public static JavaArchive createTestArchive() 
+    {
+    	JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
+    		.addPackages(true,"org.jboss.seam.cron")
+    		.addAsManifestResource(
+    			new File("src/main/resources/META-INF/beans.xml"), 
+    			ArchivePaths.create("beans.xml"))
+    		.addAsManifestResource(
+			new File("src/main/resources/META-INF/services/javax.enterprise.inject.spi.Extension"), 
+			ArchivePaths.create("services/javax.enterprise.inject.spi.Extension"));
+    	
+        log.debug(archive.toString(true));
+    	return archive;
     }
 
     @Inject

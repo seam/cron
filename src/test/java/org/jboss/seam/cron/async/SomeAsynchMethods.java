@@ -16,23 +16,37 @@
  */
 package org.jboss.seam.cron.async;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
-
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
+import org.jboss.logging.Logger;
 import org.jboss.seam.cron.annotations.Asynchronous;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Peter Royle
  */
-@Asynchronous
+@ApplicationScoped
 public class SomeAsynchMethods {
 
     public static AtomicInteger count = new AtomicInteger(0);
     public static final int NUM_LOOPS = 2;
     public static final int SLEEP_PER_LOOP = 1000;
-    private static Logger log = LoggerFactory.getLogger(SomeAsynchMethods.class);
+    private CountDownLatch statusLatch;
+    private CountDownLatch heystackLatch;
+    private Status statusEvent;
+    private Integer haystackCount;
+    private static Logger log = Logger.getLogger(SomeAsynchMethods.class);
 
+    public void reset() {
+        statusEvent = null;
+        haystackCount = null;
+        statusLatch = new CountDownLatch(1);
+        heystackLatch = new CountDownLatch(1);
+    }
+    
+    @Asynchronous
     public void increment() {
         for (int i = 0; i < NUM_LOOPS; i++) {
             int c = count.incrementAndGet();
@@ -45,4 +59,49 @@ public class SomeAsynchMethods {
         }
     }
 
+    @Asynchronous
+    public Status returnStatusObject(String statusToSet) {
+        return new Status(statusToSet);
+    }
+
+    public void reportStatusForBoth(@Observes Status status) {
+        statusEvent = status;
+        statusLatch.countDown();
+        System.out.println("The future is " + status.getDescription());
+    }
+
+    @Asynchronous
+    public Future<Status> returnStatusInFuture(String statusToSet) {
+        return new AsyncResult<Status>(new Status(statusToSet));
+    }
+
+    @Asynchronous
+    @HaystackCount
+    public Integer countNeedlesInTheHaystack(int numToReturn) {
+        return numToReturn;
+    }
+
+    public void reportHaystackCount(@Observes @HaystackCount Integer count) {
+        System.out.println("Needles in haystack: " + count);
+        haystackCount = count;
+        heystackLatch.countDown();
+    }
+
+    public CountDownLatch getStatusLatch() {
+        return statusLatch;
+    }
+
+    public Status getStatusEvent() {
+        return statusEvent;
+    }
+
+    public Integer getHaystackCount() {
+        return haystackCount;
+    }
+
+    public CountDownLatch getHeystackLatch() {
+        return heystackLatch;
+    }
+    
+    
 }

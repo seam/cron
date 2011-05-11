@@ -14,33 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.async;
-
-import javax.interceptor.InvocationContext;
-
-import org.jboss.logging.Logger;
-import org.jboss.seam.cron.exception.AsynchronousMethodExecutionException;
+package org.jboss.seam.cron.exception;
 
 /**
+ * This exception indicates a probable programming error, eg using a managed bean
+ * before properly configuring it.
+ *
  * @author Peter Royle
  */
-public class InvocationContextRunner implements Runnable {
-
-    private InvocationContext ic;
-    private Logger log = Logger.getLogger(InvocationContextRunner.class);
-
-    public InvocationContextRunner(InvocationContext ic) {
-        log.info("New Invocation Context");
-        this.ic = ic;
+public class InternalException
+        extends RuntimeException {
+    /**
+     * Create a new instance of #{@link InternalException} with the given error message.
+     * @param message The error message.
+     */
+    public InternalException(String message) {
+        super(message);
     }
 
-    public void run() {
-        log.info("Running Invocation Context");
-        try {
-            ic.proceed();
-            log.info("After proceed");
-        } catch (Exception ex) {
-            throw new AsynchronousMethodExecutionException("Error executing @Asynchronous method", ex);
-        }
+    /**
+     * Create a new instance of #{@link InternalException} with the given error message and cause.
+     * @param message The error message.
+     * @param cause The original cause.
+     */
+    public InternalException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

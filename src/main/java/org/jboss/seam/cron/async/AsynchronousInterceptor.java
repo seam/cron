@@ -16,15 +16,21 @@
  */
 package org.jboss.seam.cron.async;
 
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
+import javax.enterprise.inject.Instance;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-
+import org.jboss.logging.Logger;
 import org.jboss.seam.cron.annotations.Asynchronous;
 
 /**
  * Interceptor for asynchronous methods. Method may be directly marked as
- *
+ * #{@link Asynchronous} or may exist on a type marked as #{@link Asynchronous}.
+ * 
  * @author Peter Royle
  * @Asnychronous or may exist on a type marked as @Asynchronous.
  */
@@ -32,12 +38,51 @@ import org.jboss.seam.cron.annotations.Asynchronous;
 @Interceptor
 public class AsynchronousInterceptor {
 
+    Logger log = Logger.getLogger(AsynchronousInterceptor.class);
+    @Inject
+    BeanManager beanMan;
+    @Inject
+    Instance<InvocationCallable> icrs;
+
     @AroundInvoke
-    public Object executeAsynchronously(InvocationContext ctx) throws Exception {
-        Thread thread = new Thread(new InvocationContextRunner(ctx));
-        thread.start();
-        //ctx.proceed();
-        // TODO: (PR): What to return here? The future?
-        return null;
+    public Object executeAsynchronously(final InvocationContext ctx) throws Exception {
+        Object result;
+
+        log.trace("Intercepting method invocation of " + ctx.getMethod().getName() + " to make it @Asynchronous");
+        
+        final InvocationCallable icr = icrs.get();
+        icr.setInvocationContext(ctx);
+
+        if (returnImplementsFuture(ctx)) {
+            // swap the "dummy" Future for a truly asynchronous future to return to the caller immediately
+            icr.setPopResultsFromFuture(true);
+            FutureTask asyncResult = new FutureTask(icr);
+            new Thread(asyncResult).start();
+            result = asyncResult;
+        } else {
+            // Execute the method in a background thread and return nothing of value to the caller.
+            // They'll need to be observing an event if they want a return value.
+            new CallableAsThread(icr).start();
+            result = null;
+        }
+
+        // this will either be a Future, or null
+        return result;
+    }
+
+    private boolean returnImplementsFuture(final InvocationContext ctx) {
+        boolean implementsFuture = false;
+        Class rtnType = ctx.getMethod().getReturnType();
+        if (rtnType.equals(Future.class)) {
+            implementsFuture = true;
+        } else {
+            Class[] rtnInterfaces = rtnType.getInterfaces();
+            for (Class clazz : rtnInterfaces) {
+                if (clazz.equals(Future.class)) {
+                    implementsFuture = true;
+                }
+            }
+        }
+        return implementsFuture;
     }
 }

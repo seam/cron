@@ -16,18 +16,19 @@
  */
 package org.jboss.seam.cron;
 
-import java.util.Calendar;
-import java.util.Date;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
 
 import org.jboss.seam.cron.annotations.Every;
 import org.jboss.seam.cron.annotations.Scheduled;
 import org.jboss.seam.cron.events.CronEvent;
 import org.jboss.seam.cron.events.Second;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.Calendar;
+import java.util.Date;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
+import org.jboss.logging.Logger;
 
 /**
  * Test all events, but minute and hour (to shorten test time).
@@ -36,7 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 @ApplicationScoped
 public class DummyBean {
-    private Logger log = LoggerFactory.getLogger(DummyBean.class);
+    private Logger log = Logger.getLogger( DummyBean.class );
     private boolean scheduledEventObserved = false;
     private boolean namedEventObserved = false;
     private boolean typesafeEventObserved = false;

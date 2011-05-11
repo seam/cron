@@ -16,7 +16,6 @@
  */
 package org.jboss.seam.cron.exception;
 
-
 /**
  * Exception which is thrown when there is a problem running an @Asynchronous
  * method asynchronously.
@@ -25,9 +24,10 @@ package org.jboss.seam.cron.exception;
  */
 public class AsynchronousMethodExecutionException
         extends RuntimeException {
+    
     /**
-     * Create a new instance of AsynchronousMethodExecutionException with the given error message.
-     *
+     * Create a new instance of #{@link AsynchronousMethodExecutionException} with the given error message.
+     * 
      * @param message The error message.
      */
     public AsynchronousMethodExecutionException(String message) {
@@ -35,8 +35,8 @@ public class AsynchronousMethodExecutionException
     }
 
     /**
-     * Create a new instance of AsynchronousMethodExecutionException with the given error message and cause.
-     *
+     * Create a new instance of #{@link AsynchronousMethodExecutionException} with the given error message and cause.
+     * 
      * @param message The error message.
      * @param cause   The original cause.
      */

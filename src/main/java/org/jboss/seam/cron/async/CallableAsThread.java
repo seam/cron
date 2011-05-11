@@ -14,32 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.exception;
+package org.jboss.seam.cron.async;
+
+import java.util.concurrent.Callable;
+import org.jboss.seam.cron.exception.AsynchronousMethodExecutionException;
 
 /**
- * Exception which is thrown when there is a problem with the configuration of
- * the application using Seam Cron.
- *
+ * Simply wraps our #{@link Callable} in #{@link Thread}.
  * @author Peter Royle
  */
-public class SchedulerConfigurationException
-        extends RuntimeException {
-    /**
-     * Create a new instance of #{@link SchedulerConfigurationException} with the given error message.
-     * 
-     * @param message The error message.
-     */
-    public SchedulerConfigurationException(String message) {
-        super(message);
+public class CallableAsThread extends Thread {
+
+    private final Callable invCall;
+
+    public CallableAsThread(Callable invCall) {
+        this.invCall = invCall;
     }
 
-    /**
-     * Create a new instance of #{@link SchedulerConfigurationException} with the given error message and cause.
-     * 
-     * @param message The error message.
-     * @param cause The original cause.
-     */
-    public SchedulerConfigurationException(String message, Throwable cause) {
-        super(message, cause);
+    @Override
+    public void run() {
+        try {
+            invCall.call();
+        } catch (Throwable t) {
+            throw new AsynchronousMethodExecutionException("Error executing callable method", t);
+        }
     }
 }

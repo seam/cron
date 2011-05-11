@@ -14,32 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.exception;
+package org.jboss.seam.cron.async;
 
 /**
- * Exception which is thrown when there is a problem with the configuration of
- * the application using Seam Cron.
  *
  * @author Peter Royle
  */
-public class SchedulerConfigurationException
-        extends RuntimeException {
-    /**
-     * Create a new instance of #{@link SchedulerConfigurationException} with the given error message.
-     * 
-     * @param message The error message.
-     */
-    public SchedulerConfigurationException(String message) {
-        super(message);
+public class Status {
+
+    private String description;
+
+    public Status(String desc) {
+        this.description = desc;
     }
 
-    /**
-     * Create a new instance of #{@link SchedulerConfigurationException} with the given error message and cause.
-     * 
-     * @param message The error message.
-     * @param cause The original cause.
-     */
-    public SchedulerConfigurationException(String message, Throwable cause) {
-        super(message, cause);
+    public String getDescription() {
+        return description;
     }
 }

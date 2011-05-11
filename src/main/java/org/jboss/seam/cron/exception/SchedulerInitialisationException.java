@@ -16,10 +16,9 @@
  */
 package org.jboss.seam.cron.exception;
 
-
 /**
- * Exception thrown when there is a problem starting the Seam Scheduling module.
- *
+ * Exception thrown when there is a problem starting the Seam Cron module.
+ * 
  * @author Peter Royle
  */
 public class SchedulerInitialisationException
