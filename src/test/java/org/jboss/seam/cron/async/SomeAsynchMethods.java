@@ -80,6 +80,13 @@ public class SomeAsynchMethods {
     public Integer countNeedlesInTheHaystack(int numToReturn) {
         return numToReturn;
     }
+    
+    @Asynchronous
+    public Future<String> throwAnException() {
+        String result = null;
+        result.toString();
+        return new AsyncResult<String>("You won't get this far");
+    }
 
     public void reportHaystackCount(@Observes @HaystackCount Integer count) {
         System.out.println("Needles in haystack: " + count);
@@ -102,6 +109,5 @@ public class SomeAsynchMethods {
     public CountDownLatch getHeystackLatch() {
         return heystackLatch;
     }
-    
     
 }

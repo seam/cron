@@ -28,10 +28,11 @@ import javax.inject.Inject;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.seam.cron.exception.AsynchronousMethodExecutionException;
 import org.jboss.shrinkwrap.api.ArchivePaths;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.Assert;
+import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.quartz.SchedulerException;
@@ -74,8 +75,8 @@ public class AsynchronousTest implements Serializable {
         // If executions were asynchronous then at least some of the increments
         // would have been executed by now, but not all (ie: none of those which
         // come after a sleep).
-        Assert.assertTrue(SomeAsynchMethods.count.get() >= 0);
-        Assert.assertTrue(SomeAsynchMethods.count.get() < NUM_EXECUTIONS * SomeAsynchMethods.NUM_LOOPS);
+        assertTrue(SomeAsynchMethods.count.get() >= 0);
+        assertTrue(SomeAsynchMethods.count.get() < NUM_EXECUTIONS * SomeAsynchMethods.NUM_LOOPS);
 
         // Now if we wait for long enough, all of the increments should have been completed.
         try {
@@ -84,54 +85,74 @@ public class AsynchronousTest implements Serializable {
             log.error("Interrupted while sleeping", ie);
         }
 
-        Assert.assertTrue(SomeAsynchMethods.count.get() == NUM_EXECUTIONS * SomeAsynchMethods.NUM_LOOPS);
+        assertTrue(SomeAsynchMethods.count.get() == NUM_EXECUTIONS * SomeAsynchMethods.NUM_LOOPS);
 
     }
 
     @Test
     public void testPostExecutionNoQualifiers() throws InterruptedException {
         log.info("Testing asynchronous methods fire observable post-execution event");
-        Assert.assertNotNull(asynchBean);
+        assertNotNull(asynchBean);
         asynchBean.reset();
-        Assert.assertNull(asynchBean.getStatusEvent());
-        Assert.assertNull(asynchBean.getHaystackCount());
+        assertNull(asynchBean.getStatusEvent());
+        assertNull(asynchBean.getHaystackCount());
         String statusToSet = "orange";
         asynchBean.returnStatusObject(statusToSet);
         asynchBean.getStatusLatch().await(2, TimeUnit.SECONDS);
-        Assert.assertNotNull(asynchBean.getStatusEvent());
-        Assert.assertNull(asynchBean.getHaystackCount());
-        Assert.assertEquals(statusToSet, asynchBean.getStatusEvent().getDescription());
+        assertNotNull(asynchBean.getStatusEvent());
+        assertNull(asynchBean.getHaystackCount());
+        assertEquals(statusToSet, asynchBean.getStatusEvent().getDescription());
     }
 
     @Test
     public void testPostExecutionHaystackQualifiers() throws InterruptedException {
         log.info("Testing asynchronous methods fire observable post-execution event");
-        Assert.assertNotNull(asynchBean);
+        assertNotNull(asynchBean);
         asynchBean.reset();
-        Assert.assertNull(asynchBean.getStatusEvent());
-        Assert.assertNull(asynchBean.getHaystackCount());
+        assertNull(asynchBean.getStatusEvent());
+        assertNull(asynchBean.getHaystackCount());
         Integer numNeedles = 11;
         asynchBean.countNeedlesInTheHaystack(numNeedles);
         asynchBean.getHeystackLatch().await(2, TimeUnit.SECONDS);
-        Assert.assertNotNull(asynchBean.getHaystackCount());
-        Assert.assertNull(asynchBean.getStatusEvent());
-        Assert.assertEquals(numNeedles, asynchBean.getHaystackCount());
+        assertNotNull(asynchBean.getHaystackCount());
+        assertNull(asynchBean.getStatusEvent());
+        assertEquals(numNeedles, asynchBean.getHaystackCount());
     }
 
     @Test
     public void testAsynchReturningFuture() throws InterruptedException, InterruptedException, ExecutionException, TimeoutException {
         log.info("Testing asynchronous methods return a future as expected");
-        Assert.assertNotNull(asynchBean);
+        assertNotNull(asynchBean);
         asynchBean.reset();
-        Assert.assertNull(asynchBean.getStatusEvent());
-        Assert.assertNull(asynchBean.getHaystackCount());
+        assertNull(asynchBean.getStatusEvent());
+        assertNull(asynchBean.getHaystackCount());
         String statusToSet = "blue";
         Future<Status> result = asynchBean.returnStatusInFuture(statusToSet);
-        Assert.assertNotNull(result);
+        assertNotNull(result);
         Status resultStatus = result.get(2, TimeUnit.SECONDS);
-        Assert.assertNotNull(resultStatus);
-        Assert.assertNotNull(resultStatus.getDescription());
-        Assert.assertEquals(statusToSet, resultStatus.getDescription());
-        Assert.assertNull(asynchBean.getHaystackCount());
+        assertNotNull(resultStatus);
+        assertNotNull(resultStatus.getDescription());
+        assertEquals(statusToSet, resultStatus.getDescription());
+        assertNull(asynchBean.getHaystackCount());
+    }
+    
+    @Test
+    public void testErrorThrownReturnsAsPerEJBSpec() {
+        log.info("Testing that an error thrown during an @Asynchronous invocation which returns a Future will be delivered to the caller as per the EJB spec");
+        assertNotNull(asynchBean);
+        asynchBean.reset();
+        Future<String> result = asynchBean.throwAnException();
+        try {
+            String resultStr = result.get(2, TimeUnit.SECONDS);
+            fail("If you got here, the asynch method didn't throw an exception properly");
+        } catch (ExecutionException ee) {
+            log.info("The correct kind of exception was found");
+            assertEquals(AsynchronousMethodExecutionException.class, ee.getCause().getClass());
+        } catch (TimeoutException toe) {
+            log.error("Should not have timed out here!", toe);
+        } catch (InterruptedException ie) {
+            log.error("Should not have been interrupted here!", ie);
+        }
+        
     }
 }
