@@ -56,6 +56,7 @@ public class AsynchronousInterceptor {
         if (returnImplementsFuture(ctx)) {
             // swap the "dummy" Future for a truly asynchronous future to return to the caller immediately
             icr.setPopResultsFromFuture(true);
+            // use of FutureTask here provides the exception behaviour described by EJB
             FutureTask asyncResult = new FutureTask(icr);
             new Thread(asyncResult).start();
             result = asyncResult;

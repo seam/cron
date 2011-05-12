@@ -21,6 +21,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import javax.interceptor.InvocationContext;
@@ -74,7 +75,11 @@ public class InvocationCallable implements Callable {
      * @throws Exception Includes any exception thrown by the invoked method.
      */
     public Object call() throws Exception {
-        // housekeeping
+        
+        // This will be the basic form, with the result available immediately
+        Object result;
+            
+            // housekeeping
         if (ic.getMethod() == null) {
             throw new InternalException("Failed to provide an InvocationContext to this " + this.getClass().getName());
         }
@@ -91,34 +96,26 @@ public class InvocationCallable implements Callable {
             }
         }
 
-        // This will be the basic form, with the result available immediately
-        Object result;
-        
-        try {
-            result = ic.proceed();
+        result = ic.proceed();
 
-            if (popResultsFromFuture) {
-                // pop the value out of the "dummy" AsynchResult as it will be wrapped
-                // in proper AsynchResult by the AsynchronousInterceptor
-                result = ((Future) result).get();
+        if (popResultsFromFuture) {
+            // pop the value out of the "dummy" AsynchResult as it will be wrapped
+            // in proper AsynchResult by the AsynchronousInterceptor
+            result = ((Future) result).get();
+        }
+
+        // fire the post execution event if a result was returned.
+        if (result != null) {
+            if (log.isTraceEnabled()) {
+                log.trace("Firing post execution event result: " + result);
             }
-
-            // fire the post execution event if a result was returned.
-            if (result != null) {
-                if (log.isTraceEnabled()) {
-                    log.trace("Firing post execution event result: " + result);
-                }
-                beanMan.fireEvent(result, qualifiers.toArray(new Annotation[qualifiers.size()]));
+            beanMan.fireEvent(result, qualifiers.toArray(new Annotation[qualifiers.size()]));
+        } else {
+            if (method.getReturnType().equals(Void.TYPE)) {
+                log.debug("Method invocation on " + method.getName() + ":" + method.getClass().getName() + " returns void, so not firing a post-execution event");
             } else {
-                if (method.getReturnType().equals(Void.TYPE)) {
-                    log.debug("Method invocation on " + method.getName() + ":" + method.getClass().getName() + " returns void, so not firing a post-execution event");
-                } else {
-                    log.debug("Method invocation on " + method.getName() + ":" + method.getClass().getName() + " returned null, so not firing an event");
-                }
+                log.debug("Method invocation on " + method.getName() + ":" + method.getClass().getName() + " returned null, so not firing an event");
             }
-
-        } catch (Exception ex) {
-            throw new AsynchronousMethodExecutionException("Error executing @Asynchronous method", ex);
         }
 
         return result;
