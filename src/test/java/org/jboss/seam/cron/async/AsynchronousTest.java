@@ -143,11 +143,11 @@ public class AsynchronousTest implements Serializable {
         asynchBean.reset();
         Future<String> result = asynchBean.throwAnException();
         try {
-            String resultStr = result.get(2, TimeUnit.SECONDS);
+            result.get(2, TimeUnit.SECONDS);
             fail("If you got here, the asynch method didn't throw an exception properly");
         } catch (ExecutionException ee) {
             log.info("The correct kind of exception was found");
-            assertEquals(AsynchronousMethodExecutionException.class, ee.getCause().getClass());
+            assertEquals(NullPointerException.class, ee.getCause().getClass());
         } catch (TimeoutException toe) {
             log.error("Should not have timed out here!", toe);
         } catch (InterruptedException ie) {
