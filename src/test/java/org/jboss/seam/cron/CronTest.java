@@ -81,9 +81,9 @@ public class CronTest extends SeamCronTest {
         }
         assert bean.isScheduledEventObserved() == true;
         assert bean.isNamedEventObserved() == true;
-        assert bean.isTypesafeEventObserved() == true;
         assert bean.isEverySecondEventObserved() == true;
         assert bean.isFiredCorrectly() == true;
+        assert bean.isTypesafeEventObserved() == true;
 
     }
 }

@@ -20,7 +20,9 @@ import javax.inject.Inject;
 
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.quartz.QuartzStarter;
+import org.jboss.seam.cron.beans.EveryTestBean;
+import org.jboss.seam.cron.exception.InternalException;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -28,14 +30,25 @@ import org.junit.runner.RunWith;
  * Test @Every schedules
  */
 @RunWith(Arquillian.class)
-public class EveryTest extends SeamCronTest {
+public class EveryLongTest extends SeamCronTest {
+    public static final int SLEEP_TIME = 100000;
 
-    private static Logger log = Logger.getLogger(EveryTest.class);
+    private static Logger log = Logger.getLogger(EveryLongTest.class);
+    
     @Inject
-    QuartzStarter qStarter;
+    EveryTestBean everyTestBean;
 
-    @Test
-    public void testEvery40thSecond() {
-        
+    @Test 
+    public void testEvery40thSecond() throws Exception {
+        try {
+            // just fire up the bean and give it enough time to time itself and record any anomolies.
+            Thread.sleep(SLEEP_TIME);
+        } catch (InterruptedException ex) {
+            throw new InternalException("Should not have been woken up here");
+        }
+        Assert.assertTrue(everyTestBean.isWasEventObserved());
+        if (everyTestBean.getErrorDetected() != null) {
+            throw everyTestBean.getErrorDetected();
+        }
     }
 }

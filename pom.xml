@@ -1,4 +1,3 @@
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -9,10 +8,10 @@
     <name>Seam Cron</name>
     <url>http://seamframework.org/Seam3/CronModule</url>
     <properties>
-		<!-- Current Arquillian version -->
+        <!-- Current Arquillian version -->
         <arquillian.version>1.0.0.Alpha5</arquillian.version>
     </properties>
-	<!-- Dependency management, including extra repositories if needed -->
+    <!-- Dependency management, including extra repositories if needed -->
     <repositories>
         <repository>
             <id>repository.jboss.org</id>
@@ -36,23 +35,37 @@
                     <target>1.5</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>-client -Xmx896m -XX:MaxPermSize=192m</argLine>
+                    <forkMode>once</forkMode>
+                    <includes>
+                        <include>**/**/*Test.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/**/*LongTest.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-    
+
     <dependencies>
         <dependency>
             <groupId>org.jboss.seam.solder</groupId>
             <artifactId>seam-solder</artifactId>
             <version>3.0.0.Final</version>
         </dependency>
-        
+
         <!-- Provided dependencies -->
         <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
             <scope>provided</scope>
         </dependency>
-        
+
         <!-- Runtime Dependencies -->
         <dependency>
             <groupId>org.opensymphony.quartz</groupId>
@@ -72,8 +85,8 @@
             <version>3.2.1</version>
             <scope>runtime</scope>
         </dependency>
-        
-	<!-- Test dependencies -->
+
+        <!-- Test dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -91,7 +104,7 @@
             <version>20100212</version>
         </dependency>
     </dependencies>
-    
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -103,7 +116,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-      
+
     <profiles>
         <profile>
             <id>glassfish-embedded-3.1</id>
@@ -122,10 +135,11 @@
                 </dependency>
             </dependencies>
         </profile>
-          
         <profile>
             <id>openwebbeans-embedded-1</id>
-            <activation><activeByDefault>true</activeByDefault></activation>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <dependencies>
                 <dependency>
                     <groupId>org.jboss.arquillian.container</groupId>
@@ -196,6 +210,5 @@
                 </dependencies>
             </dependencyManagement>
         </profile>
-          
     </profiles>
 </project>

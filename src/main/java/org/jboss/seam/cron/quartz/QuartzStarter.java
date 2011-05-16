@@ -44,6 +44,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.annotations.Every;
 import org.jboss.seam.cron.annotations.Scheduled;
+import org.jboss.seam.cron.events.TimeUnit;
 import static org.jboss.seam.cron.events.TimeUnit.*;
 import org.jboss.seam.cron.exception.SchedulerConfigurationException;
 import org.jboss.seam.cron.exception.SchedulerInitialisationException;
@@ -59,6 +60,7 @@ import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
+import org.quartz.TriggerUtils;
 import org.quartz.impl.DirectSchedulerFactory;
 import org.quartz.simpl.RAMJobStore;
 import org.quartz.simpl.SimpleThreadPool;
@@ -80,7 +82,7 @@ public class QuartzStarter
      * The name of the property containing the observer method bindings to be used
      * when storing and retrieving it from the job details.
      */
-    public static final String QUALIFIERS = "qualifiers";
+    public static final String QUALIFIER = "qualifier";
     /**
      * The name of the property containing the schedule specification (in cron format)
      * when storing and retrieving it from the job details.
@@ -201,6 +203,27 @@ public class QuartzStarter
     }
 
     /**
+     * Inspects the given @Every qualifier and extracts its settings into a new #{@link ScheduledQualifiedEventPayload}.
+     * 
+     * @param everyBinding
+     * @return a fully populated #{@link ScheduledQualifiedEventPayload}.
+     */
+    public ScheduledQualifiedEventPayload createScheduledQualifiedEventPayloadFromEveryBinding(final Every everyBinding) {
+        Class jobClass = null;
+        switch (everyBinding.value()) {
+            case SECOND:
+                jobClass = SecondJob.class;
+                break;
+            case MINUTE:
+                jobClass = MinuteJob.class;
+                break;
+            case HOUR:
+                jobClass = HourJob.class;
+        }
+        return new ScheduledQualifiedEventPayload(everyBinding, jobClass);
+    }
+    
+    /**
      * If the given String is already a schedule then just return it, otherwise check the 
      * scheduler.properties file for schedule spec with the given name and return that.
      * @param scheduleSpec
@@ -229,35 +252,6 @@ public class QuartzStarter
     }
 
     /**
-     * Create a cron spec corresponding to the given @Every values.
-     * @param everyBinding
-     * @return a cron specification
-     */
-    public ScheduledQualifiedEventPayload createScheduledQualifiedEventPayloadFromEveryBinding(final Every everyBinding) {
-        String prefix = "";
-        String suffix = "";
-        Class jobClass = null;
-        switch (everyBinding.value()) {
-            case SECOND:
-                prefix = "0/";
-                suffix = " * * ? * *";
-                jobClass = SecondJob.class;
-                break;
-            case MINUTE:
-                prefix = "0 0/";
-                suffix = " * ? * *";
-                jobClass = MinuteJob.class;
-                break;
-            case HOUR:
-                prefix = "0 0 0/";
-                suffix = " ? * *";
-                jobClass = HourJob.class;
-        }
-        String scheduleSpec = prefix + everyBinding.nth() + suffix;
-        return new ScheduledQualifiedEventPayload(scheduleSpec, everyBinding, jobClass);
-    }
-
-    /**
      * Construct the job details using the given parameter map and chedule the job
      * to be executed by the given job class using the given trigger.
      *
@@ -283,7 +277,7 @@ public class QuartzStarter
 
     /**
      * Set up schedule for an arbitrarily scheduled event. This will pass the given
-     * observerBinding binding type as the QUALIFIERS job parameter to be used when firing
+     * observerBinding binding type as the QUALIFIER job parameter to be used when firing
      * the events. This binding type will usually be an instance of @Scheduled or
      * some other binding type with the @Scheduled meta-annotation.
      *
@@ -297,12 +291,26 @@ public class QuartzStarter
         final String name = schedQualEvtPld.toString();
         log.info("Scheduling trigger for " + name);
 
-        final Trigger schedTrigger = new CronTrigger(name, SCHEDULE_JOB_GROUP, schedQualEvtPld.getScheduleSpec());
+        Trigger schedTrigger = null;
+        if (schedQualEvtPld.isInterval()) {
+            if (TimeUnit.SECOND.equals(schedQualEvtPld.getRepeatUnit())) {
+                schedTrigger = TriggerUtils.makeSecondlyTrigger(schedQualEvtPld.getRepeatInterval());
+            } else if (TimeUnit.MINUTE.equals(schedQualEvtPld.getRepeatUnit())) {
+                schedTrigger = TriggerUtils.makeMinutelyTrigger(schedQualEvtPld.getRepeatInterval());
+            } else if (TimeUnit.HOUR.equals(schedQualEvtPld.getRepeatUnit())) {
+                schedTrigger = TriggerUtils.makeHourlyTrigger(schedQualEvtPld.getRepeatInterval());
+            } else {
+                throw new InternalError("Could not work out which interval to use for the schedule of an @Every observer");
+            }
+            schedTrigger.setName(name);
+        } else {
+            schedTrigger = new CronTrigger(name, SCHEDULE_JOB_GROUP, schedQualEvtPld.getScheduleSpec());
+        }
         schedTrigger.setStartTime(startTime);
 
         final Map jobParams = new HashMap();
         jobParams.put(CRON_SCHEDULE_SPEC, schedQualEvtPld.getScheduleSpec());
-        jobParams.put(QUALIFIERS, schedQualEvtPld.getQualifiers());
+        jobParams.put(QUALIFIER, schedQualEvtPld.getQualifier());
         scheduleJob(name + "-trigger", manager, schedTrigger, schedQualEvtPld.getPayloadType(), jobParams);
     }
 
@@ -316,9 +324,9 @@ public class QuartzStarter
         // collect the set of unique schedule specifications
         for (ObserverMethod<?> obsMeth : allObservers) {
             for (Object bindingObj : obsMeth.getObservedQualifiers()) {
-                final Annotation qualifier = (Annotation) bindingObj;
-                final Scheduled schedBinding = getScheduledBinding(qualifier);
-                Every everyBinding = getEveryBinding(qualifier);
+                final Annotation orginalQualifier = (Annotation) bindingObj;
+                final Scheduled schedBinding = getScheduledBinding(orginalQualifier);
+                Every everyBinding = getEveryBinding(orginalQualifier);
                 ScheduledQualifiedEventPayload payload = null;
                         
                 // observer is only meaningful if the payload is the right type
@@ -330,7 +338,7 @@ public class QuartzStarter
                 // to the apropriate schedule.
                 if (schedBinding != null) {
                     String cronScheduleSpec = lookupNamedScheduleIfNecessary(schedBinding.value());
-                    payload = new ScheduledQualifiedEventPayload(cronScheduleSpec, qualifier, ScheduledEventJob.class);
+                    payload = new ScheduledQualifiedEventPayload(cronScheduleSpec, orginalQualifier, ScheduledEventJob.class);
                 }
                 if (everyBinding != null) {
                     payload = createScheduledQualifiedEventPayloadFromEveryBinding(everyBinding);

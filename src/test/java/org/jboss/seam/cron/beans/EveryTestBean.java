@@ -22,6 +22,7 @@ import javax.time.Instant;
 import org.jboss.seam.cron.annotations.Every;
 import org.jboss.seam.cron.events.TimeUnit;
 import org.jboss.seam.cron.events.Trigger;
+import org.jboss.seam.cron.exception.InternalException;
 
 /**
  *
@@ -29,13 +30,32 @@ import org.jboss.seam.cron.events.Trigger;
  */
 @ApplicationScoped
 public class EveryTestBean {
-    
-    Instant lastTriggerSecond = null;
-    
-    public void every40Seconds(@Observes @Every(nth=40, value=TimeUnit.SECOND) Trigger t) {
-        if (lastTriggerSecond == null) {
-            lastTriggerSecond = Instant.seconds(t.getValue());
+
+    private Instant lastTriggerSecond = null;
+    private int tolleranceSeconds = 1; // tollerance of 1 second
+    private Exception errorDetected = null;
+    private boolean wasEventObserved = false;
+
+    public void every40Seconds(@Observes @Every(nth = 40, value = TimeUnit.SECOND) Trigger t) throws Exception {
+        wasEventObserved = true;
+        final Instant newInstant = Instant.millis(t.getTimeFired());
+        if (lastTriggerSecond != null) {
+            if (Math.abs(lastTriggerSecond.getEpochSeconds() - (newInstant.getEpochSeconds() - 40)) > tolleranceSeconds) {
+                final String errorMessage = "Tick interval was not as per configuration. Previous tick was at " + lastTriggerSecond.getEpochSeconds() 
+                        + " and this one was at " + newInstant.getEpochSeconds();
+                System.out.println("ERROR: " + errorMessage);
+                errorDetected = new InternalException(errorMessage);
+            }
         }
+        lastTriggerSecond = newInstant;
     }
-    
+
+    public Exception getErrorDetected() {
+        return errorDetected;
+    }
+
+    public boolean isWasEventObserved() {
+        return wasEventObserved;
+    }
+   
 }

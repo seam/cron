@@ -19,7 +19,6 @@ package org.jboss.seam.cron.quartz.jobs;
 import java.lang.annotation.Annotation;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Set;
 
 import javax.enterprise.inject.spi.BeanManager;
 
@@ -67,10 +66,8 @@ public abstract class AbstractTimeEventJob
 
         final Trigger eventPayload = createEventPayload();
 
-        for (Annotation binding : (Set<Annotation>) context.getJobDetail().getJobDataMap()
-                .get(QuartzStarter.QUALIFIERS)) {
-            log.trace("Firing time event for " + eventPayload + " with binding " + binding);
-            manager.fireEvent(eventPayload, binding);
-        }
+        Annotation binding = (Annotation)context.getJobDetail().getJobDataMap().get(QuartzStarter.QUALIFIER);
+        log.trace("Firing time event for " + eventPayload + " with binding " + binding);
+        manager.fireEvent(eventPayload, binding);
     }
 }

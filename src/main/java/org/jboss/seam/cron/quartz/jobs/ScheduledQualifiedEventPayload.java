@@ -17,8 +17,8 @@
 package org.jboss.seam.cron.quartz.jobs;
 
 import java.lang.annotation.Annotation;
-import java.util.HashSet;
-import java.util.Set;
+import org.jboss.seam.cron.annotations.Every;
+import org.jboss.seam.cron.events.TimeUnit;
 
 /**
  * Simple container for the qualifying annotation and payload type of
@@ -29,20 +29,25 @@ import java.util.Set;
 public class ScheduledQualifiedEventPayload {
    
     private final String scheduleSpec;
-    private final Set<Annotation> qualifiers;
+    private final Annotation qualifier;
     private final Class payloadType;
+    private final TimeUnit repeatUnit;
+    private final Integer repeatInterval;
 
-    public ScheduledQualifiedEventPayload(String scheduleSpec, Annotation qualifier, Class payloadType) {
-        this.scheduleSpec = scheduleSpec;
-        this.qualifiers = new HashSet<Annotation>();
-        this.qualifiers.add(qualifier);
+    public ScheduledQualifiedEventPayload(String dereferencedScheduleSpec, Annotation qualifier, Class payloadType) {
+        this.scheduleSpec = dereferencedScheduleSpec;
+        this.qualifier = qualifier;
         this.payloadType = payloadType;
+        this.repeatUnit = null;
+        this.repeatInterval = null;
     }
 
-    public ScheduledQualifiedEventPayload(String scheduleSpec, Set<Annotation> qualifiers, Class payloadType) {
-        this.scheduleSpec = scheduleSpec;
-        this.qualifiers = qualifiers;
+    public ScheduledQualifiedEventPayload(Every qualifier, Class payloadType) {
+        this.scheduleSpec = null;
+        this.qualifier = qualifier;
         this.payloadType = payloadType;
+        this.repeatUnit = qualifier.value();
+        this.repeatInterval = qualifier.nth();
     }
 
     public String getScheduleSpec() {
@@ -53,8 +58,20 @@ public class ScheduledQualifiedEventPayload {
         return payloadType;
     }
 
-    public Set<Annotation> getQualifiers() {
-        return qualifiers;
+    public Annotation getQualifier() {
+        return qualifier;
+    }
+
+    public TimeUnit getRepeatUnit() {
+        return repeatUnit;
+    }
+
+    public Integer getRepeatInterval() {
+        return repeatInterval;
+    }
+    
+    public boolean isInterval() {
+        return repeatUnit != null && scheduleSpec == null;
     }
 
     @Override
@@ -69,10 +86,16 @@ public class ScheduledQualifiedEventPayload {
         if ((this.scheduleSpec == null) ? (other.scheduleSpec != null) : !this.scheduleSpec.equals(other.scheduleSpec)) {
             return false;
         }
-        if (this.qualifiers != other.qualifiers && (this.qualifiers == null || !this.qualifiers.equals(other.qualifiers))) {
+        if (this.qualifier != other.qualifier && (this.qualifier == null || !this.qualifier.equals(other.qualifier))) {
             return false;
         }
         if (this.payloadType != other.payloadType && (this.payloadType == null || !this.payloadType.equals(other.payloadType))) {
+            return false;
+        }
+        if (this.repeatUnit != other.repeatUnit) {
+            return false;
+        }
+        if (this.repeatInterval != other.repeatInterval && (this.repeatInterval == null || !this.repeatInterval.equals(other.repeatInterval))) {
             return false;
         }
         return true;
@@ -80,16 +103,18 @@ public class ScheduledQualifiedEventPayload {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 59 * hash + (this.scheduleSpec != null ? this.scheduleSpec.hashCode() : 0);
-        hash = 59 * hash + (this.qualifiers != null ? this.qualifiers.hashCode() : 0);
-        hash = 59 * hash + (this.payloadType != null ? this.payloadType.hashCode() : 0);
+        int hash = 7;
+        hash = 17 * hash + (this.scheduleSpec != null ? this.scheduleSpec.hashCode() : 0);
+        hash = 17 * hash + (this.qualifier != null ? this.qualifier.hashCode() : 0);
+        hash = 17 * hash + (this.payloadType != null ? this.payloadType.hashCode() : 0);
+        hash = 17 * hash + (this.repeatUnit != null ? this.repeatUnit.hashCode() : 0);
+        hash = 17 * hash + (this.repeatInterval != null ? this.repeatInterval.hashCode() : 0);
         return hash;
     }
 
     @Override
     public String toString() {
-        return "SeamCronSchedule{" + "scheduleSpec=" + scheduleSpec + ", qualifiers=" + qualifiers + ", payloadType=" + payloadType + '}';
+        return "ScheduledQualifiedEventPayload{" + "scheduleSpec=" + scheduleSpec + ", qualifier=" + qualifier + ", payloadType=" + payloadType + ", repeatUnit=" + repeatUnit + ", repeatInterval=" + repeatInterval + '}';
     }
 
 }
