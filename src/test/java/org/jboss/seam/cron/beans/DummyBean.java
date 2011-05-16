@@ -14,14 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron;
+package org.jboss.seam.cron.beans;
 
 
 
 import org.jboss.seam.cron.annotations.Every;
 import org.jboss.seam.cron.annotations.Scheduled;
-import org.jboss.seam.cron.events.CronEvent;
-import org.jboss.seam.cron.events.Second;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -29,6 +27,8 @@ import java.util.Date;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import org.jboss.logging.Logger;
+import org.jboss.seam.cron.events.Trigger;
+import static org.jboss.seam.cron.events.TimeUnit.*;
 
 /**
  * Test all events, but minute and hour (to shorten test time).
@@ -46,7 +46,7 @@ public class DummyBean {
 
     public void onSchedule(@Observes
                            @Scheduled("*/5 * * ? * *")
-                           CronEvent event) {
+                           Trigger event) {
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(event.getTimeFired());
         firedCorrectly = firedCorrectly & ((c.get(Calendar.SECOND) % 5) == 0);
@@ -56,7 +56,7 @@ public class DummyBean {
 
     public void onNamedSchedule(@Observes
                                 @Scheduled("test.one")
-                                CronEvent event) {
+                                Trigger event) {
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(event.getTimeFired());
         firedCorrectly = firedCorrectly & ((c.get(Calendar.SECOND) % 5) == 0);
@@ -66,7 +66,7 @@ public class DummyBean {
 
     public void onTypesafeSchedule(@Observes
                                    @Frequent
-                                   CronEvent event) {
+                                   Trigger event) {
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(event.getTimeFired());
         firedCorrectly = firedCorrectly & ((c.get(Calendar.SECOND) % 5) == 0);
@@ -75,8 +75,8 @@ public class DummyBean {
     }
 
     public void onEverySecondSchedule(@Observes
-                                      @Every
-                                      Second event) {
+                                      @Every(SECOND)
+                                      Trigger event) {
         log.info("Every second event fired at " + new Date(event.getTimeFired()));
         this.everySecondEventObserved = true;
     }

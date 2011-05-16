@@ -18,8 +18,7 @@ package org.jboss.seam.cron.quartz.jobs;
 
 import java.util.GregorianCalendar;
 
-import org.jboss.seam.cron.events.AbstractTimeEvent;
-import org.jboss.seam.cron.events.Second;
+import org.jboss.seam.cron.events.Trigger;
 
 /**
  * Fires the Second event with the @Every binding.
@@ -27,14 +26,15 @@ import org.jboss.seam.cron.events.Second;
  * @author Peter Royle
  */
 public class SecondJob
-        extends AbstractTimeEventJob {
+        extends ScheduledEventJob {
     /**
      * Create an instance of the Event payload using the current system time.
      *
      * @return an instance of Event.
      */
-    protected AbstractTimeEvent createEventPayload() {
-        return new Second(System.currentTimeMillis(),
+    @Override
+    protected Trigger createEventPayload() {
+        return new Trigger(System.currentTimeMillis(),
                 gc.get(GregorianCalendar.SECOND));
     }
 }

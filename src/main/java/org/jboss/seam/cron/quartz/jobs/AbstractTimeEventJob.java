@@ -24,7 +24,7 @@ import java.util.Set;
 import javax.enterprise.inject.spi.BeanManager;
 
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.events.AbstractTimeEvent;
+import org.jboss.seam.cron.events.Trigger;
 import org.jboss.seam.cron.quartz.QuartzStarter;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -41,7 +41,7 @@ public abstract class AbstractTimeEventJob
         implements Job {
     protected int value = 0;
     protected final GregorianCalendar gc = new GregorianCalendar();
-    private Logger log = Logger.getLogger(SecondJob.class);
+    private Logger log = Logger.getLogger(AbstractTimeEventJob.class);
 
     /**
      * Implement this to return an instance of the appropriate event payload
@@ -49,7 +49,7 @@ public abstract class AbstractTimeEventJob
      *
      * @return an instance of the appropriate event type.
      */
-    protected abstract AbstractTimeEvent createEventPayload();
+    protected abstract Trigger createEventPayload();
 
     /**
      * Executes the internally scheduled job by firing the appropriate event with the
@@ -65,10 +65,10 @@ public abstract class AbstractTimeEventJob
                 (BeanManager) context.getJobDetail().getJobDataMap().get(QuartzStarter.MANAGER_NAME);
         gc.setTime(new Date());
 
-        final AbstractTimeEvent eventPayload = createEventPayload();
+        final Trigger eventPayload = createEventPayload();
 
         for (Annotation binding : (Set<Annotation>) context.getJobDetail().getJobDataMap()
-                .get(QuartzStarter.BINDINGS)) {
+                .get(QuartzStarter.QUALIFIERS)) {
             log.trace("Firing time event for " + eventPayload + " with binding " + binding);
             manager.fireEvent(eventPayload, binding);
         }

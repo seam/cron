@@ -22,6 +22,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import javax.inject.Qualifier;
+import org.jboss.seam.cron.events.TimeUnit;
 
 /**
  * The annotation which accompanies scheduled events which observe
@@ -39,4 +40,6 @@ import javax.inject.Qualifier;
         ElementType.TYPE
 })
 public @interface Every {
+    int nth() default 1;
+    TimeUnit value();
 }

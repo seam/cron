@@ -14,24 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.events;
+package org.jboss.seam.cron.beans;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
+import javax.time.Instant;
+import org.jboss.seam.cron.annotations.Every;
+import org.jboss.seam.cron.events.TimeUnit;
+import org.jboss.seam.cron.events.Trigger;
 
 /**
- * Event that fires every second.
  *
  * @author Peter Royle
  */
-public class Second
-        extends AbstractTimeEvent {
-    /**
-     * Creates an instance of Second using the given value of timeFired.
-     *
-     * @param timeFired The time at which the event was fired.
-     * @param second    The second upon which the event was fired
-     */
-    public Second(long timeFired, int second) {
-        super(timeFired);
-        this.value = second;
+@ApplicationScoped
+public class EveryTestBean {
+    
+    Instant lastTriggerSecond = null;
+    
+    public void every40Seconds(@Observes @Every(nth=40, value=TimeUnit.SECOND) Trigger t) {
+        if (lastTriggerSecond == null) {
+            lastTriggerSecond = Instant.seconds(t.getValue());
+        }
     }
+    
 }

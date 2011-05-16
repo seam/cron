@@ -49,11 +49,11 @@ public class AsynchronousInterceptor {
         Object result;
 
         log.trace("Intercepting method invocation of " + ctx.getMethod().getName() + " to make it @Asynchronous");
-        
+
         final InvocationCallable icr = icrs.get();
         icr.setInvocationContext(ctx);
 
-        if (returnImplementsFuture(ctx)) {
+        if (Future.class.isAssignableFrom(ctx.getMethod().getReturnType())) {
             // swap the "dummy" Future for a truly asynchronous future to return to the caller immediately
             icr.setPopResultsFromFuture(true);
             // use of FutureTask here provides the exception behaviour described by EJB
@@ -70,20 +70,5 @@ public class AsynchronousInterceptor {
         // this will either be a Future, or null
         return result;
     }
-
-    private boolean returnImplementsFuture(final InvocationContext ctx) {
-        boolean implementsFuture = false;
-        Class rtnType = ctx.getMethod().getReturnType();
-        if (rtnType.equals(Future.class)) {
-            implementsFuture = true;
-        } else {
-            Class[] rtnInterfaces = rtnType.getInterfaces();
-            for (Class clazz : rtnInterfaces) {
-                if (clazz.equals(Future.class)) {
-                    implementsFuture = true;
-                }
-            }
-        }
-        return implementsFuture;
-    }
+    
 }

@@ -16,21 +16,16 @@
  */
 package org.jboss.seam.cron;
 
-import java.io.File;
-import java.io.Serializable;
+import org.jboss.seam.cron.beans.DummyBean;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import junit.framework.Assert;
-import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.quartz.QuartzStarter;
-import org.jboss.shrinkwrap.api.ArchivePaths;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.quartz.SchedulerException;
@@ -40,27 +35,11 @@ import org.quartz.SchedulerException;
  */
 @SuppressWarnings("serial")
 @RunWith(Arquillian.class)
-public class CronTest implements Serializable {
+public class CronTest extends SeamCronTest {
 
     private static final int MAX_TIME_TO_WAIT = 20000;
     private static final int SLEEP_TIME = 2000;
     private static Logger log = Logger.getLogger(CronTest.class);
-
-    @Deployment
-    public static JavaArchive createTestArchive() 
-    {
-    	JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
-    		.addPackages(true,"org.jboss.seam.cron")
-    		.addAsManifestResource(
-    			new File("src/main/resources/META-INF/beans.xml"), 
-    			ArchivePaths.create("beans.xml"))
-    		.addAsManifestResource(
-			new File("src/main/resources/META-INF/services/javax.enterprise.inject.spi.Extension"), 
-			ArchivePaths.create("services/javax.enterprise.inject.spi.Extension"));
-    	
-        log.debug(archive.toString(true));
-    	return archive;
-    }
 
     @Inject
     DummyBean bean;
@@ -96,8 +75,8 @@ public class CronTest implements Serializable {
                 Thread.sleep(SLEEP_TIME);
             } catch (InterruptedException ex) {
                 log.error("Thread was woken up while sleeping");
-                Assert.fail("Thread was woken up while sleeping. Why?");
                 ex.printStackTrace();
+                Assert.fail("Thread was woken up while sleeping. Why?");
             }
         }
         assert bean.isScheduledEventObserved() == true;

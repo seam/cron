@@ -16,8 +16,7 @@
  */
 package org.jboss.seam.cron.quartz.jobs;
 
-import org.jboss.seam.cron.events.AbstractTimeEvent;
-import org.jboss.seam.cron.events.CronEvent;
+import org.jboss.seam.cron.events.Trigger;
 
 /**
  * Fires the 'Event' event with the current system time.
@@ -31,7 +30,7 @@ public class ScheduledEventJob
      *
      * @return an instance of Event.
      */
-    protected AbstractTimeEvent createEventPayload() {
-        return new CronEvent(System.currentTimeMillis());
+    protected Trigger createEventPayload() {
+        return new Trigger(System.currentTimeMillis());
     }
 }

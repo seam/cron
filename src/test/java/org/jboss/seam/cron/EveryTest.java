@@ -14,23 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.events;
+package org.jboss.seam.cron;
 
+import javax.inject.Inject;
+
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.logging.Logger;
+import org.jboss.seam.cron.quartz.QuartzStarter;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
- * Event which fires for arbitrarily-scheduled events.
- *
- * @author Peter Royle
- * @see org.jboss.seam.cron.annotations.Scheduled
+ * Test @Every schedules
  */
-public class CronEvent
-        extends AbstractTimeEvent {
-    /**
-     * Creates an instance of Event using the given value of timeFired.
-     *
-     * @param timeFired The time at which the event was fired.
-     */
-    public CronEvent(long timeFired) {
-        super(timeFired);
+@RunWith(Arquillian.class)
+public class EveryTest extends SeamCronTest {
+
+    private static Logger log = Logger.getLogger(EveryTest.class);
+    @Inject
+    QuartzStarter qStarter;
+
+    @Test
+    public void testEvery40thSecond() {
+        
     }
 }

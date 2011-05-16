@@ -21,13 +21,11 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import javax.interceptor.InvocationContext;
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.annotations.Asynchronous;
-import org.jboss.seam.cron.exception.AsynchronousMethodExecutionException;
 import org.jboss.seam.cron.exception.InternalException;
 
 /**

@@ -18,29 +18,35 @@ package org.jboss.seam.cron.events;
 
 
 /**
- * Superclass of all scheduled events, be they arbitrarily scheduled or one of the
- * built-in Second, Minute or Hour events. Note that the presence of this superclass
+ * The payload of all scheduled events, be they arbitrarily scheduled or one of the
+ * built-in @Every() schedules. Note that the presence of this superclass
  * implies that the following observation is possible:
- * <code>public void doSomething(@Observes @Every AbstractTimeEvent e)</code>
+ * <code>public void doSomething(@Observes @Every Trigger e)</code>
  * <p/>
  * Such an observation is valid, and will respond to every single scheduled event
  * fired (including the built in events).
  *
  * @author Peter Royle
  */
-public abstract class AbstractTimeEvent {
+public class Trigger {
+    
     private long timeFired;
-
+    
     // the value of the second, miute or hour, as the case may be
     protected int value;
 
     /**
-     * Create an instance of some subclass of AbstractTimeEvent using the given timeFired.
+     * Create an instance of some subclass of Trigger using the given timeFired.
      *
      * @param timeFired Represents the time at which the event represented by this instance fired.
      */
-    protected AbstractTimeEvent(long timeFired) {
+    public Trigger(long timeFired) {
         this.timeFired = timeFired;
+    }
+
+    public Trigger(long timeFired, int value) {
+        this.timeFired = timeFired;
+        this.value = value;
     }
 
     /**

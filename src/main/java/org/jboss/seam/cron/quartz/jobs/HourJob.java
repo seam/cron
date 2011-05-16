@@ -18,8 +18,7 @@ package org.jboss.seam.cron.quartz.jobs;
 
 import java.util.GregorianCalendar;
 
-import org.jboss.seam.cron.events.AbstractTimeEvent;
-import org.jboss.seam.cron.events.Hour;
+import org.jboss.seam.cron.events.Trigger;
 
 /**
  * Fires the Hour event with the @Every binding.
@@ -27,14 +26,15 @@ import org.jboss.seam.cron.events.Hour;
  * @author Peter Royle
  */
 public class HourJob
-        extends AbstractTimeEventJob {
+        extends ScheduledEventJob {
     /**
      * Create an event payload instance of type Hour with the current system time.
      *
      * @return an instance of Hour.
      */
-    protected AbstractTimeEvent createEventPayload() {
-        return new Hour(System.currentTimeMillis(),
+    @Override
+    protected Trigger createEventPayload() {
+        return new Trigger(System.currentTimeMillis(),
                 gc.get(GregorianCalendar.HOUR_OF_DAY));
     }
 }

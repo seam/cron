@@ -85,6 +85,11 @@
             <version>${arquillian.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>javax.time</groupId>
+            <artifactId>jsr-310-ri</artifactId>
+            <version>20100212</version>
+        </dependency>
     </dependencies>
     
     <dependencyManagement>

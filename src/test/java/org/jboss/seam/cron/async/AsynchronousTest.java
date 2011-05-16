@@ -28,7 +28,6 @@ import javax.inject.Inject;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.seam.cron.exception.AsynchronousMethodExecutionException;
 import org.jboss.shrinkwrap.api.ArchivePaths;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -55,8 +54,9 @@ public class AsynchronousTest implements Serializable {
                 .addPackages(true, "org.jboss.seam.cron.async")
                 .addAsManifestResource(new File("src/main/resources/META-INF/beans.xml"), 
                         ArchivePaths.create("beans.xml"))
-                .addAsManifestResource(new File("src/test/resources/META-INF/services/asynchronous.Extension"), 
-                        ArchivePaths.create("services/javax.enterprise.inject.spi.Extension"));
+    		.addAsManifestResource(
+			new File("src/main/resources/META-INF/services/javax.enterprise.inject.spi.Extension"), 
+			ArchivePaths.create("services/javax.enterprise.inject.spi.Extension"));
 
         log.debug(archive.toString(true));
         return archive;

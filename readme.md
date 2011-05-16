@@ -30,6 +30,11 @@ be resolved into a time using the `scheduler.properties` file at the root of you
 Alternatively you could just put the schedule definition directly into the `@Scheduled` 
 annotation on the method to be scheduled, but that would be a rather masochistic thing to do.
 
+If your requirements are fairly simple, for example running a task repeatedly at 
+a specific interval, then you can use the `@Every` qualifier like so:
+
+    public void ringTheBell(@Observes @Every(HOUR)
+
 ## MEH. What else you got?
 
 You're kidding right?
@@ -97,6 +102,7 @@ which the calling code can use as expected immediately.
 
     @Asynchronous
     public Future<Blah> doSomeHeavyLiftingInTheBackground() {
+        ...
         return new AsyncResult(new Blah());
     }
 

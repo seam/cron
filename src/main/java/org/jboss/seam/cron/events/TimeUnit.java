@@ -16,22 +16,18 @@
  */
 package org.jboss.seam.cron.events;
 
+import javax.enterprise.event.Observes;
+import org.jboss.seam.cron.annotations.Every;
 
 /**
- * Event that fires every hour.
- *
+ * Represents the time intervals observable using #{@link Observes} #{@link Every(timeUnit)}
  * @author Peter Royle
  */
-public class Hour
-        extends AbstractTimeEvent {
-    /**
-     * Creates an instance of Hour using the given value of timeFired.
-     *
-     * @param timeFired The time at which the event was fired.
-     * @param hour      The hour upon which the event was fired
-     */
-    public Hour(long timeFired, int hour) {
-        super(timeFired);
-        this.value = hour;
+public enum TimeUnit {
+
+    SECOND, MINUTE, HOUR;
+
+    private TimeUnit() {
     }
+
 }

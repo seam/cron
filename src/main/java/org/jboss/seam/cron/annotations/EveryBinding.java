@@ -17,6 +17,7 @@
 package org.jboss.seam.cron.annotations;
 
 import javax.enterprise.util.AnnotationLiteral;
+import org.jboss.seam.cron.events.TimeUnit;
 
 /**
  * @author Peter Royle
@@ -24,4 +25,21 @@ import javax.enterprise.util.AnnotationLiteral;
 public class EveryBinding
         extends AnnotationLiteral<Every>
         implements Every {
+
+    private final int nth;
+    private final TimeUnit value;
+
+    public EveryBinding(int nth, TimeUnit value) {
+        this.nth = nth;
+        this.value = value;
+    }
+    
+    public int nth() {
+        return nth;
+    }
+
+    public TimeUnit value() {
+        return value;
+    }
+    
 }

@@ -18,8 +18,7 @@ package org.jboss.seam.cron.quartz.jobs;
 
 import java.util.GregorianCalendar;
 
-import org.jboss.seam.cron.events.AbstractTimeEvent;
-import org.jboss.seam.cron.events.Minute;
+import org.jboss.seam.cron.events.Trigger;
 
 /**
  * Fires the Minute event with the @Every binding.
@@ -27,14 +26,15 @@ import org.jboss.seam.cron.events.Minute;
  * @author Peter Royle
  */
 public class MinuteJob
-        extends AbstractTimeEventJob {
+        extends ScheduledEventJob {
     /**
      * Create an event payload instance of type Minute with the current system time.
      *
      * @return an instance of Minute.
      */
-    protected AbstractTimeEvent createEventPayload() {
-        return new Minute(System.currentTimeMillis(),
+    @Override
+    protected Trigger createEventPayload() {
+        return new Trigger(System.currentTimeMillis(),
                 gc.get(GregorianCalendar.MINUTE));
     }
 }

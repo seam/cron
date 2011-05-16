@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron;
+package org.jboss.seam.cron.beans;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
