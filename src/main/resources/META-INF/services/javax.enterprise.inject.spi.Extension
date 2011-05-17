@@ -1,2 +1,2 @@
-org.jboss.seam.cron.quartz.QuartzStarter
-org.jboss.seam.cron.async.AsyncMethodSupportExtension
+org.jboss.seam.cron.provider.quartz.QuartzStarter
+org.jboss.seam.cron.impl.async.AsyncMethodSupportExtension

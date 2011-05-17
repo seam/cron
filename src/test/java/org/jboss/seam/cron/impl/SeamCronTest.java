@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron;
+package org.jboss.seam.cron.impl;
 
 import java.io.File;
 import java.io.Serializable;
@@ -32,11 +32,10 @@ public abstract class SeamCronTest implements Serializable {
 
     private static Logger log = Logger.getLogger(CronTest.class);
         
-    @Deployment
     public static JavaArchive createDefaultArchive() 
     {
     	JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
-    		.addPackages(true,"org.jboss.seam.cron")
+    		.addPackages(true,SeamCronTest.class.getPackage())
     		.addAsManifestResource(
     			new File("src/main/resources/META-INF/beans.xml"), 
     			ArchivePaths.create("beans.xml"))

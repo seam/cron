@@ -53,19 +53,39 @@
     </build>
 
     <dependencies>
-        <dependency>
-            <groupId>org.jboss.seam.solder</groupId>
-            <artifactId>seam-solder</artifactId>
-            <version>3.0.0.Final</version>
-        </dependency>
-
+        <!-- Dependencies for API sub-project -->
         <!-- Provided dependencies -->
         <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>javax.time</groupId>
+            <artifactId>jsr-310-ri</artifactId>
+            <version>20100212</version>
+        </dependency>
+        
+        <!-- Dependencies for Implementation sub-project -->
+        <dependency>
+            <groupId>org.jboss.seam.solder</groupId>
+            <artifactId>seam-solder</artifactId>
+            <version>3.0.0.Final</version>
+        </dependency>
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian</groupId>
+            <artifactId>arquillian-junit</artifactId>
+            <version>${arquillian.version}</version>
+            <scope>test</scope>
+        </dependency>
 
+        <!-- Dependencies for providers/quartz sub-project -->
         <!-- Runtime Dependencies -->
         <dependency>
             <groupId>org.opensymphony.quartz</groupId>
@@ -84,24 +104,6 @@
             <artifactId>commons-collections</artifactId>
             <version>3.2.1</version>
             <scope>runtime</scope>
-        </dependency>
-
-        <!-- Test dependencies -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian</groupId>
-            <artifactId>arquillian-junit</artifactId>
-            <version>${arquillian.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.time</groupId>
-            <artifactId>jsr-310-ri</artifactId>
-            <version>20100212</version>
         </dependency>
     </dependencies>
 

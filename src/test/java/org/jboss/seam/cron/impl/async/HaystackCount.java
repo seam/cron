@@ -14,29 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.async;
-
-import java.util.concurrent.Callable;
-import org.jboss.seam.cron.impl.exception.AsynchronousMethodExecutionException;
+package org.jboss.seam.cron.impl.async;
 
 /**
- * Simply wraps our #{@link Callable} in #{@link Thread}.
+ *
  * @author Peter Royle
  */
-public class CallableAsThread extends Thread {
-
-    private final Callable invCall;
-
-    public CallableAsThread(Callable invCall) {
-        this.invCall = invCall;
-    }
-
-    @Override
-    public void run() {
-        try {
-            invCall.call();
-        } catch (Throwable t) {
-            throw new AsynchronousMethodExecutionException("Error executing callable method", t);
-        }
-    }
+public @interface HaystackCount
+{
+   
 }

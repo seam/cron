@@ -14,18 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron;
+package org.jboss.seam.cron.impl;
 
-import org.jboss.seam.cron.beans.DummyBean;
+import org.jboss.seam.cron.impl.beans.DummyBean;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import junit.framework.Assert;
+import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.quartz.QuartzStarter;
+import org.jboss.seam.cron.provider.quartz.QuartzStarter;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.quartz.SchedulerException;
@@ -45,6 +47,11 @@ public class CronTest extends SeamCronTest {
     DummyBean bean;
     @Inject
     QuartzStarter qStarter;
+
+    @Deployment
+    public static JavaArchive createTestArchive() {
+        return createDefaultArchive();
+    }
 
     @Test
     public void testScheduleDoesGetRegistered() throws SchedulerException {

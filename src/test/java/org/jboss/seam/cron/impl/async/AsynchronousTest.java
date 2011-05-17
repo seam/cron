@@ -14,8 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.async;
+package org.jboss.seam.cron.impl.async;
 
+import org.jboss.seam.cron.impl.async.InvocationCallable;
 import org.jboss.logging.Logger;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -28,6 +29,8 @@ import javax.inject.Inject;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.seam.cron.api.async.Asynchronous;
+import org.jboss.seam.cron.impl.SeamCronTest;
 import org.jboss.shrinkwrap.api.ArchivePaths;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -35,31 +38,23 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.quartz.SchedulerException;
-import static org.jboss.seam.cron.async.SomeAsynchMethods.NUM_LOOPS;
-import static org.jboss.seam.cron.async.SomeAsynchMethods.SLEEP_PER_LOOP;
+import static org.jboss.seam.cron.impl.async.SomeAsynchMethods.NUM_LOOPS;
+import static org.jboss.seam.cron.impl.async.SomeAsynchMethods.SLEEP_PER_LOOP;
 
 /**
  * Test @Asynchronous method execution.
  */
 @SuppressWarnings("serial")
 @RunWith(Arquillian.class)
-public class AsynchronousTest implements Serializable {
+public class AsynchronousTest extends SeamCronTest {
     
     private static final int NUM_EXECUTIONS = 3;
     private static Logger log = Logger.getLogger(AsynchronousTest.class);
 
     @Deployment
     public static JavaArchive createTestArchive() {
-        JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
-                .addPackages(true, "org.jboss.seam.cron.async")
-                .addAsManifestResource(new File("src/main/resources/META-INF/beans.xml"), 
-                        ArchivePaths.create("beans.xml"))
-    		.addAsManifestResource(
-			new File("src/main/resources/META-INF/services/javax.enterprise.inject.spi.Extension"), 
-			ArchivePaths.create("services/javax.enterprise.inject.spi.Extension"));
-
-        log.debug(archive.toString(true));
-        return archive;
+        return createDefaultArchive()
+                .addPackages(true, Asynchronous.class.getPackage(), InvocationCallable.class.getPackage());
     }
 
     @Inject

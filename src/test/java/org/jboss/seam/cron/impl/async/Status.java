@@ -14,13 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.async;
+package org.jboss.seam.cron.impl.async;
 
 /**
  *
  * @author Peter Royle
  */
-public @interface HaystackCount
-{
-   
+public class Status {
+
+    private String description;
+
+    public Status(String desc) {
+        this.description = desc;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

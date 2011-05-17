@@ -14,14 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron;
+package org.jboss.seam.cron.impl;
 
 import javax.inject.Inject;
+import org.jboss.arquillian.api.Deployment;
 
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.beans.EveryTestBean;
+import org.jboss.seam.cron.impl.beans.EveryTestBean;
 import org.jboss.seam.cron.impl.exception.InternalException;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,6 +39,11 @@ public class EveryLongTest extends SeamCronTest {
     
     @Inject
     EveryTestBean everyTestBean;
+
+    @Deployment
+    public static JavaArchive createTestArchive() {
+        return createDefaultArchive();
+    }
 
     @Test 
     public void testEvery40thSecond() throws Exception {
