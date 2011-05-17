@@ -25,8 +25,8 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import javax.interceptor.InvocationContext;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.annotations.Asynchronous;
-import org.jboss.seam.cron.exception.InternalException;
+import org.jboss.seam.cron.api.async.Asynchronous;
+import org.jboss.seam.cron.impl.exception.InternalException;
 
 /**
  * This class handles the invocation of the #{@link Asynchronous} method, unwrapping of the

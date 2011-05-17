@@ -25,7 +25,7 @@ import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.annotations.Asynchronous;
+import org.jboss.seam.cron.api.async.Asynchronous;
 
 /**
  * Interceptor for asynchronous methods. Method may be directly marked as

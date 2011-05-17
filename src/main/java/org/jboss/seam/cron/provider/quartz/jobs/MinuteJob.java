@@ -14,32 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.annotations;
+package org.jboss.seam.cron.provider.quartz.jobs;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.GregorianCalendar;
 
-import javax.inject.Qualifier;
-import org.jboss.seam.cron.events.TimeUnit;
+import org.jboss.seam.cron.api.Trigger;
 
 /**
- * The annotation which accompanies scheduled events which observe
- * every event in a particular schedule. Eg:
- * <code>public void doSomething( @Observes @Every Minute min )</code> will
- * observe the event fired every minute.
+ * Fires the Minute event with the @Every binding.
  *
  * @author Peter Royle
  */
-@Qualifier
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER,
-        ElementType.METHOD,
-        ElementType.FIELD,
-        ElementType.TYPE
-})
-public @interface Every {
-    int nth() default 1;
-    TimeUnit value();
+public class MinuteJob
+        extends ScheduledEventJob {
+    /**
+     * Create an event payload instance of type Minute with the current system time.
+     *
+     * @return an instance of Minute.
+     */
+    @Override
+    protected Trigger createEventPayload() {
+        return new Trigger(System.currentTimeMillis(),
+                gc.get(GregorianCalendar.MINUTE));
+    }
 }

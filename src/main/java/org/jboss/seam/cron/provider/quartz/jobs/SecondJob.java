@@ -14,20 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.events;
+package org.jboss.seam.cron.provider.quartz.jobs;
 
-import javax.enterprise.event.Observes;
-import org.jboss.seam.cron.annotations.Every;
+import java.util.GregorianCalendar;
+
+import org.jboss.seam.cron.api.Trigger;
 
 /**
- * Represents the time intervals observable using #{@link Observes} #{@link Every(timeUnit)}
+ * Fires the Second event with the @Every binding.
+ *
  * @author Peter Royle
  */
-public enum TimeUnit {
-
-    SECOND, MINUTE, HOUR;
-
-    private TimeUnit() {
+public class SecondJob
+        extends ScheduledEventJob {
+    /**
+     * Create an instance of the Event payload using the current system time.
+     *
+     * @return an instance of Event.
+     */
+    @Override
+    protected Trigger createEventPayload() {
+        return new Trigger(System.currentTimeMillis(),
+                gc.get(GregorianCalendar.SECOND));
     }
-
 }

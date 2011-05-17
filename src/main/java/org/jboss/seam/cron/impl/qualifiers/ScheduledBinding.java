@@ -14,8 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.annotations;
+package org.jboss.seam.cron.impl.qualifiers;
 
+import org.jboss.seam.cron.api.Scheduled;
 import javax.enterprise.util.AnnotationLiteral;
 
 /**

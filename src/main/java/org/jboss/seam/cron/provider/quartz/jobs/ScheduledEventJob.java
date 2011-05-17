@@ -14,27 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.annotations;
+package org.jboss.seam.cron.provider.quartz.jobs;
 
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import javax.interceptor.InterceptorBinding;
-
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import org.jboss.seam.cron.api.Trigger;
 
 /**
- * Indicates that the annotated method, or all methods in the annotated class
- * will be executed asynchronously.
+ * Fires the 'Event' event with the current system time.
  *
  * @author Peter Royle
  */
-@Inherited
-@InterceptorBinding
-@Retention(RUNTIME)
-@Target({METHOD, TYPE})
-public @interface Asynchronous {
+public class ScheduledEventJob
+        extends AbstractTimeEventJob {
+    /**
+     * Create an event payload instance of type Event with the current system time.
+     *
+     * @return an instance of Event.
+     */
+    protected Trigger createEventPayload() {
+        return new Trigger(System.currentTimeMillis());
+    }
 }

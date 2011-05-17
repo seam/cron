@@ -16,13 +16,14 @@
  */
 package org.jboss.seam.cron.async;
 
+import org.jboss.seam.cron.api.AsyncResult;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.annotations.Asynchronous;
+import org.jboss.seam.cron.api.async.Asynchronous;
 
 /**
  * @author Peter Royle

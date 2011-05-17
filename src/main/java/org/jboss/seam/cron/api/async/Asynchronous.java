@@ -14,27 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.quartz.jobs;
+package org.jboss.seam.cron.api.async;
 
-import java.util.GregorianCalendar;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-import org.jboss.seam.cron.events.Trigger;
+import javax.interceptor.InterceptorBinding;
+
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Fires the Hour event with the @Every binding.
+ * Indicates that the annotated method, or all methods in the annotated class
+ * will be executed asynchronously.
  *
  * @author Peter Royle
  */
-public class HourJob
-        extends ScheduledEventJob {
-    /**
-     * Create an event payload instance of type Hour with the current system time.
-     *
-     * @return an instance of Hour.
-     */
-    @Override
-    protected Trigger createEventPayload() {
-        return new Trigger(System.currentTimeMillis(),
-                gc.get(GregorianCalendar.HOUR_OF_DAY));
-    }
+@Inherited
+@InterceptorBinding
+@Retention(RUNTIME)
+@Target({METHOD, TYPE})
+public @interface Asynchronous {
 }

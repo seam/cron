@@ -14,27 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.quartz.jobs;
-
-import java.util.GregorianCalendar;
-
-import org.jboss.seam.cron.events.Trigger;
+package org.jboss.seam.cron.impl.exception;
 
 /**
- * Fires the Second event with the @Every binding.
+ * Exception which is thrown when there is a problem with the configuration of
+ * the application using Seam Cron.
  *
  * @author Peter Royle
  */
-public class SecondJob
-        extends ScheduledEventJob {
+public class SchedulerConfigurationException
+        extends RuntimeException {
     /**
-     * Create an instance of the Event payload using the current system time.
-     *
-     * @return an instance of Event.
+     * Create a new instance of #{@link SchedulerConfigurationException} with the given error message.
+     * 
+     * @param message The error message.
      */
-    @Override
-    protected Trigger createEventPayload() {
-        return new Trigger(System.currentTimeMillis(),
-                gc.get(GregorianCalendar.SECOND));
+    public SchedulerConfigurationException(String message) {
+        super(message);
+    }
+
+    /**
+     * Create a new instance of #{@link SchedulerConfigurationException} with the given error message and cause.
+     * 
+     * @param message The error message.
+     * @param cause The original cause.
+     */
+    public SchedulerConfigurationException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

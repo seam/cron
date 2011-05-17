@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 
 import javax.inject.Qualifier;
 
-import org.jboss.seam.cron.annotations.Scheduled;
+import org.jboss.seam.cron.api.Scheduled;
 
 /**
  * A typesafe representation of the schedule named "test.one" for use as a binding

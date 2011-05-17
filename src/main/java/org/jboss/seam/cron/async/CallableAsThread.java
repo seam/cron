@@ -17,7 +17,7 @@
 package org.jboss.seam.cron.async;
 
 import java.util.concurrent.Callable;
-import org.jboss.seam.cron.exception.AsynchronousMethodExecutionException;
+import org.jboss.seam.cron.impl.exception.AsynchronousMethodExecutionException;
 
 /**
  * Simply wraps our #{@link Callable} in #{@link Thread}.

@@ -14,32 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.annotations;
+package org.jboss.seam.cron.api;
 
-import javax.enterprise.util.AnnotationLiteral;
-import org.jboss.seam.cron.events.TimeUnit;
+import javax.enterprise.event.Observes;
+import org.jboss.seam.cron.api.Every;
 
 /**
+ * Represents the time intervals observable using #{@link Observes} #{@link Every(timeUnit)}
  * @author Peter Royle
  */
-public class EveryBinding
-        extends AnnotationLiteral<Every>
-        implements Every {
+public enum TimeUnit {
 
-    private final int nth;
-    private final TimeUnit value;
+    SECOND, MINUTE, HOUR;
 
-    public EveryBinding(int nth, TimeUnit value) {
-        this.nth = nth;
-        this.value = value;
-    }
-    
-    public int nth() {
-        return nth;
+    private TimeUnit() {
     }
 
-    public TimeUnit value() {
-        return value;
-    }
-    
 }

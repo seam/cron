@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.quartz.jobs;
+package org.jboss.seam.cron.provider.quartz.jobs;
 
 import java.lang.annotation.Annotation;
 import java.util.Date;
@@ -23,7 +23,7 @@ import java.util.GregorianCalendar;
 import javax.enterprise.inject.spi.BeanManager;
 
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.events.Trigger;
+import org.jboss.seam.cron.api.Trigger;
 import org.jboss.seam.cron.quartz.QuartzStarter;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;

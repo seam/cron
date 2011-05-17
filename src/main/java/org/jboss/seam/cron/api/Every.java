@@ -14,32 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.exception;
+package org.jboss.seam.cron.api;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import javax.inject.Qualifier;
 
 /**
- * Exception which is thrown when there is a problem with the configuration of
- * the application using Seam Cron.
+ * The annotation which accompanies scheduled events which observe
+ * every event in a particular schedule. Eg:
+ * <code>public void doSomething( @Observes @Every Minute min )</code> will
+ * observe the event fired every minute.
  *
  * @author Peter Royle
  */
-public class SchedulerConfigurationException
-        extends RuntimeException {
-    /**
-     * Create a new instance of #{@link SchedulerConfigurationException} with the given error message.
-     * 
-     * @param message The error message.
-     */
-    public SchedulerConfigurationException(String message) {
-        super(message);
-    }
-
-    /**
-     * Create a new instance of #{@link SchedulerConfigurationException} with the given error message and cause.
-     * 
-     * @param message The error message.
-     * @param cause The original cause.
-     */
-    public SchedulerConfigurationException(String message, Throwable cause) {
-        super(message, cause);
-    }
+@Qualifier
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER,
+        ElementType.METHOD,
+        ElementType.FIELD,
+        ElementType.TYPE
+})
+public @interface Every {
+    int nth() default 1;
+    TimeUnit value();
 }

@@ -14,33 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.exception;
+package org.jboss.seam.cron.impl.qualifiers;
+
+import org.jboss.seam.cron.api.Every;
+import javax.enterprise.util.AnnotationLiteral;
+import org.jboss.seam.cron.api.TimeUnit;
 
 /**
- * Exception which is thrown when there is a problem running an @Asynchronous
- * method asynchronously.
- *
  * @author Peter Royle
  */
-public class AsynchronousMethodExecutionException
-        extends RuntimeException {
+public class EveryBinding
+        extends AnnotationLiteral<Every>
+        implements Every {
+
+    private final int nth;
+    private final TimeUnit value;
+
+    public EveryBinding(int nth, TimeUnit value) {
+        this.nth = nth;
+        this.value = value;
+    }
     
-    /**
-     * Create a new instance of #{@link AsynchronousMethodExecutionException} with the given error message.
-     * 
-     * @param message The error message.
-     */
-    public AsynchronousMethodExecutionException(String message) {
-        super(message);
+    public int nth() {
+        return nth;
     }
 
-    /**
-     * Create a new instance of #{@link AsynchronousMethodExecutionException} with the given error message and cause.
-     * 
-     * @param message The error message.
-     * @param cause   The original cause.
-     */
-    public AsynchronousMethodExecutionException(String message, Throwable cause) {
-        super(message, cause);
+    public TimeUnit value() {
+        return value;
     }
+    
 }

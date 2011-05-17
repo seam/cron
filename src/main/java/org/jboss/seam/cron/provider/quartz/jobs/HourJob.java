@@ -14,30 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.exception;
+package org.jboss.seam.cron.provider.quartz.jobs;
+
+import java.util.GregorianCalendar;
+
+import org.jboss.seam.cron.api.Trigger;
 
 /**
- * This exception indicates a probable programming error, eg using a managed bean
- * before properly configuring it.
+ * Fires the Hour event with the @Every binding.
  *
  * @author Peter Royle
  */
-public class InternalException
-        extends RuntimeException {
+public class HourJob
+        extends ScheduledEventJob {
     /**
-     * Create a new instance of #{@link InternalException} with the given error message.
-     * @param message The error message.
+     * Create an event payload instance of type Hour with the current system time.
+     *
+     * @return an instance of Hour.
      */
-    public InternalException(String message) {
-        super(message);
-    }
-
-    /**
-     * Create a new instance of #{@link InternalException} with the given error message and cause.
-     * @param message The error message.
-     * @param cause The original cause.
-     */
-    public InternalException(String message, Throwable cause) {
-        super(message, cause);
+    @Override
+    protected Trigger createEventPayload() {
+        return new Trigger(System.currentTimeMillis(),
+                gc.get(GregorianCalendar.HOUR_OF_DAY));
     }
 }

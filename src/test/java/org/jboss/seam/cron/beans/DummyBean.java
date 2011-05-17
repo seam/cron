@@ -18,8 +18,8 @@ package org.jboss.seam.cron.beans;
 
 
 
-import org.jboss.seam.cron.annotations.Every;
-import org.jboss.seam.cron.annotations.Scheduled;
+import org.jboss.seam.cron.api.Every;
+import org.jboss.seam.cron.api.Scheduled;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -27,8 +27,8 @@ import java.util.Date;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.events.Trigger;
-import static org.jboss.seam.cron.events.TimeUnit.*;
+import org.jboss.seam.cron.api.Trigger;
+import static org.jboss.seam.cron.api.TimeUnit.*;
 
 /**
  * Test all events, but minute and hour (to shorten test time).

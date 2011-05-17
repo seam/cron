@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.quartz.jobs;
+package org.jboss.seam.cron.provider.quartz.jobs;
 
 import java.lang.annotation.Annotation;
-import org.jboss.seam.cron.annotations.Every;
-import org.jboss.seam.cron.events.TimeUnit;
+import org.jboss.seam.cron.api.Every;
+import org.jboss.seam.cron.api.TimeUnit;
 
 /**
  * Simple container for the qualifying annotation and payload type of

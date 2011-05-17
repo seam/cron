@@ -19,10 +19,10 @@ package org.jboss.seam.cron.beans;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.time.Instant;
-import org.jboss.seam.cron.annotations.Every;
-import org.jboss.seam.cron.events.TimeUnit;
-import org.jboss.seam.cron.events.Trigger;
-import org.jboss.seam.cron.exception.InternalException;
+import org.jboss.seam.cron.api.Every;
+import org.jboss.seam.cron.api.TimeUnit;
+import org.jboss.seam.cron.api.Trigger;
+import org.jboss.seam.cron.impl.exception.InternalException;
 
 /**
  *

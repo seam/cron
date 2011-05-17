@@ -14,23 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.quartz.jobs;
-
-import org.jboss.seam.cron.events.Trigger;
+package org.jboss.seam.cron.impl.exception;
 
 /**
- * Fires the 'Event' event with the current system time.
- *
+ * Exception thrown when there is a problem starting the Seam Cron module.
+ * 
  * @author Peter Royle
  */
-public class ScheduledEventJob
-        extends AbstractTimeEventJob {
+public class SchedulerInitialisationException
+        extends RuntimeException {
     /**
-     * Create an event payload instance of type Event with the current system time.
+     * Create a new instance of SchedulerInitialisationException with the given error message.
      *
-     * @return an instance of Event.
+     * @param message The error message.
      */
-    protected Trigger createEventPayload() {
-        return new Trigger(System.currentTimeMillis());
+    public SchedulerInitialisationException(String message) {
+        super(message);
+    }
+
+    /**
+     * Create a new instance of SchedulerInitialisationException with the given error message and cause.
+     *
+     * @param message The error message.
+     * @param cause   The orginal cause of the error.
+     */
+    public SchedulerInitialisationException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

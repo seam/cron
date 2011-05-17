@@ -21,7 +21,7 @@ import javax.inject.Inject;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.beans.EveryTestBean;
-import org.jboss.seam.cron.exception.InternalException;
+import org.jboss.seam.cron.impl.exception.InternalException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

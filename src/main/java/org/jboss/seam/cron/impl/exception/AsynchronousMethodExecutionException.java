@@ -14,27 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.quartz.jobs;
-
-import java.util.GregorianCalendar;
-
-import org.jboss.seam.cron.events.Trigger;
+package org.jboss.seam.cron.impl.exception;
 
 /**
- * Fires the Minute event with the @Every binding.
+ * Exception which is thrown when there is a problem running an @Asynchronous
+ * method asynchronously.
  *
  * @author Peter Royle
  */
-public class MinuteJob
-        extends ScheduledEventJob {
+public class AsynchronousMethodExecutionException
+        extends RuntimeException {
+    
     /**
-     * Create an event payload instance of type Minute with the current system time.
-     *
-     * @return an instance of Minute.
+     * Create a new instance of #{@link AsynchronousMethodExecutionException} with the given error message.
+     * 
+     * @param message The error message.
      */
-    @Override
-    protected Trigger createEventPayload() {
-        return new Trigger(System.currentTimeMillis(),
-                gc.get(GregorianCalendar.MINUTE));
+    public AsynchronousMethodExecutionException(String message) {
+        super(message);
+    }
+
+    /**
+     * Create a new instance of #{@link AsynchronousMethodExecutionException} with the given error message and cause.
+     * 
+     * @param message The error message.
+     * @param cause   The original cause.
+     */
+    public AsynchronousMethodExecutionException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.async;
+package org.jboss.seam.cron.api;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import org.jboss.seam.cron.annotations.Asynchronous;
+import org.jboss.seam.cron.api.async.Asynchronous;
 
 /**
  * <p>
