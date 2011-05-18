@@ -22,18 +22,12 @@ import java.lang.annotation.Annotation;
  *
  * @author peteroyle
  */
-public class TriggerDetail {
+public abstract class TriggerDetail {
 
     private final Annotation qualifier;
-    private final AbstractTriggerHelper triggerHelper;
 
-    public TriggerDetail(AbstractTriggerHelper triggerHelper, Annotation qualifier) {
-        this.triggerHelper = triggerHelper;
+    public TriggerDetail(Annotation qualifier) {
         this.qualifier = qualifier;
-    }
-
-    public AbstractTriggerHelper getTriggerHelper() {
-        return triggerHelper;
     }
 
     public Annotation getQualifier() {

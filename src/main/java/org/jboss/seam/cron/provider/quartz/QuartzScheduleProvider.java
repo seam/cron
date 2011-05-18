@@ -16,6 +16,7 @@
  */
 package org.jboss.seam.cron.provider.quartz;
 
+import org.jboss.seam.cron.provider.quartz.jobs.TriggerJob;
 import org.jboss.seam.cron.provider.spi.CronScheduleProvider;
 import java.text.ParseException;
 import java.util.Date;
@@ -30,19 +31,9 @@ import javax.inject.Inject;
 
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.api.Every;
-import org.jboss.seam.cron.api.TimeUnit;
-import org.jboss.seam.cron.impl.exception.InternalException;
 import org.jboss.seam.cron.impl.exception.SchedulerInitialisationException;
-import org.jboss.seam.cron.provider.quartz.jobs.HourJob;
-import org.jboss.seam.cron.provider.quartz.jobs.MinuteJob;
-import org.jboss.seam.cron.provider.quartz.jobs.ScheduledEventJob;
-import org.jboss.seam.cron.provider.quartz.jobs.SecondJob;
-import org.jboss.seam.cron.provider.spi.trigger.HourTriggerHelper;
 import org.jboss.seam.cron.provider.spi.trigger.IntervalTriggerDetail;
-import org.jboss.seam.cron.provider.spi.trigger.MinuteTriggerHelper;
 import org.jboss.seam.cron.provider.spi.trigger.ScheduledTriggerDetail;
-import org.jboss.seam.cron.provider.spi.trigger.ScheduledTriggerHelper;
-import org.jboss.seam.cron.provider.spi.trigger.SecondTriggerHelper;
 import org.jboss.seam.cron.provider.spi.trigger.TriggerDetail;
 import org.quartz.CronTrigger;
 import org.quartz.JobDataMap;
@@ -56,6 +47,7 @@ import org.quartz.simpl.RAMJobStore;
 import org.quartz.simpl.SimpleThreadPool;
 import org.quartz.spi.JobStore;
 import org.quartz.spi.ThreadPool;
+import static org.jboss.seam.cron.api.TimeUnit.*;
 
 /**
  * Methods of this class are called at various stages of the JSR-299 initialisation
@@ -113,11 +105,11 @@ public class QuartzScheduleProvider implements CronScheduleProvider {
 
     public void processIntervalTrigger(final IntervalTriggerDetail intervalTriggerDetails) throws ParseException, SchedulerException, InternalError {
         Trigger schedTrigger = null;
-        if (TimeUnit.SECOND.equals(intervalTriggerDetails.getRepeatUnit())) {
+        if (SECOND.equals(intervalTriggerDetails.getRepeatUnit())) {
             schedTrigger = TriggerUtils.makeSecondlyTrigger(intervalTriggerDetails.getRepeatInterval());
-        } else if (TimeUnit.MINUTE.equals(intervalTriggerDetails.getRepeatUnit())) {
+        } else if (MINUTE.equals(intervalTriggerDetails.getRepeatUnit())) {
             schedTrigger = TriggerUtils.makeMinutelyTrigger(intervalTriggerDetails.getRepeatInterval());
-        } else if (TimeUnit.HOUR.equals(intervalTriggerDetails.getRepeatUnit())) {
+        } else if (HOUR.equals(intervalTriggerDetails.getRepeatUnit())) {
             schedTrigger = TriggerUtils.makeHourlyTrigger(intervalTriggerDetails.getRepeatInterval());
         } else {
             throw new InternalError("Could not work out which interval to use for the schedule of an @" + Every.class.getName() + " observer");
@@ -170,22 +162,7 @@ public class QuartzScheduleProvider implements CronScheduleProvider {
         final String jobName = triggerDetails.toString() + "-trigger";
         schedTrigger.setName(jobName);
 
-        // TODO: (PR): this has gone wrong. Will fix it shortly.
-        Class jobKlass = null;
-        if (triggerDetails.getTriggerHelper() instanceof ScheduledTriggerHelper) {
-            jobKlass = ScheduledEventJob.class;
-        } else if (triggerDetails.getTriggerHelper() instanceof SecondTriggerHelper) {
-            jobKlass = SecondJob.class;
-        } else if (triggerDetails.getTriggerHelper() instanceof MinuteTriggerHelper) {
-            jobKlass = MinuteJob.class;
-        } else if (triggerDetails.getTriggerHelper() instanceof HourTriggerHelper) {
-            jobKlass = HourJob.class;
-        } else {
-            throw new InternalException("wtf");
-        }
-
-        triggerDetails.getTriggerHelper();
-        JobDetail job = new JobDetail(jobName, schedTrigger.getGroup(), jobKlass);
+        JobDetail job = new JobDetail(jobName, schedTrigger.getGroup(), TriggerJob.class);
         job.setJobDataMap(new JobDataMap());
         job.getJobDataMap().put(MANAGER_NAME, beanManager);
         job.getJobDataMap().putAll(jobParams);

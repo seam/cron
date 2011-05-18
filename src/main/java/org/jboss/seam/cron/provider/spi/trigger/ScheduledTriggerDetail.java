@@ -28,8 +28,8 @@ public class ScheduledTriggerDetail extends TriggerDetail {
 
     private final String cronScheduleSpec;
 
-    public ScheduledTriggerDetail(String dereferencedScheduleSpec, Annotation qualifier, AbstractTriggerHelper triggerHelper) {
-        super(triggerHelper, qualifier);
+    public ScheduledTriggerDetail(String dereferencedScheduleSpec, Annotation qualifier) {
+        super(qualifier);
         this.cronScheduleSpec = dereferencedScheduleSpec;
     }
 
@@ -52,9 +52,6 @@ public class ScheduledTriggerDetail extends TriggerDetail {
         if (this.getQualifier() != other.getQualifier() && (this.getQualifier() == null || !this.getQualifier().equals(other.getQualifier()))) {
             return false;
         }
-        if (this.getTriggerHelper() != other.getTriggerHelper() && (this.getTriggerHelper() == null || !this.getTriggerHelper().equals(other.getTriggerHelper()))) {
-            return false;
-        }
         return true;
     }
 
@@ -63,12 +60,11 @@ public class ScheduledTriggerDetail extends TriggerDetail {
         int hash = 7;
         hash = 17 * hash + (this.cronScheduleSpec != null ? this.cronScheduleSpec.hashCode() : 0);
         hash = 17 * hash + (this.getQualifier() != null ? this.getQualifier().hashCode() : 0);
-        hash = 17 * hash + (this.getTriggerHelper() != null ? this.getTriggerHelper().hashCode() : 0);
         return hash;
     }
 
     @Override
     public String toString() {
-        return getClass().getName() + "{" + "scheduleSpec=" + cronScheduleSpec + ", qualifier=" + getQualifier() + ", payloadType=" + getTriggerHelper() + '}';
+        return getClass().getName() + "{" + "scheduleSpec=" + cronScheduleSpec + ", qualifier=" + getQualifier() + '}';
     }
 }

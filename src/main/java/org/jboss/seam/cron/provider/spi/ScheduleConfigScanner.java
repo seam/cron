@@ -37,14 +37,10 @@ import org.jboss.seam.cron.api.Scheduled;
 import org.jboss.seam.cron.api.Trigger;
 import org.jboss.seam.cron.impl.exception.SchedulerConfigurationException;
 import org.jboss.seam.cron.impl.exception.SchedulerInitialisationException;
+import org.jboss.seam.cron.impl.util.AnnotaionUtils;
 import org.jboss.seam.cron.impl.util.SchedulePropertiesManager;
-import org.jboss.seam.cron.provider.spi.trigger.HourTriggerHelper;
 import org.jboss.seam.cron.provider.spi.trigger.IntervalTriggerDetail;
-import org.jboss.seam.cron.provider.spi.trigger.MinuteTriggerHelper;
-import org.jboss.seam.cron.provider.spi.trigger.AbstractTriggerHelper;
 import org.jboss.seam.cron.provider.spi.trigger.ScheduledTriggerDetail;
-import org.jboss.seam.cron.provider.spi.trigger.ScheduledTriggerHelper;
-import org.jboss.seam.cron.provider.spi.trigger.SecondTriggerHelper;
 
 /**
  *
@@ -81,16 +77,16 @@ public class ScheduleConfigScanner
             for (ObserverMethod<?> obsMeth : allObservers) {
                 for (Object bindingObj : obsMeth.getObservedQualifiers()) {
                     final Annotation orginalQualifier = (Annotation) bindingObj;
-                    final Scheduled schedBinding = (Scheduled) getQualifier(orginalQualifier, Scheduled.class);
-                    final Every everyBinding = (Every) getQualifier(orginalQualifier, Every.class);
+                    final Scheduled schedQualifier = (Scheduled) AnnotaionUtils.getQualifier(orginalQualifier, Scheduled.class);
+                    final Every everyQualifier = (Every) AnnotaionUtils.getQualifier(orginalQualifier, Every.class);
                     // gather the details of all @Scheduled and @Every triggers
-                    if (schedBinding != null) {
-                        String cronScheduleSpec = lookupNamedScheduleIfNecessary(schedBinding.value());
-                        ScheduledTriggerDetail payload = new ScheduledTriggerDetail(cronScheduleSpec, orginalQualifier, new ScheduledTriggerHelper());
+                    if (schedQualifier != null) {
+                        String cronScheduleSpec = lookupNamedScheduleIfNecessary(schedQualifier.value());
+                        ScheduledTriggerDetail payload = new ScheduledTriggerDetail(cronScheduleSpec, orginalQualifier);
                         scheduleProvider.processScheduledTrigger(payload);
                     }
-                    if (everyBinding != null) {
-                        IntervalTriggerDetail payload = createEventPayloadFromEveryBinding(everyBinding);
+                    if (everyQualifier != null) {
+                        IntervalTriggerDetail payload = createEventPayloadFromEveryBinding(everyQualifier);
                         scheduleProvider.processIntervalTrigger(payload);
                     }
                 }
@@ -110,17 +106,6 @@ public class ScheduleConfigScanner
         scheduleProvider.stopScheduler();
     }
 
-    private Annotation getQualifier(Annotation binding, Class qualifierType) {
-        Annotation qualifier = null;
-        if (qualifierType.isAssignableFrom(binding.getClass())) {
-            qualifier = binding;
-        } else {
-            // check for meta-annotation
-            qualifier = binding.annotationType().getAnnotation(qualifierType);
-        }
-        return qualifier;
-    }
-
     /**
      * Inspects the given @Every qualifier and extracts its settings into a new #{@link ScheduledTriggerDetail}.
      *
@@ -128,18 +113,7 @@ public class ScheduleConfigScanner
      * @return a fully populated #{@link ScheduledTriggerDetail}.
      */
     public IntervalTriggerDetail createEventPayloadFromEveryBinding(final Every everyBinding) {
-        AbstractTriggerHelper trigerHelper = null;
-        switch (everyBinding.value()) {
-            case SECOND:
-                trigerHelper = new SecondTriggerHelper();
-                break;
-            case MINUTE:
-                trigerHelper = new MinuteTriggerHelper();
-                break;
-            case HOUR:
-                trigerHelper = new HourTriggerHelper();
-        }
-        return new IntervalTriggerDetail(everyBinding, trigerHelper);
+        return new IntervalTriggerDetail(everyBinding);
     }
 
     /**

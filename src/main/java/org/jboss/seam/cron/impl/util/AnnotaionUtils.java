@@ -14,28 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.provider.spi.trigger;
+package org.jboss.seam.cron.impl.util;
 
-import java.util.GregorianCalendar;
-
-import org.jboss.seam.cron.api.Trigger;
+import java.lang.annotation.Annotation;
 
 /**
- * Fires the Second event with the @Every binding.
  *
- * @author Peter Royle
+ * @author peteroyle
  */
-public class SecondTriggerHelper
-        extends AbstractTriggerHelper {
+public class AnnotaionUtils {
 
-    /**
-     * Create an instance of the Event payload using the current system time.
-     *
-     * @return an instance of Event.
-     */
-    @Override
-    protected Trigger createEventPayload() {
-        return new Trigger(System.currentTimeMillis(),
-                gc.get(GregorianCalendar.SECOND));
+    public static Annotation getQualifier(Annotation binding, Class qualifierType) {
+        Annotation qualifier = null;
+        if (qualifierType.isAssignableFrom(binding.getClass())) {
+            qualifier = binding;
+        } else {
+            // check for meta-annotation
+            qualifier = binding.annotationType().getAnnotation(qualifierType);
+        }
+        return qualifier;
     }
+
 }

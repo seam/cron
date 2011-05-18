@@ -30,8 +30,8 @@ public class IntervalTriggerDetail extends TriggerDetail {
     private final TimeUnit repeatUnit;
     private final Integer repeatInterval;
 
-    public IntervalTriggerDetail(Every qualifier, AbstractTriggerHelper triggerHelper) {
-        super(triggerHelper, qualifier);
+    public IntervalTriggerDetail(Every qualifier) {
+        super(qualifier);
         this.repeatUnit = qualifier.value();
         this.repeatInterval = qualifier.nth();
     }
@@ -56,9 +56,6 @@ public class IntervalTriggerDetail extends TriggerDetail {
         if (this.getQualifier() != other.getQualifier() && (this.getQualifier() == null || !this.getQualifier().equals(other.getQualifier()))) {
             return false;
         }
-        if (this.getTriggerHelper() != other.getTriggerHelper() && (this.getTriggerHelper() == null || !this.getTriggerHelper().equals(other.getTriggerHelper()))) {
-            return false;
-        }
         if (this.repeatUnit != other.repeatUnit) {
             return false;
         }
@@ -72,7 +69,6 @@ public class IntervalTriggerDetail extends TriggerDetail {
     public int hashCode() {
         int hash = 7;
         hash = 17 * hash + (this.getQualifier() != null ? this.getQualifier().hashCode() : 0);
-        hash = 17 * hash + (this.getTriggerHelper() != null ? this.getTriggerHelper().hashCode() : 0);
         hash = 17 * hash + (this.repeatUnit != null ? this.repeatUnit.hashCode() : 0);
         hash = 17 * hash + (this.repeatInterval != null ? this.repeatInterval.hashCode() : 0);
         return hash;
@@ -80,6 +76,6 @@ public class IntervalTriggerDetail extends TriggerDetail {
 
     @Override
     public String toString() {
-        return getClass().getName() + "{" + ", qualifier=" + getQualifier() + ", payloadType=" + getTriggerHelper() + ", repeatUnit=" + repeatUnit + ", repeatInterval=" + repeatInterval + '}';
+        return getClass().getName() + "{" + ", qualifier=" + getQualifier() + ", repeatUnit=" + repeatUnit + ", repeatInterval=" + repeatInterval + '}';
     }
 }

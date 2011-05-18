@@ -23,8 +23,11 @@ import java.util.GregorianCalendar;
 import javax.enterprise.inject.spi.BeanManager;
 
 import org.jboss.logging.Logger;
+import org.jboss.seam.cron.api.Every;
+import org.jboss.seam.cron.api.Scheduled;
 import org.jboss.seam.cron.api.Trigger;
 import org.jboss.seam.cron.impl.exception.InternalException;
+import org.jboss.seam.cron.impl.util.AnnotaionUtils;
 
 /**
  * Base class for firing a Trigger. Implementing classes must define type of the
@@ -32,23 +35,14 @@ import org.jboss.seam.cron.impl.exception.InternalException;
  *
  * @author Peter Royle
  */
-public abstract class AbstractTriggerHelper {
-    
+public class DefaultTriggerHelper implements TriggerHelper {
+
     protected int value = 0;
     protected final GregorianCalendar gc = new GregorianCalendar();
     protected BeanManager beanManager;
     protected Annotation qualifier;
     private boolean configured = false;
-    private Logger log = Logger.getLogger(AbstractTriggerHelper.class);
-
-
-    /**
-     * Implement this to return an instance of the appropriate event payload
-     * to be used when firing the event.
-     *
-     * @return an instance of the appropriate event type.
-     */
-    protected abstract Trigger createEventPayload();
+    private Logger log = Logger.getLogger(DefaultTriggerHelper.class);
 
     /**
      * Must call configure before calling fireTrigger.
@@ -68,12 +62,48 @@ public abstract class AbstractTriggerHelper {
         if (!configured) {
             throw new InternalException(getClass().getName() + " was not configured properly before calling this method.");
         }
-        
+
         gc.setTime(new Date());
-        final Trigger eventPayload = createEventPayload();
-        
+
+        Trigger eventPayload = null;
+        final Scheduled schedQualifier = (Scheduled) AnnotaionUtils.getQualifier(qualifier, Scheduled.class);
+        if (schedQualifier != null) {
+            eventPayload = createScheduledEventPayload();
+        } else {
+            final Every everyQualifier = (Every) AnnotaionUtils.getQualifier(qualifier, Every.class);
+            if (everyQualifier != null) {
+                switch (everyQualifier.value()) {
+                    case SECOND: eventPayload = createSecondEventPayload(); break;
+                    case MINUTE: eventPayload = createMinuteEventPayload(); break;
+                    case HOUR: eventPayload = createHourEventPayload(); break;
+                }
+            }
+        }
         log.trace("Firing time event for " + eventPayload + " with binding " + qualifier);
         beanManager.fireEvent(eventPayload, qualifier);
     }
 
+    /**
+     * Create an instance of the Event payload using the current system time.
+     *
+     * @return an instance of Event.
+     */
+    protected Trigger createScheduledEventPayload() {
+        return new Trigger(System.currentTimeMillis());
+    }
+
+    protected Trigger createSecondEventPayload() {
+        return new Trigger(System.currentTimeMillis(),
+                gc.get(GregorianCalendar.SECOND));
+    }
+
+    protected Trigger createMinuteEventPayload() {
+        return new Trigger(System.currentTimeMillis(),
+                gc.get(GregorianCalendar.MINUTE));
+    }
+
+    protected Trigger createHourEventPayload() {
+        return new Trigger(System.currentTimeMillis(),
+                gc.get(GregorianCalendar.HOUR_OF_DAY));
+    }
 }
