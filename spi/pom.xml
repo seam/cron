@@ -3,11 +3,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.jboss.seam.cron</groupId>
-    <artifactId>seam-cron-impl</artifactId>
+    <artifactId>seam-cron-spi</artifactId>
     <packaging>jar</packaging>
     <version>3.0.0-SNAPSHOT</version>
-    <name>Seam Cron Implementation</name>
-    <description>The Extension implementation for Seam Cron</description>
+    <name>Seam Cron SPI</name>
+    <description>The Service Provider Interface for Seam Cron.</description>
     <url>http://seamframework.org/Seam3/CronModule</url>
 
     <parent>
@@ -18,6 +18,7 @@
     </parent>
 
     <dependencies>
+        <!-- Dependencies for API sub-project -->
         <!-- Provided dependencies -->
         <dependency>
             <groupId>javax.enterprise</groupId>
@@ -27,18 +28,10 @@
         <!-- Compile-time dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>seam-cron-api</artifactId>
+            <artifactId>seam-cron-impl</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.jboss.seam.solder</groupId>
-            <artifactId>seam-solder</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <!-- TODO: (PR) once API and IMPL are separate projects <scope>runtime</scope>-->
-        </dependency>
+
         <!-- Test dependencies -->
         <dependency>
             <groupId>junit</groupId>
@@ -49,6 +42,19 @@
             <groupId>org.jboss.arquillian</groupId>
             <artifactId>arquillian-junit</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <!-- Dependencies for providers/quartz sub-project -->
+        <!-- Runtime Dependencies -->
+        <dependency>
+            <groupId>org.opensymphony.quartz</groupId>
+            <artifactId>quartz</artifactId>
+            <!-- TODO: (PR) once API and IMPL are separate projects <scope>runtime</scope>-->
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
