@@ -14,9 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.provider.quartz.jobs;
+package org.jboss.seam.cron.provider.spi.trigger;
 
-import java.lang.annotation.Annotation;
 import org.jboss.seam.cron.api.Every;
 import org.jboss.seam.cron.api.TimeUnit;
 
@@ -26,40 +25,15 @@ import org.jboss.seam.cron.api.TimeUnit;
  * 
  * @author Peter Royle
  */
-public class ScheduledQualifiedEventPayload {
-   
-    private final String scheduleSpec;
-    private final Annotation qualifier;
-    private final Class payloadType;
+public class IntervalTriggerDetail extends TriggerDetail {
+
     private final TimeUnit repeatUnit;
     private final Integer repeatInterval;
 
-    public ScheduledQualifiedEventPayload(String dereferencedScheduleSpec, Annotation qualifier, Class payloadType) {
-        this.scheduleSpec = dereferencedScheduleSpec;
-        this.qualifier = qualifier;
-        this.payloadType = payloadType;
-        this.repeatUnit = null;
-        this.repeatInterval = null;
-    }
-
-    public ScheduledQualifiedEventPayload(Every qualifier, Class payloadType) {
-        this.scheduleSpec = null;
-        this.qualifier = qualifier;
-        this.payloadType = payloadType;
+    public IntervalTriggerDetail(Every qualifier, AbstractTriggerHelper triggerHelper) {
+        super(triggerHelper, qualifier);
         this.repeatUnit = qualifier.value();
         this.repeatInterval = qualifier.nth();
-    }
-
-    public String getScheduleSpec() {
-        return scheduleSpec;
-    }
-
-    public Class getPayloadType() {
-        return payloadType;
-    }
-
-    public Annotation getQualifier() {
-        return qualifier;
     }
 
     public TimeUnit getRepeatUnit() {
@@ -68,10 +42,6 @@ public class ScheduledQualifiedEventPayload {
 
     public Integer getRepeatInterval() {
         return repeatInterval;
-    }
-    
-    public boolean isInterval() {
-        return repeatUnit != null && scheduleSpec == null;
     }
 
     @Override
@@ -82,14 +52,11 @@ public class ScheduledQualifiedEventPayload {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ScheduledQualifiedEventPayload other = (ScheduledQualifiedEventPayload) obj;
-        if ((this.scheduleSpec == null) ? (other.scheduleSpec != null) : !this.scheduleSpec.equals(other.scheduleSpec)) {
+        final IntervalTriggerDetail other = (IntervalTriggerDetail) obj;
+        if (this.getQualifier() != other.getQualifier() && (this.getQualifier() == null || !this.getQualifier().equals(other.getQualifier()))) {
             return false;
         }
-        if (this.qualifier != other.qualifier && (this.qualifier == null || !this.qualifier.equals(other.qualifier))) {
-            return false;
-        }
-        if (this.payloadType != other.payloadType && (this.payloadType == null || !this.payloadType.equals(other.payloadType))) {
+        if (this.getTriggerHelper() != other.getTriggerHelper() && (this.getTriggerHelper() == null || !this.getTriggerHelper().equals(other.getTriggerHelper()))) {
             return false;
         }
         if (this.repeatUnit != other.repeatUnit) {
@@ -104,9 +71,8 @@ public class ScheduledQualifiedEventPayload {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 17 * hash + (this.scheduleSpec != null ? this.scheduleSpec.hashCode() : 0);
-        hash = 17 * hash + (this.qualifier != null ? this.qualifier.hashCode() : 0);
-        hash = 17 * hash + (this.payloadType != null ? this.payloadType.hashCode() : 0);
+        hash = 17 * hash + (this.getQualifier() != null ? this.getQualifier().hashCode() : 0);
+        hash = 17 * hash + (this.getTriggerHelper() != null ? this.getTriggerHelper().hashCode() : 0);
         hash = 17 * hash + (this.repeatUnit != null ? this.repeatUnit.hashCode() : 0);
         hash = 17 * hash + (this.repeatInterval != null ? this.repeatInterval.hashCode() : 0);
         return hash;
@@ -114,7 +80,6 @@ public class ScheduledQualifiedEventPayload {
 
     @Override
     public String toString() {
-        return "ScheduledQualifiedEventPayload{" + "scheduleSpec=" + scheduleSpec + ", qualifier=" + qualifier + ", payloadType=" + payloadType + ", repeatUnit=" + repeatUnit + ", repeatInterval=" + repeatInterval + '}';
+        return getClass().getName() + "{" + ", qualifier=" + getQualifier() + ", payloadType=" + getTriggerHelper() + ", repeatUnit=" + repeatUnit + ", repeatInterval=" + repeatInterval + '}';
     }
-
 }

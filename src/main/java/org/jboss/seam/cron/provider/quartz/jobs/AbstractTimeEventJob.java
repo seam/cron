@@ -16,58 +16,45 @@
  */
 package org.jboss.seam.cron.provider.quartz.jobs;
 
+import org.jboss.seam.cron.provider.spi.trigger.AbstractTriggerHelper;
 import java.lang.annotation.Annotation;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import javax.enterprise.inject.spi.BeanManager;
 
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.api.Trigger;
-import org.jboss.seam.cron.provider.quartz.QuartzStarter;
+import org.jboss.seam.cron.provider.quartz.QuartzScheduleProvider;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 /**
- * Base class for quartz jobs which fire scheduled events (including the built-in
- * second, minute and hourly events). Implementing classes must define type of the
- * event to be fired.
+ * Base class for firing a Trigger via a Quartz Job via the wrapped #{@link AbstractTriggerHelper}.
  *
  * @author Peter Royle
  */
 public abstract class AbstractTimeEventJob
         implements Job {
-    protected int value = 0;
-    protected final GregorianCalendar gc = new GregorianCalendar();
-    private Logger log = Logger.getLogger(AbstractTimeEventJob.class);
 
     /**
-     * Implement this to return an instance of the appropriate event payload
-     * to be used when firing the event.
-     *
-     * @return an instance of the appropriate event type.
+     * Implement this to create an instance of the appropriate helper.
      */
-    protected abstract Trigger createEventPayload();
+    protected abstract AbstractTriggerHelper createTriggerHelper();
 
     /**
-     * Executes the internally scheduled job by firing the appropriate event with the
-     * appropriate binding annotation (to in turn execute the application-specific jobs
-     * which observe those events).
-     *
-     * @param context Details about the job.
+     * Executes the firing of the trigger payload via the delegate #{@link AbstractTriggerHelper}
+     * when told to do so by the Quartz scheduler.
+     * 
+     * @param context
      * @throws JobExecutionException
      */
     public void execute(JobExecutionContext context)
             throws JobExecutionException {
-        BeanManager manager =
-                (BeanManager) context.getJobDetail().getJobDataMap().get(QuartzStarter.MANAGER_NAME);
-        gc.setTime(new Date());
 
-        final Trigger eventPayload = createEventPayload();
+        final BeanManager manager = (BeanManager) context.getJobDetail().getJobDataMap().get(QuartzScheduleProvider.MANAGER_NAME);
+        final Annotation qualifier = (Annotation) context.getJobDetail().getJobDataMap().get(QuartzScheduleProvider.QUALIFIER);
+        AbstractTriggerHelper delegate = createTriggerHelper();
+        delegate.configure(manager, qualifier);
+        delegate.fireTrigger();
 
-        Annotation binding = (Annotation)context.getJobDetail().getJobDataMap().get(QuartzStarter.QUALIFIER);
-        log.trace("Firing time event for " + eventPayload + " with binding " + binding);
-        manager.fireEvent(eventPayload, binding);
     }
 }

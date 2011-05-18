@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.Serializable;
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.logging.Logger;
+import org.jboss.seam.cron.provider.quartz.QuartzScheduleProvider;
+import org.jboss.seam.cron.provider.spi.CronScheduleProvider;
 import org.jboss.shrinkwrap.api.ArchivePaths;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -28,14 +30,14 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
  *
  * @author Peter Royle
  */
-public abstract class SeamCronTest implements Serializable {
+public abstract class SeamCronTestBase implements Serializable {
 
     private static Logger log = Logger.getLogger(CronTest.class);
         
     public static JavaArchive createDefaultArchive() 
     {
     	JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
-    		.addPackages(true,SeamCronTest.class.getPackage())
+    		.addPackages(true,SeamCronTestBase.class.getPackage(), CronScheduleProvider.class.getPackage(), QuartzScheduleProvider.class.getPackage())
     		.addAsManifestResource(
     			new File("src/main/resources/META-INF/beans.xml"), 
     			ArchivePaths.create("beans.xml"))
@@ -48,7 +50,7 @@ public abstract class SeamCronTest implements Serializable {
     }
 
 
-    public SeamCronTest() {
+    public SeamCronTestBase() {
     }
     
 }

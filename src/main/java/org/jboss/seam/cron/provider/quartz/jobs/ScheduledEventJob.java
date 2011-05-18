@@ -16,7 +16,8 @@
  */
 package org.jboss.seam.cron.provider.quartz.jobs;
 
-import org.jboss.seam.cron.api.Trigger;
+import org.jboss.seam.cron.provider.spi.trigger.AbstractTriggerHelper;
+import org.jboss.seam.cron.provider.spi.trigger.ScheduledTriggerHelper;
 
 /**
  * Fires the 'Event' event with the current system time.
@@ -25,12 +26,10 @@ import org.jboss.seam.cron.api.Trigger;
  */
 public class ScheduledEventJob
         extends AbstractTimeEventJob {
-    /**
-     * Create an event payload instance of type Event with the current system time.
-     *
-     * @return an instance of Event.
-     */
-    protected Trigger createEventPayload() {
-        return new Trigger(System.currentTimeMillis());
+
+    @Override
+    protected AbstractTriggerHelper createTriggerHelper() {
+        return new ScheduledTriggerHelper();
     }
+
 }

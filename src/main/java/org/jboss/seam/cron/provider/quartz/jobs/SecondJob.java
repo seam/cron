@@ -16,25 +16,20 @@
  */
 package org.jboss.seam.cron.provider.quartz.jobs;
 
-import java.util.GregorianCalendar;
-
-import org.jboss.seam.cron.api.Trigger;
+import org.jboss.seam.cron.provider.spi.trigger.AbstractTriggerHelper;
+import org.jboss.seam.cron.provider.spi.trigger.SecondTriggerHelper;
 
 /**
- * Fires the Second event with the @Every binding.
+ * Fires the 'Event' event with the current system time.
  *
  * @author Peter Royle
  */
 public class SecondJob
-        extends ScheduledEventJob {
-    /**
-     * Create an instance of the Event payload using the current system time.
-     *
-     * @return an instance of Event.
-     */
+        extends AbstractTimeEventJob {
+
     @Override
-    protected Trigger createEventPayload() {
-        return new Trigger(System.currentTimeMillis(),
-                gc.get(GregorianCalendar.SECOND));
+    protected AbstractTriggerHelper createTriggerHelper() {
+        return new SecondTriggerHelper();
     }
+
 }

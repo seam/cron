@@ -14,22 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.provider.quartz.jobs;
+package org.jboss.seam.cron.provider.spi.trigger;
 
-import org.jboss.seam.cron.provider.spi.trigger.AbstractTriggerHelper;
-import org.jboss.seam.cron.provider.spi.trigger.MinuteTriggerHelper;
+import java.lang.annotation.Annotation;
 
 /**
- * Fires the 'Event' event with the current system time.
  *
- * @author Peter Royle
+ * @author peteroyle
  */
-public class MinuteJob
-        extends AbstractTimeEventJob {
+public class TriggerDetail {
 
-    @Override
-    protected AbstractTriggerHelper createTriggerHelper() {
-        return new MinuteTriggerHelper();
+    private final Annotation qualifier;
+    private final AbstractTriggerHelper triggerHelper;
+
+    public TriggerDetail(AbstractTriggerHelper triggerHelper, Annotation qualifier) {
+        this.triggerHelper = triggerHelper;
+        this.qualifier = qualifier;
+    }
+
+    public AbstractTriggerHelper getTriggerHelper() {
+        return triggerHelper;
+    }
+
+    public Annotation getQualifier() {
+        return qualifier;
     }
 
 }

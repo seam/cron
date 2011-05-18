@@ -14,48 +14,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.impl;
+package org.jboss.seam.cron.provider.quartz;
+
+import java.util.Arrays;
+import java.util.List;
 
 import javax.inject.Inject;
-import org.jboss.arquillian.api.Deployment;
 
+import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.impl.beans.EveryTestBean;
-import org.jboss.seam.cron.impl.exception.InternalException;
+import org.jboss.seam.cron.impl.SeamCronTestBase;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.quartz.SchedulerException;
 
 /**
- * Test @Every schedules
+ * Test all kinds of events.
  */
+@SuppressWarnings("serial")
 @RunWith(Arquillian.class)
-public class EveryLongTest extends SeamCronTestBase {
-    public static final int SLEEP_TIME = 100000;
+public class QuartzScheduleProviderTest extends SeamCronTestBase {
 
-    private static Logger log = Logger.getLogger(EveryLongTest.class);
-    
+    private static final int MAX_TIME_TO_WAIT = 20000;
+    private static final int SLEEP_TIME = 2000;
+    private static Logger log = Logger.getLogger(QuartzScheduleProviderTest.class);
+
     @Inject
-    EveryTestBean everyTestBean;
+    QuartzScheduleProvider qStarter;
 
     @Deployment
     public static JavaArchive createTestArchive() {
-        return createDefaultArchive();
+        return createDefaultArchive().addPackage(QuartzScheduleProvider.class.getPackage());
     }
 
-    @Test 
-    public void testEvery40thSecond() throws Exception {
-        try {
-            // just fire up the bean and give it enough time to time itself and record any anomolies.
-            Thread.sleep(SLEEP_TIME);
-        } catch (InterruptedException ex) {
-            throw new InternalException("Should not have been woken up here");
-        }
-        Assert.assertTrue(everyTestBean.isWasEventObserved());
-        if (everyTestBean.getErrorDetected() != null) {
-            throw everyTestBean.getErrorDetected();
-        }
+    @Test
+    public void testScheduleDoesGetRegistered() throws SchedulerException {
+        log.info("Testing scheduler gets registered.");
+        List<String> jobGroupNames = Arrays.asList(qStarter.getScheduler().getJobGroupNames());
+        assert jobGroupNames.contains(QuartzScheduleProvider.SCHEDULE_JOB_GROUP);
     }
+
 }

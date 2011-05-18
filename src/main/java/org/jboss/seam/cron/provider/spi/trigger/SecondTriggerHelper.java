@@ -14,22 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.provider.quartz.jobs;
+package org.jboss.seam.cron.provider.spi.trigger;
 
-import org.jboss.seam.cron.provider.spi.trigger.AbstractTriggerHelper;
-import org.jboss.seam.cron.provider.spi.trigger.MinuteTriggerHelper;
+import java.util.GregorianCalendar;
+
+import org.jboss.seam.cron.api.Trigger;
 
 /**
- * Fires the 'Event' event with the current system time.
+ * Fires the Second event with the @Every binding.
  *
  * @author Peter Royle
  */
-public class MinuteJob
-        extends AbstractTimeEventJob {
+public class SecondTriggerHelper
+        extends AbstractTriggerHelper {
 
+    /**
+     * Create an instance of the Event payload using the current system time.
+     *
+     * @return an instance of Event.
+     */
     @Override
-    protected AbstractTriggerHelper createTriggerHelper() {
-        return new MinuteTriggerHelper();
+    protected Trigger createEventPayload() {
+        return new Trigger(System.currentTimeMillis(),
+                gc.get(GregorianCalendar.SECOND));
     }
-
 }

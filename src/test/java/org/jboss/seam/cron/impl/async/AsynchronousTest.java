@@ -16,12 +16,9 @@
  */
 package org.jboss.seam.cron.impl.async;
 
-import org.jboss.seam.cron.impl.async.InvocationCallable;
 import org.jboss.logging.Logger;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.io.File;
-import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -30,9 +27,7 @@ import javax.inject.Inject;
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.cron.api.async.Asynchronous;
-import org.jboss.seam.cron.impl.SeamCronTest;
-import org.jboss.shrinkwrap.api.ArchivePaths;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.seam.cron.impl.SeamCronTestBase;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -46,7 +41,7 @@ import static org.jboss.seam.cron.impl.async.SomeAsynchMethods.SLEEP_PER_LOOP;
  */
 @SuppressWarnings("serial")
 @RunWith(Arquillian.class)
-public class AsynchronousTest extends SeamCronTest {
+public class AsynchronousTest extends SeamCronTestBase {
     
     private static final int NUM_EXECUTIONS = 3;
     private static Logger log = Logger.getLogger(AsynchronousTest.class);

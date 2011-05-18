@@ -17,8 +17,6 @@
 package org.jboss.seam.cron.impl;
 
 import org.jboss.seam.cron.impl.beans.DummyBean;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -26,18 +24,17 @@ import junit.framework.Assert;
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.provider.quartz.QuartzStarter;
+import org.jboss.seam.cron.provider.spi.CronScheduleProvider;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.quartz.SchedulerException;
 
 /**
  * Test all kinds of events.
  */
 @SuppressWarnings("serial")
 @RunWith(Arquillian.class)
-public class CronTest extends SeamCronTest {
+public class CronTest extends SeamCronTestBase {
 
     private static final int MAX_TIME_TO_WAIT = 20000;
     private static final int SLEEP_TIME = 2000;
@@ -46,20 +43,13 @@ public class CronTest extends SeamCronTest {
     @Inject
     DummyBean bean;
     @Inject
-    QuartzStarter qStarter;
+    CronScheduleProvider cronSchedProv;
 
     @Deployment
     public static JavaArchive createTestArchive() {
         return createDefaultArchive();
     }
-
-    @Test
-    public void testScheduleDoesGetRegistered() throws SchedulerException {
-        log.info("Testing scheduler gets registered.");
-        List<String> jobGroupNames = Arrays.asList(qStarter.getScheduler().getJobGroupNames());
-        assert jobGroupNames.contains(QuartzStarter.SCHEDULE_JOB_GROUP);
-    }
-
+    
     @Test
     public void testEventsGetsFired() {
         log.info("Testing schedule observer receiving events");
