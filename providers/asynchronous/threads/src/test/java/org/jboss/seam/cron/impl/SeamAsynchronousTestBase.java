@@ -16,10 +16,7 @@
  */
 package org.jboss.seam.cron.impl;
 
-import java.io.File;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.provider.spi.CronScheduleProvider;
-import org.jboss.shrinkwrap.api.ArchivePaths;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 
 /**
@@ -33,10 +30,7 @@ public abstract class SeamAsynchronousTestBase extends SeamCronTestBase {
     public static JavaArchive createDefaultArchive() 
     {
     	JavaArchive archive = SeamCronTestBase.createDefaultArchive()
-    		.addPackages(true,SeamAsynchronousTestBase.class.getPackage())
-    		.addAsManifestResource(
-			new File("src/test/resources/META-INF/services/asynchronous.javax.enterprise.inject.spi.Extension"),
-			ArchivePaths.create("services/javax.enterprise.inject.spi.Extension"));
+    		.addPackages(true,SeamAsynchronousTestBase.class.getPackage());
     	
         log.debug(archive.toString(true));
     	return archive;

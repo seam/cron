@@ -16,29 +16,34 @@
  */
 package org.jboss.seam.cron.impl;
 
+import java.io.File;
+import java.io.Serializable;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.provider.spi.CronScheduleProvider;
+import org.jboss.shrinkwrap.api.ArchivePaths;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 
 /**
  *
  * @author Peter Royle
  */
-public abstract class SeamSchedulingTestBase extends SeamCronTestBase {
+public abstract class SeamCronTestBase implements Serializable {
 
-    private static Logger log = Logger.getLogger(SeamSchedulingTestBase.class);
+    private static Logger log = Logger.getLogger(SeamCronTestBase.class);
         
     public static JavaArchive createDefaultArchive() 
     {
-    	JavaArchive archive = SeamCronTestBase.createDefaultArchive()
-    		.addPackages(true,SeamSchedulingTestBase.class.getPackage(), CronScheduleProvider.class.getPackage());
+    	JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
+    		.addPackages(true,SeamCronTestBase.class.getPackage())
+    		.addAsManifestResource(
+    			new File("src/main/resources/META-INF/beans.xml"), 
+    			ArchivePaths.create("beans.xml"));
     	
         log.debug(archive.toString(true));
     	return archive;
     }
 
-
-    public SeamSchedulingTestBase() {
+    public SeamCronTestBase() {
     }
     
 }

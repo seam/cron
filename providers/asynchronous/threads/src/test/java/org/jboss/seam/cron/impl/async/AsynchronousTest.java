@@ -27,7 +27,7 @@ import javax.inject.Inject;
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.cron.api.async.Asynchronous;
-import org.jboss.seam.cron.impl.SeamQuartzTestBase;
+import org.jboss.seam.cron.impl.SeamAsynchronousTestBase;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -41,7 +41,7 @@ import static org.jboss.seam.cron.impl.async.SomeAsynchMethods.SLEEP_PER_LOOP;
  */
 @SuppressWarnings("serial")
 @RunWith(Arquillian.class)
-public class AsynchronousTest extends SeamQuartzTestBase {
+public class AsynchronousTest extends SeamAsynchronousTestBase {
     
     private static final int NUM_EXECUTIONS = 3;
     private static Logger log = Logger.getLogger(AsynchronousTest.class);
