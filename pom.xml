@@ -19,7 +19,9 @@
     <modules>
         <module>api</module>
         <module>impl</module>
-        <module>spi</module>
+        <module>spi/asynchronous</module>
+        <module>spi/scheduling</module>
+        <module>providers/scheduling/quartz</module>
     </modules>
 
     <properties>
