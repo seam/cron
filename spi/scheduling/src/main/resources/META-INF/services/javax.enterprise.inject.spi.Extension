@@ -1,1 +1,1 @@
-org.jboss.seam.cron.provider.spi.ScheduleConfigScanner
+org.jboss.seam.cron.scheduling.spi.CronSchedulingExtension
