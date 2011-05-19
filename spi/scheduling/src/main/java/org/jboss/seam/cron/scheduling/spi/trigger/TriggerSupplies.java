@@ -14,29 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.asynchronous.impl;
+package org.jboss.seam.cron.scheduling.spi.trigger;
 
-import java.util.concurrent.Callable;
-import org.jboss.seam.cron.asynchronous.impl.exception.AsynchronousMethodExecutionException;
+import java.lang.annotation.Annotation;
+
+import javax.enterprise.inject.spi.BeanManager;
+
 
 /**
- * Simply wraps our #{@link Callable} in #{@link Thread}.
+ * Represents the objects required in order for a #{@link DefaultTriggerHelper}
+ * to be able to fire the appropriate event when asked.
+ *
  * @author Peter Royle
  */
-public class CallableAsThread extends Thread {
+public class TriggerSupplies {
 
-    private final Callable invCall;
+    protected final BeanManager beanManager;
+    protected final Annotation qualifier;
 
-    public CallableAsThread(Callable invCall) {
-        this.invCall = invCall;
+    public TriggerSupplies(BeanManager beanManager, Annotation qualifier) {
+        this.beanManager = beanManager;
+        this.qualifier = qualifier;
     }
 
-    @Override
-    public void run() {
-        try {
-            invCall.call();
-        } catch (Throwable t) {
-            throw new AsynchronousMethodExecutionException("Error executing callable method", t);
-        }
+    public BeanManager getBeanManager() {
+        return beanManager;
     }
+
+    public Annotation getQualifier() {
+        return qualifier;
+    }
+
 }

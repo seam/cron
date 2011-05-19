@@ -1,1 +1,1 @@
-org.jboss.seam.cron.asynchronous.impl.AsyncMethodSupportExtension
+org.jboss.seam.cron.asynchronous.spi.CronAsyncMethodInvocationExtension

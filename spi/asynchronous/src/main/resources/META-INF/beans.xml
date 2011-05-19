@@ -21,7 +21,7 @@
     <!-- Asynchronous provider will most likely need to contain the following interceptor
          declaration in its beans.xml file
     <interceptors>
-        <class>org.jboss.seam.cron.asynchronous.impl.AsynchronousInterceptor</class>
+        <class>org.jboss.seam.cron.asynchronous.spi.AsynchronousInterceptor</class>
     </interceptors>
     -->
 </beans>

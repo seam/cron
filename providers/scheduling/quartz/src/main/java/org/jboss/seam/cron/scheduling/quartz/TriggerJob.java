@@ -14,43 +14,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.scheduling.quartz.jobs;
+package org.jboss.seam.cron.scheduling.quartz;
 
-import org.jboss.seam.cron.scheduling.spi.trigger.DefaultTriggerHelper;
-import java.lang.annotation.Annotation;
+import org.jboss.seam.cron.scheduling.spi.trigger.ProviderContextTriggerSupport;
 
-import javax.enterprise.inject.spi.BeanManager;
 
 import org.jboss.seam.cron.scheduling.quartz.QuartzScheduleProvider;
-import org.jboss.seam.cron.scheduling.spi.trigger.TriggerHelper;
+import org.jboss.seam.cron.scheduling.spi.trigger.TriggerSupplies;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 /**
- * Base class for firing a Trigger via a Quartz Job via the wrapped #{@link DefaultTriggerHelper}.
+ * Base class for firing a Trigger via a Quartz Job via the extended #{@link ProviderContextTriggerSupport}.
  *
  * @author Peter Royle
  */
-public class TriggerJob
+public class TriggerJob extends ProviderContextTriggerSupport<JobExecutionContext>
         implements Job {
 
-    TriggerHelper delegate = new DefaultTriggerHelper();
+    @Override
+    public TriggerSupplies fetchTriggerSupplies(JobExecutionContext context) {
+        return (TriggerSupplies) context.getJobDetail().getJobDataMap().get(QuartzScheduleProvider.TRIGGER_SUPPLIES);
+    }
 
     /**
-     * Executes the firing of the trigger payload via the delegate #{@link DefaultTriggerHelper}
+     * Executes the firing of the trigger payload via the delegate #{@link ProviderContextTriggerSupport}
      * when told to do so by the Quartz scheduler.
      * 
      * @param context
      * @throws JobExecutionException
      */
-    public void execute(JobExecutionContext context)
-            throws JobExecutionException {
-
-        final BeanManager manager = (BeanManager) context.getJobDetail().getJobDataMap().get(QuartzScheduleProvider.MANAGER_NAME);
-        final Annotation qualifier = (Annotation) context.getJobDetail().getJobDataMap().get(QuartzScheduleProvider.QUALIFIER);
-        delegate.configure(manager, qualifier);
-        delegate.fireTrigger();
-
+    @Override
+    public void execute(JobExecutionContext context) throws JobExecutionException {
+        fireTrigger(context);
     }
 }

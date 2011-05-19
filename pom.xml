@@ -23,6 +23,7 @@
         <module>spi/scheduling</module>
         <module>providers/scheduling/quartz</module>
         <module>providers/asynchronous/threads</module>
+        <module>providers/asynchronous/quartz</module>
     </modules>
 
     <properties>

@@ -14,19 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.asynchronous.impl;
+package org.jboss.seam.cron.asynchronous.threads;
 
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.BeforeBeanDiscovery;
-import javax.enterprise.inject.spi.Extension;
+import java.util.concurrent.Callable;
 
 /**
- * @author Peter Royle
+ *
+ * @author peteroyle
  */
-public class AsyncMethodSupportExtension implements Extension {
+public class QuartzJobResultCallable<T> implements Callable<T> {
 
-    public void startJobs(@Observes BeforeBeanDiscovery event, BeanManager manager) {
-        event.addAnnotatedType(manager.createAnnotatedType(AsynchronousInterceptor.class));
+    private T result;
+    private boolean resultReturned = false;
+
+    public void setResult(T result) {
+        this.result = result;
+        this.resultReturned = true;
+    }
+
+    public T call() throws Exception {
+        while (!resultReturned) {
+            // TODO: (PR): Horrible, i know!! Just testing a theory.
+            Thread.sleep(500);
+        }
+        return result;
     }
 }

@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.asynchronous.impl;
+package org.jboss.seam.cron.asynchronous.spi;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import javax.interceptor.InvocationContext;
 import org.jboss.logging.Logger;
+import org.jboss.seam.cron.asynchronous.api.AsyncResult;
 import org.jboss.seam.cron.asynchronous.api.Asynchronous;
 import org.jboss.seam.cron.scheduling.impl.exception.InternalException;
 
@@ -32,19 +32,19 @@ import org.jboss.seam.cron.scheduling.impl.exception.InternalException;
  * This class handles the invocation of the #{@link Asynchronous} method, unwrapping of the
  * results out of a "dummy" #{@link AsyncResult} if necessary, and firing post-execution
  * events with the results if any. It is designed as a managed bean to be instantiated via 
- * #{@literal @Inject Instance<InvocationCallable>}.
+ * #{@literal @Inject Instance<InvocationContextExecutor>}.
  * 
  * @author Peter Royle
  */
-public class InvocationCallable implements Callable {
+public class InvocationContextExecutor {
 
     @Inject
     BeanManager beanMan;
     private InvocationContext ic;
     private boolean popResultsFromFuture = false;
-    private Logger log = Logger.getLogger(InvocationCallable.class);
+    private Logger log = Logger.getLogger(InvocationContextExecutor.class);
 
-    public InvocationCallable() {
+    public InvocationContextExecutor() {
     }
 
     /**
@@ -72,7 +72,7 @@ public class InvocationCallable implements Callable {
      * (ie: the return type of the method is a #{@link Future}).
      * @throws Exception Includes any exception thrown by the invoked method.
      */
-    public Object call() throws Exception {
+    public Object executeInvocationContext() throws Exception {
         
         // This will be the basic form, with the result available immediately
         Object result;

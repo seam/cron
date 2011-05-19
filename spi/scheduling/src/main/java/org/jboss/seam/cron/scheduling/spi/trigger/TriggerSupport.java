@@ -16,41 +16,47 @@
  */
 package org.jboss.seam.cron.scheduling.spi.trigger;
 
-import java.lang.annotation.Annotation;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
-import javax.enterprise.inject.spi.BeanManager;
 
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.scheduling.api.Every;
 import org.jboss.seam.cron.scheduling.api.Scheduled;
 import org.jboss.seam.cron.scheduling.api.Trigger;
-import org.jboss.seam.cron.scheduling.impl.exception.InternalException;
+import org.jboss.seam.cron.scheduling.spi.CronScheduleProvider;
 import org.jboss.seam.cron.util.AnnotaitonUtils;
 
 /**
- * Base class for firing a Trigger. Implementing classes must define type of the
- * event to be fired.
- *
+ * <p>
+ * Base class allowing scheduling providers to easily fire the
+ * appropriate CDI event when required. Simply provide the necessary
+ * objects (represented by #{@link TriggerSupplies} to the constructor when the
+ * schedule is first registered (see #{@link CronScheduleProvider}). Then call
+ * #{@literal fireTrigger()} at the scheduled time(s).
+ * </p>
+ * <p>
+ * If the scheduling provider does not allow context to be passed directly to
+ * a new worker instance, but instead requires it to be passed via some
+ * other context, you will need to use #{@link ProviderContextTriggerSupport}
+ * instead.
+ * </p>
+ * 
  * @author Peter Royle
+ * 
+ * @see ProviderContextTriggerSupport
  */
-public class DefaultTriggerHelper implements TriggerHelper {
+public abstract class TriggerSupport {
 
     protected int value = 0;
     protected final GregorianCalendar gc = new GregorianCalendar();
-    protected BeanManager beanManager;
-    protected Annotation qualifier;
-    private boolean configured = false;
-    private Logger log = Logger.getLogger(DefaultTriggerHelper.class);
+    protected TriggerSupplies supplies = null;
+    private Logger log = Logger.getLogger(TriggerSupport.class);
 
-    /**
-     * Must call configure before calling fireTrigger.
-     */
-    public void configure(BeanManager beanManager, Annotation qualifier) {
-        this.beanManager = beanManager;
-        this.qualifier = qualifier;
-        this.configured = true;
+    protected TriggerSupport() {
+    }
+
+    public TriggerSupport(TriggerSupplies supplies) {
+        this.supplies = supplies;
     }
 
     /**
@@ -59,28 +65,31 @@ public class DefaultTriggerHelper implements TriggerHelper {
      *
      */
     public void fireTrigger() {
-        if (!configured) {
-            throw new InternalException(getClass().getName() + " was not configured properly before calling this method.");
-        }
 
         gc.setTime(new Date());
 
         Trigger eventPayload = null;
-        final Scheduled schedQualifier = (Scheduled) AnnotaitonUtils.getQualifier(qualifier, Scheduled.class);
+        final Scheduled schedQualifier = (Scheduled) AnnotaitonUtils.getQualifier(supplies.getQualifier(), Scheduled.class);
         if (schedQualifier != null) {
             eventPayload = createScheduledEventPayload();
         } else {
-            final Every everyQualifier = (Every) AnnotaitonUtils.getQualifier(qualifier, Every.class);
+            final Every everyQualifier = (Every) AnnotaitonUtils.getQualifier(supplies.getQualifier(), Every.class);
             if (everyQualifier != null) {
                 switch (everyQualifier.value()) {
-                    case SECOND: eventPayload = createSecondEventPayload(); break;
-                    case MINUTE: eventPayload = createMinuteEventPayload(); break;
-                    case HOUR: eventPayload = createHourEventPayload(); break;
+                    case SECOND:
+                        eventPayload = createSecondEventPayload();
+                        break;
+                    case MINUTE:
+                        eventPayload = createMinuteEventPayload();
+                        break;
+                    case HOUR:
+                        eventPayload = createHourEventPayload();
+                        break;
                 }
             }
         }
-        log.trace("Firing time event for " + eventPayload + " with binding " + qualifier);
-        beanManager.fireEvent(eventPayload, qualifier);
+        log.trace("Firing time event for " + eventPayload + " with binding " + supplies.getQualifier());
+        supplies.getBeanManager().fireEvent(eventPayload, supplies.getQualifier());
     }
 
     /**

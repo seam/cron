@@ -14,10 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.asynchronous.impl;
+package org.jboss.seam.cron.asynchronous.spi;
 
 import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
@@ -42,7 +41,9 @@ public class AsynchronousInterceptor {
     @Inject
     BeanManager beanMan;
     @Inject
-    Instance<InvocationCallable> icrs;
+    Instance<InvocationContextExecutor> iceCopies;
+    @Inject 
+    Instance<AsynchronousStrategy> asyncStgyCopies;
     
     @AroundInvoke
     public Object executeAsynchronously(final InvocationContext ctx) throws Exception {
@@ -50,25 +51,21 @@ public class AsynchronousInterceptor {
 
         log.trace("Intercepting method invocation of " + ctx.getMethod().getName() + " to make it @Asynchronous");
 
-        final InvocationCallable icr = icrs.get();
-        icr.setInvocationContext(ctx);
+        final InvocationContextExecutor ice = iceCopies.get();
+        ice.setInvocationContext(ctx);
+        final AsynchronousStrategy asyncStrategy = asyncStgyCopies.get();
 
         if (Future.class.isAssignableFrom(ctx.getMethod().getReturnType())) {
             // swap the "dummy" Future for a truly asynchronous future to return to the caller immediately
-            icr.setPopResultsFromFuture(true);
-            // use of FutureTask here provides the exception behaviour described by EJB
-            FutureTask asyncResult = new FutureTask(icr);
-            new Thread(asyncResult).start();
-            result = asyncResult;
+            ice.setPopResultsFromFuture(true);
+            result = asyncStrategy.executeAndReturnFuture(ice);
         } else {
-            // Execute the method in a background thread and return nothing of value to the caller.
-            // They'll need to be observing an event if they want a return value.
-            new CallableAsThread(icr).start();
+            asyncStrategy.executeWithoutReturn(ice);
             result = null;
         }
 
         // this will either be a Future, or null
         return result;
     }
-    
+
 }

@@ -14,28 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.scheduling.spi.trigger;
+package org.jboss.seam.cron.asynchronous.test;
 
-import java.lang.annotation.Annotation;
-import javax.enterprise.inject.spi.BeanManager;
+import org.jboss.logging.Logger;
+import org.jboss.seam.cron.test.SeamCronTestBase;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 
 /**
- * Interface for firing a Trigger.
  *
  * @author Peter Royle
  */
-public interface TriggerHelper {
+public abstract class SeamAsynchronousTestBase extends SeamCronTestBase {
 
-    /**
-     * Must call configure before calling fireTrigger.
-     */
-    void configure(BeanManager beanManager, Annotation qualifier);
+    private static Logger log = Logger.getLogger(SeamAsynchronousTestBase.class);
+        
+    public static JavaArchive createDefaultArchive() 
+    {
+    	JavaArchive archive = SeamCronTestBase.createDefaultArchive()
+    		.addPackages(true,SeamAsynchronousTestBase.class.getPackage());
+    	
+        log.debug(archive.toString(true));
+    	return archive;
+    }
 
-    /**
-     * Fires the appropriate trigger payload with the appropriate qualifier
-     * (to in turn execute the application-specific code that observes those events).
-     *
-     */
-    void fireTrigger();
 
+    public SeamAsynchronousTestBase() {
+    }
+    
 }

@@ -16,7 +16,6 @@
  */
 package org.jboss.seam.cron.asynchronous.test;
 
-import org.jboss.seam.cron.asynchronous.spi.InvocationContextExecutor;
 import org.jboss.logging.Logger;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -27,10 +26,9 @@ import javax.inject.Inject;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.seam.cron.asynchronous.threads.QuartzAsynchStrategy;
 import org.jboss.seam.cron.asynchronous.api.Asynchronous;
 import org.jboss.seam.cron.asynchronous.spi.AsynchronousInterceptor;
-import org.jboss.seam.cron.asynchronous.spi.InvocationContextExecutor;
-import org.jboss.seam.cron.asynchronous.threads.InvocationContextCallable;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -53,7 +51,7 @@ public class AsynchronousTest extends SeamAsynchronousTestBase {
     public static JavaArchive createTestArchive() {
         return createDefaultArchive()
                 .addPackages(true, Asynchronous.class.getPackage(), 
-                AsynchronousInterceptor.class.getPackage(), InvocationContextCallable.class.getPackage());
+                AsynchronousInterceptor.class.getPackage(), QuartzAsynchStrategy.class.getPackage());
     }
 
     @Inject

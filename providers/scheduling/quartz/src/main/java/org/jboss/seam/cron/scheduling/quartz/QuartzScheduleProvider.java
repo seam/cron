@@ -16,13 +16,11 @@
  */
 package org.jboss.seam.cron.scheduling.quartz;
 
-import org.jboss.seam.cron.scheduling.quartz.jobs.TriggerJob;
+import org.jboss.seam.cron.scheduling.spi.trigger.TriggerSupplies;
 import org.jboss.seam.cron.scheduling.spi.CronScheduleProvider;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -73,6 +71,7 @@ public class QuartzScheduleProvider implements CronScheduleProvider {
      * stored and retrieved from the job details.
      */
     public static final String MANAGER_NAME = "manager";
+    public static final String TRIGGER_SUPPLIES = "trigger_helper";
     private static final String SCHEDULER_NAME_PREFIX = "SeamCronScheduler";
     private String schedulerName;
     private Scheduler scheduler;
@@ -99,8 +98,7 @@ public class QuartzScheduleProvider implements CronScheduleProvider {
 
     public void processScheduledTrigger(final ScheduledTriggerDetail schedTriggerDetails) throws ParseException, SchedulerException, InternalError {
         Trigger schedTrigger = new CronTrigger(schedTriggerDetails.toString(), SCHEDULE_JOB_GROUP, schedTriggerDetails.getCronScheduleSpec());
-        final Map jobParams = new HashMap();
-        scheduleJob(schedTrigger, schedTriggerDetails, jobParams);
+        scheduleJob(schedTrigger, schedTriggerDetails);
     }
 
     public void processIntervalTrigger(final IntervalTriggerDetail intervalTriggerDetails) throws ParseException, SchedulerException, InternalError {
@@ -115,8 +113,7 @@ public class QuartzScheduleProvider implements CronScheduleProvider {
             throw new InternalError("Could not work out which interval to use for the schedule of an @" + Every.class.getName() + " observer");
         }
         schedTrigger.setJobGroup(SCHEDULE_JOB_GROUP);
-        final Map jobParams = new HashMap();
-        scheduleJob(schedTrigger, intervalTriggerDetails, jobParams);
+        scheduleJob(schedTrigger, intervalTriggerDetails);
     }
 
     /**
@@ -148,8 +145,7 @@ public class QuartzScheduleProvider implements CronScheduleProvider {
      * @param jobParams The parameters to be passed to the job executor.
      * @throws SchedulerException
      */
-    private void scheduleJob(Trigger schedTrigger, final TriggerDetail triggerDetails,
-            Map jobParams) throws SchedulerInitialisationException {
+    private void scheduleJob(Trigger schedTrigger, final TriggerDetail triggerDetails) throws SchedulerInitialisationException {
 
         // common Second payload sample and start time
         GregorianCalendar gc = new GregorianCalendar();
@@ -157,15 +153,12 @@ public class QuartzScheduleProvider implements CronScheduleProvider {
         Date startTime = new Date(gc.getTimeInMillis());
         schedTrigger.setStartTime(startTime);
 
-        jobParams.put(QUALIFIER, triggerDetails.getQualifier());
-
         final String jobName = triggerDetails.toString() + "-trigger";
         schedTrigger.setName(jobName);
 
         JobDetail job = new JobDetail(jobName, schedTrigger.getGroup(), TriggerJob.class);
         job.setJobDataMap(new JobDataMap());
-        job.getJobDataMap().put(MANAGER_NAME, beanManager);
-        job.getJobDataMap().putAll(jobParams);
+        job.getJobDataMap().put(TRIGGER_SUPPLIES, new TriggerSupplies(beanManager, triggerDetails.getQualifier()));
         try {
             getScheduler().scheduleJob(job, schedTrigger);
         } catch (SchedulerException e) {

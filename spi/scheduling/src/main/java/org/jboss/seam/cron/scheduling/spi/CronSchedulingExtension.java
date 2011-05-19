@@ -61,7 +61,7 @@ public class CronSchedulingExtension
      * Initialises the scheduler.
      *
      */
-    public void initTicker(@Observes AfterBeanDiscovery afterDisc, BeanManager beanManager, CronScheduleProvider scheduleProvider) throws Exception {
+    public void initProviderScheduler(@Observes AfterBeanDiscovery afterDisc, BeanManager beanManager, CronScheduleProvider scheduleProvider) throws Exception {
         scheduleProvider.initScheduler();
     }
 
@@ -71,7 +71,7 @@ public class CronSchedulingExtension
      * @param afterValid The observed event.
      * @param manager    The JSR-299 Bean Manager.
      */
-    public void startJobs(@Observes AfterDeploymentValidation afterValid, BeanManager manager, CronScheduleProvider scheduleProvider) {
+    public void processScheduledTriggers(@Observes AfterDeploymentValidation afterValid, BeanManager manager, CronScheduleProvider scheduleProvider) {
         try {
             // collect the set of unique schedule specifications
             for (ObserverMethod<?> obsMeth : allObservers) {
@@ -102,7 +102,7 @@ public class CronSchedulingExtension
      * Shutdown the scheduler on application close.
      */
     @PreDestroy
-    public void stopTicker(@Observes BeforeShutdown event, CronScheduleProvider scheduleProvider) {
+    public void stopProvidersScheduler(@Observes BeforeShutdown event, CronScheduleProvider scheduleProvider) {
         scheduleProvider.stopScheduler();
     }
 
