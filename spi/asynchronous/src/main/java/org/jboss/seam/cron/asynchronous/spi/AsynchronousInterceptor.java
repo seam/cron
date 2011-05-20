@@ -41,7 +41,7 @@ public class AsynchronousInterceptor {
     @Inject
     BeanManager beanMan;
     @Inject
-    Instance<InvocationContextExecutor> iceCopies;
+    Instance<Invoker> iceCopies;
     @Inject 
     Instance<AsynchronousStrategy> asyncStgyCopies;
     
@@ -51,7 +51,7 @@ public class AsynchronousInterceptor {
 
         log.trace("Intercepting method invocation of " + ctx.getMethod().getName() + " to make it @Asynchronous");
 
-        final InvocationContextExecutor ice = iceCopies.get();
+        final Invoker ice = iceCopies.get();
         ice.setInvocationContext(ctx);
         final AsynchronousStrategy asyncStrategy = asyncStgyCopies.get();
 

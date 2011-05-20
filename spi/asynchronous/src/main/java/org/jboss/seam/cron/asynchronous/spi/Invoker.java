@@ -26,25 +26,26 @@ import javax.interceptor.InvocationContext;
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.asynchronous.api.AsyncResult;
 import org.jboss.seam.cron.asynchronous.api.Asynchronous;
+import org.jboss.seam.cron.asynchronous.impl.exception.AsynchronousMethodExecutionException;
 import org.jboss.seam.cron.scheduling.impl.exception.InternalException;
 
 /**
  * This class handles the invocation of the #{@link Asynchronous} method, unwrapping of the
  * results out of a "dummy" #{@link AsyncResult} if necessary, and firing post-execution
  * events with the results if any. It is designed as a managed bean to be instantiated via 
- * #{@literal @Inject Instance<InvocationContextExecutor>}.
+ * #{@literal @Inject Instance<Invoker>}.
  * 
  * @author Peter Royle
  */
-public class InvocationContextExecutor {
+public class Invoker {
 
     @Inject
     BeanManager beanMan;
     private InvocationContext ic;
     private boolean popResultsFromFuture = false;
-    private Logger log = Logger.getLogger(InvocationContextExecutor.class);
+    private Logger log = Logger.getLogger(Invoker.class);
 
-    public InvocationContextExecutor() {
+    public Invoker() {
     }
 
     /**
@@ -73,11 +74,11 @@ public class InvocationContextExecutor {
      * @throws Exception Includes any exception thrown by the invoked method.
      */
     public Object executeInvocationContext() throws Exception {
-        
+
         // This will be the basic form, with the result available immediately
         Object result;
-            
-            // housekeeping
+
+        // housekeeping
         if (ic.getMethod() == null) {
             throw new InternalException("Failed to provide an InvocationContext to this " + this.getClass().getName());
         }
@@ -95,13 +96,11 @@ public class InvocationContextExecutor {
         }
 
         result = ic.proceed();
-
         if (popResultsFromFuture) {
             // pop the value out of the "dummy" AsynchResult as it will be wrapped
             // in proper AsynchResult by the AsynchronousInterceptor
             result = ((Future) result).get();
         }
-
         // fire the post execution event if a result was returned.
         if (result != null) {
             if (log.isTraceEnabled()) {
@@ -117,5 +116,6 @@ public class InvocationContextExecutor {
         }
 
         return result;
+
     }
 }

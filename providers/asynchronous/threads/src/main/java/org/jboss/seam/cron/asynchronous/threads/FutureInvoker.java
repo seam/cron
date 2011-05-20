@@ -16,42 +16,48 @@
  */
 package org.jboss.seam.cron.asynchronous.threads;
 
-import java.util.concurrent.Future;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
-import javax.enterprise.context.ApplicationScoped;
-import org.jboss.seam.cron.asynchronous.spi.AsynchronousStrategy;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.jboss.seam.cron.asynchronous.spi.support.FutureInvokerSupport;
 import org.jboss.seam.cron.asynchronous.spi.Invoker;
 
 /**
- * Simple asynchronous method invocation strategy which wraps the execution
- * in a new Thread and starts it.
- *
+ * Handy #{@link RunnableFuture} which can be constructed with an #{@link Invoker}.
+ * 
  * @author peteroyle
  */
-@ApplicationScoped
-public class ThreadsAsynchronousStrategy implements AsynchronousStrategy {
+public class FutureInvoker implements RunnableFuture {
 
-    public void initMethodInvoker() {
-        // nop
+    RunnableFuture delegate;
+
+    public FutureInvoker(Invoker invoker) {
+        delegate = new FutureTask(new CallableFutureInvoker(new FutureInvokerSupport(invoker)));
     }
 
-    public void shutdownMethodInvoker() {
-        // nop
+    public boolean isDone() {
+        return delegate.isDone();
     }
 
-    public void executeWithoutReturn(final Invoker invoker) {
-        // Execute the method in a background thread and return nothing of value to the caller.
-        // They'll need to be observing an event if they want a return value.
-        RunnableFuture asyncResult = new FutureInvoker(invoker);
-        new Thread(asyncResult).start();
+    public boolean isCancelled() {
+        return delegate.isCancelled();
     }
 
-    public Future executeAndReturnFuture(final Invoker invoker) {
-        RunnableFuture asyncResult = new FutureInvoker(invoker);
-        new Thread(asyncResult).start();
-        return asyncResult;
+    public Object get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+        return delegate.get(timeout, unit);
     }
 
+    public Object get() throws InterruptedException, ExecutionException {
+        return delegate.get();
+    }
+
+    public boolean cancel(boolean mayInterruptIfRunning) {
+        return delegate.cancel(mayInterruptIfRunning);
+    }
+
+    public void run() {
+        delegate.run();
+    }
 }

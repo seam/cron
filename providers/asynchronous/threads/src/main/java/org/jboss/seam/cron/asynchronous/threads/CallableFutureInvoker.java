@@ -17,26 +17,23 @@
 package org.jboss.seam.cron.asynchronous.threads;
 
 import java.util.concurrent.Callable;
+import org.jboss.seam.cron.asynchronous.spi.support.FutureInvokerSupport;
 
 /**
  *
  * @author peteroyle
  */
-public class QuartzJobResultCallable<T> implements Callable<T> {
+public class CallableFutureInvoker implements Callable {
 
-    private T result;
-    private boolean resultReturned = false;
+    private FutureInvokerSupport invoker;
 
-    public void setResult(T result) {
-        this.result = result;
-        this.resultReturned = true;
+    public CallableFutureInvoker(FutureInvokerSupport invokerSupport) {
+        this.invoker = invokerSupport;
     }
 
-    public T call() throws Exception {
-        while (!resultReturned) {
-            // TODO: (PR): Horrible, i know!! Just testing a theory.
-            Thread.sleep(500);
-        }
-        return result;
+    public Object call() throws Exception {
+        this.invoker.executeInvocationContext();
+        return this.invoker.call();
     }
+
 }

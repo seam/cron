@@ -16,8 +16,7 @@
  */
 package org.jboss.seam.cron.asynchronous.threads;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.jboss.seam.cron.asynchronous.spi.support.FutureInvokerSupport;
 import java.util.UUID;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
@@ -29,7 +28,7 @@ import javax.inject.Inject;
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.asynchronous.impl.exception.AsynchronousMethodExecutionException;
 import org.jboss.seam.cron.asynchronous.spi.AsynchronousStrategy;
-import org.jboss.seam.cron.asynchronous.spi.InvocationContextExecutor;
+import org.jboss.seam.cron.asynchronous.spi.Invoker;
 import org.jboss.seam.cron.scheduling.impl.exception.SchedulerInitialisationException;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -55,7 +54,7 @@ public class QuartzAsynchStrategy implements AsynchronousStrategy {
      */
     public static final String ASYNC_JOB_GROUP = "async_job_group";
     public static final String INV_CONTEXT_EXECUTOR = "inv_context_executor";
-    public static final String RESULT_CALLABLE = "future";
+    public static final String DELAYED_RESULT_SUPPORT = "future";
     private static final String SCHEDULER_NAME_PREFIX = "SeamCronScheduler";
     private String schedulerName;
     private Scheduler scheduler;
@@ -95,35 +94,26 @@ public class QuartzAsynchStrategy implements AsynchronousStrategy {
         }
     }
 
-    public void executeWithoutReturn(final InvocationContextExecutor ice) {
-        executeMethodAsScheduledJob(ice);
+    public void executeWithoutReturn(final Invoker inkover) {
+        executeMethodAsScheduledJob(inkover);
     }
 
-    public Future executeAndReturnFuture(final InvocationContextExecutor ice) {
-        Map<String, QuartzJobResultCallable> jobParams = new HashMap<String, QuartzJobResultCallable>();
-        final QuartzJobResultCallable quartzJobResultCallable = new QuartzJobResultCallable();
-        jobParams.put(RESULT_CALLABLE, quartzJobResultCallable);
-        FutureTask asyncResult = new FutureTask(quartzJobResultCallable);
-        executeMethodAsScheduledJob(ice, jobParams);
+    public Future executeAndReturnFuture(final Invoker invoker) {
+        FutureTask asyncResult = new FutureTask(executeMethodAsScheduledJob(invoker));
         new Thread(asyncResult).start();
         return asyncResult;
     }
 
-    private void executeMethodAsScheduledJob(final InvocationContextExecutor ice) throws AsynchronousMethodExecutionException {
-        executeMethodAsScheduledJob(ice, null);
-    }
-
-    private void executeMethodAsScheduledJob(final InvocationContextExecutor ice, Map additionalJobParams) throws AsynchronousMethodExecutionException {
+    private FutureInvokerSupport executeMethodAsScheduledJob(final Invoker invoker) throws AsynchronousMethodExecutionException {
+        final FutureInvokerSupport drs = new FutureInvokerSupport(invoker);
         try {
             final String name = UUID.randomUUID().toString();
             JobDetail jobDetail = new JobDetail(name, ASYNC_JOB_GROUP, AsyncMethodInvocationJob.class);
-            jobDetail.getJobDataMap().put(INV_CONTEXT_EXECUTOR, ice);
-            if (additionalJobParams != null) {
-                jobDetail.getJobDataMap().putAll(additionalJobParams);
-            }
+            jobDetail.getJobDataMap().put(DELAYED_RESULT_SUPPORT, drs);
             scheduler.scheduleJob(jobDetail, TriggerUtils.makeImmediateTrigger(name, 0, 1));
         } catch (SchedulerException ex) {
             throw new AsynchronousMethodExecutionException("Error invoking method asynchronously", ex);
         }
+        return drs;
     }
 }

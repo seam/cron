@@ -26,9 +26,9 @@ public interface AsynchronousStrategy {
 
     void initMethodInvoker();
 
-    Future executeAndReturnFuture(final InvocationContextExecutor ice);
+    Future executeAndReturnFuture(final Invoker ice);
 
-    void executeWithoutReturn(final InvocationContextExecutor ice);
+    void executeWithoutReturn(final Invoker ice);
 
     void shutdownMethodInvoker();
 

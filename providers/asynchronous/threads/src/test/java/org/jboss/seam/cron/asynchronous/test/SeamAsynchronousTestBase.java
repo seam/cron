@@ -17,6 +17,7 @@
 package org.jboss.seam.cron.asynchronous.test;
 
 import org.jboss.logging.Logger;
+import org.jboss.seam.cron.asynchronous.threads.ThreadsAsynchronousStrategy;
 import org.jboss.seam.cron.test.SeamCronTestBase;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 
@@ -31,7 +32,7 @@ public abstract class SeamAsynchronousTestBase extends SeamCronTestBase {
     public static JavaArchive createDefaultArchive() 
     {
     	JavaArchive archive = SeamCronTestBase.createDefaultArchive()
-    		.addPackages(true,SeamAsynchronousTestBase.class.getPackage());
+    		.addPackages(true,SeamAsynchronousTestBase.class.getPackage(), ThreadsAsynchronousStrategy.class.getPackage());
     	
         log.debug(archive.toString(true));
     	return archive;
