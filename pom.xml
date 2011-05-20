@@ -29,7 +29,6 @@
     </modules>
 
     <properties>
-        <!-- Current Arquillian version -->
         <arquillian.version>1.0.0.Alpha5</arquillian.version>
     </properties>
     <!-- Dependency management, including extra repositories if needed -->

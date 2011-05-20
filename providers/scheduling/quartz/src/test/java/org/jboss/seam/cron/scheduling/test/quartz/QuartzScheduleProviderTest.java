@@ -37,8 +37,6 @@ import org.quartz.SchedulerException;
 @RunWith(Arquillian.class)
 public class QuartzScheduleProviderTest extends QuartzSchedulingTCKTest {
 
-    private static final int MAX_TIME_TO_WAIT = 20000;
-    private static final int SLEEP_TIME = 2000;
     private static Logger log = Logger.getLogger(QuartzScheduleProviderTest.class);
 
     @Inject
