@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.asynchronous.test;
+package org.jboss.seam.cron.asynchronous.test.tck;
 
 import org.jboss.logging.Logger;
 import java.util.concurrent.ExecutionException;
@@ -24,11 +24,12 @@ import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
-import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.seam.cron.asynchronous.threads.QuartzAsynchStrategy;
 import org.jboss.seam.cron.asynchronous.api.Asynchronous;
 import org.jboss.seam.cron.asynchronous.spi.AsynchronousInterceptor;
+import org.jboss.seam.cron.asynchronous.test.SeamAsynchronousTestBase;
+import org.jboss.seam.cron.asynchronous.test.SomeAsynchMethods;
+import org.jboss.seam.cron.asynchronous.test.Status;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -42,16 +43,16 @@ import static org.jboss.seam.cron.asynchronous.test.SomeAsynchMethods.SLEEP_PER_
  */
 @SuppressWarnings("serial")
 @RunWith(Arquillian.class)
-public class AsynchronousTest extends SeamAsynchronousTestBase {
+public class SeamCronAsynchronousTCKTest extends SeamAsynchronousTestBase {
     
     private static final int NUM_EXECUTIONS = 3;
-    private static Logger log = Logger.getLogger(AsynchronousTest.class);
+    private static Logger log = Logger.getLogger(SeamCronAsynchronousTCKTest.class);
 
-    @Deployment
-    public static JavaArchive createTestArchive() {
-        return createDefaultArchive()
-                .addPackages(true, Asynchronous.class.getPackage(), 
-                AsynchronousInterceptor.class.getPackage(), QuartzAsynchStrategy.class.getPackage());
+    //@Deployment
+    public static JavaArchive createAsynchronousTestArchive() {
+        return createAsynchronousTestBaseArchive()
+                .addPackages(true, Asynchronous.class.getPackage(), AsynchronousInterceptor.class.getPackage())
+                .addPackage("org.jboss.seam.cron.asynchronous.provider");
     }
 
     @Inject

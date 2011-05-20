@@ -14,13 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.asynchronous.test;
+package org.jboss.seam.cron.scheduling.test.quartz;
+
+import org.jboss.logging.Logger;
+import org.jboss.seam.cron.scheduling.quartz.QuartzScheduleProvider;
+import org.jboss.seam.cron.scheduling.test.tck.SeamCronSchedulingTCKTest;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 
 /**
  *
  * @author Peter Royle
  */
-public @interface HaystackCount
-{
-   
+public abstract class QuartzSchedulingTCKTest extends SeamCronSchedulingTCKTest {
+
+    private static Logger log = Logger.getLogger(QuartzSchedulingTCKTest.class);
+
+    public static JavaArchive createDefaultArchive() 
+    {
+    	JavaArchive archive = SeamCronSchedulingTCKTest.createDefaultArchive()
+    		.addPackages(true,QuartzScheduleProvider.class.getPackage());
+    	
+        log.debug(archive.toString(true));
+    	return archive;
+    }
+    
 }

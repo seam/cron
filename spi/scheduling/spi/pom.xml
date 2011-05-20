@@ -3,14 +3,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.jboss.seam.cron</groupId>
-    <artifactId>seam-cron-asynchronous-quartz</artifactId>
+    <artifactId>seam-cron-scheduling-spi</artifactId>
     <packaging>jar</packaging>
     <version>3.0.0-SNAPSHOT</version>
-    <name>Seam Cron Asynchronous Provider: Quartz</name>
-    <description>The Quartz provider of asynchronous method invocation for Seam Cron.
-    "Schedules" an @Asynchronous method to be executed a very short time into the future,
-    and returns immediately.
-    </description>
+    <name>Seam Cron Scheduling SPI</name>
+    <description>The Scheduling Service Provider Interface for Seam Cron.</description>
     <url>http://seamframework.org/Seam3/CronModule</url>
 
     <parent>
@@ -21,6 +18,7 @@
     </parent>
 
     <dependencies>
+        <!-- Dependencies for API sub-project -->
         <!-- Provided dependencies -->
         <dependency>
             <groupId>javax.enterprise</groupId>
@@ -30,18 +28,11 @@
         <!-- Compile-time dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>seam-cron-asynchronous-spi</artifactId>
+            <artifactId>seam-cron-impl</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <!-- Test dependencies -->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>seam-cron-asynchronous-tck</artifactId>
-            <version>${project.version}</version>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -52,9 +43,20 @@
             <artifactId>arquillian-junit</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- Dependencies for providers/quartz sub-project -->
+        <!-- Runtime Dependencies -->
         <dependency>
             <groupId>org.opensymphony.quartz</groupId>
             <artifactId>quartz</artifactId>
+            <!-- TODO: (PR) once API and IMPL are separate projects <scope>runtime</scope>-->
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
+
+
 </project>

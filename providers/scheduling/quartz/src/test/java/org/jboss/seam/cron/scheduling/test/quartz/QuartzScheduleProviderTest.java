@@ -35,7 +35,7 @@ import org.quartz.SchedulerException;
  */
 @SuppressWarnings("serial")
 @RunWith(Arquillian.class)
-public class QuartzScheduleProviderTest extends SeamQuartzTestBase {
+public class QuartzScheduleProviderTest extends QuartzSchedulingTCKTest {
 
     private static final int MAX_TIME_TO_WAIT = 20000;
     private static final int SLEEP_TIME = 2000;
@@ -46,7 +46,7 @@ public class QuartzScheduleProviderTest extends SeamQuartzTestBase {
 
     @Deployment
     public static JavaArchive createTestArchive() {
-        return SeamQuartzTestBase.createDefaultArchive().addPackage(QuartzScheduleProvider.class.getPackage());
+        return QuartzSchedulingTCKTest.createDefaultArchive().addPackage(QuartzScheduleProvider.class.getPackage());
     }
 
     @Test

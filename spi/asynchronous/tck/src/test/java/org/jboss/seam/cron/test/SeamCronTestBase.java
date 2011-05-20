@@ -31,7 +31,7 @@ public abstract class SeamCronTestBase implements Serializable {
 
     private static Logger log = Logger.getLogger(SeamCronTestBase.class);
         
-    public static JavaArchive createDefaultArchive() 
+    public static JavaArchive createCronTestBaseArchive()
     {
     	JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
     		.addPackages(true,SeamCronTestBase.class.getPackage())

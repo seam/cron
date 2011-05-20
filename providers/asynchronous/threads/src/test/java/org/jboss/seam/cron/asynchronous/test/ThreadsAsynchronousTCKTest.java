@@ -14,36 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.test;
+package org.jboss.seam.cron.asynchronous.test;
 
-import java.io.File;
-import java.io.Serializable;
-import org.jboss.logging.Logger;
-import org.jboss.shrinkwrap.api.ArchivePaths;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.seam.cron.asynchronous.test.tck.SeamCronAsynchronousTCKTest;
+import org.jboss.arquillian.api.Deployment;
+import org.jboss.seam.cron.asynchronous.threads.ThreadsAsynchronousStrategy;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 
 /**
  *
- * @author Peter Royle
+ * @author peteroyle
  */
-public abstract class SeamCronTestBase implements Serializable {
+public class ThreadsAsynchronousTCKTest extends SeamCronAsynchronousTCKTest {
 
-    private static Logger log = Logger.getLogger(SeamCronTestBase.class);
-        
-    public static JavaArchive createDefaultArchive() 
-    {
-    	JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
-    		.addPackages(true,SeamCronTestBase.class.getPackage())
-    		.addAsManifestResource(
-    			new File("src/main/resources/META-INF/beans.xml"), 
-    			ArchivePaths.create("beans.xml"));
-    	
-        log.debug(archive.toString(true));
-    	return archive;
+    @Deployment
+    public static JavaArchive deployment() {
+        return SeamCronAsynchronousTCKTest.createAsynchronousTestArchive().addPackages(true, ThreadsAsynchronousStrategy.class.getPackage());
     }
-
-    public SeamCronTestBase() {
-    }
-    
 }

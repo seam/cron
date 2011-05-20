@@ -28,9 +28,9 @@ public abstract class SeamAsynchronousTestBase extends SeamCronTestBase {
 
     private static Logger log = Logger.getLogger(SeamAsynchronousTestBase.class);
         
-    public static JavaArchive createDefaultArchive() 
+    public static JavaArchive createAsynchronousTestBaseArchive()
     {
-    	JavaArchive archive = SeamCronTestBase.createDefaultArchive()
+    	JavaArchive archive = SeamCronTestBase.createCronTestBaseArchive()
     		.addPackages(true,SeamAsynchronousTestBase.class.getPackage());
     	
         log.debug(archive.toString(true));

@@ -16,30 +16,19 @@
  */
 package org.jboss.seam.cron.asynchronous.test;
 
-import org.jboss.logging.Logger;
-import org.jboss.seam.cron.asynchronous.threads.ThreadsAsynchronousStrategy;
-import org.jboss.seam.cron.test.SeamCronTestBase;
+import org.jboss.seam.cron.asynchronous.test.tck.SeamCronAsynchronousTCKTest;
+import org.jboss.arquillian.api.Deployment;
+import org.jboss.seam.cron.asynchronous.threads.QuartzAsynchStrategy;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 
 /**
  *
- * @author Peter Royle
+ * @author peteroyle
  */
-public abstract class SeamAsynchronousTestBase extends SeamCronTestBase {
+public class QuartzAsynchronousTCKTest extends SeamCronAsynchronousTCKTest {
 
-    private static Logger log = Logger.getLogger(SeamAsynchronousTestBase.class);
-        
-    public static JavaArchive createDefaultArchive() 
-    {
-    	JavaArchive archive = SeamCronTestBase.createDefaultArchive()
-    		.addPackages(true,SeamAsynchronousTestBase.class.getPackage(), ThreadsAsynchronousStrategy.class.getPackage());
-    	
-        log.debug(archive.toString(true));
-    	return archive;
+    @Deployment
+    public static JavaArchive deployment() {
+        return SeamCronAsynchronousTCKTest.createAsynchronousTestArchive().addPackages(true, QuartzAsynchStrategy.class.getPackage());
     }
-
-
-    public SeamAsynchronousTestBase() {
-    }
-    
 }

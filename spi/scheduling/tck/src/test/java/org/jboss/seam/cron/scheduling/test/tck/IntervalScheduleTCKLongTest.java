@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.scheduling.test;
+package org.jboss.seam.cron.scheduling.test.tck;
 
 import javax.inject.Inject;
 import org.jboss.arquillian.api.Deployment;
@@ -23,6 +23,8 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.scheduling.test.beans.IncrementalScheduledBean;
 import org.jboss.seam.cron.scheduling.impl.exception.InternalException;
+import org.jboss.seam.cron.scheduling.test.SeamCronTestBase;
+import org.jboss.seam.cron.scheduling.test.SeamSchedulingTestBase;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,10 +34,10 @@ import org.junit.runner.RunWith;
  * Test @Every schedules
  */
 @RunWith(Arquillian.class)
-public class IntervalScheduleLongTest extends SeamSchedulingTestBase {
+public class IntervalScheduleTCKLongTest extends SeamSchedulingTestBase {
     public static final int SLEEP_TIME = 100000;
 
-    private static Logger log = Logger.getLogger(IntervalScheduleLongTest.class);
+    private static Logger log = Logger.getLogger(IntervalScheduleTCKLongTest.class);
     
     @Inject
     IncrementalScheduledBean everyTestBean;

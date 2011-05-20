@@ -3,18 +3,18 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.jboss.seam.cron</groupId>
-    <artifactId>seam-cron-scheduling-spi</artifactId>
+    <artifactId>seam-cron-asynchronous-spi</artifactId>
     <packaging>jar</packaging>
     <version>3.0.0-SNAPSHOT</version>
-    <name>Seam Cron Scheduling SPI</name>
-    <description>The Scheduling Service Provider Interface for Seam Cron.</description>
+    <name>Seam Cron Asynchronous SPI</name>
+    <description>The Ascynchronous Service Provider Interface for Seam Cron.</description>
     <url>http://seamframework.org/Seam3/CronModule</url>
 
     <parent>
         <artifactId>seam-cron</artifactId>
         <groupId>org.jboss.seam.cron</groupId>
         <version>3.0.0-SNAPSHOT</version>
-        <relativePath>../../</relativePath>
+        <relativePath>../../../</relativePath>
     </parent>
 
     <dependencies>
