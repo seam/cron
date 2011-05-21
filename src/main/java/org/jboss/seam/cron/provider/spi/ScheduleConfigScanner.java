@@ -23,7 +23,6 @@ import java.util.Set;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
-import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.AfterDeploymentValidation;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeShutdown;
@@ -58,20 +57,17 @@ public class ScheduleConfigScanner
     }
 
     /**
-     * Initialises the scheduler.
-     *
-     */
-    public void initTicker(@Observes AfterBeanDiscovery afterDisc, BeanManager beanManager, CronScheduleProvider scheduleProvider) throws Exception {
-        scheduleProvider.initScheduler();
-    }
-
-    /**
      * Initialises schedulers for all of the observed scheduled events.
      *
      * @param afterValid The observed event.
      * @param manager    The JSR-299 Bean Manager.
      */
     public void startJobs(@Observes AfterDeploymentValidation afterValid, BeanManager manager, CronScheduleProvider scheduleProvider) {
+        try {
+            scheduleProvider.initScheduler();
+        } catch (Exception ex) {
+            throw new SchedulerInitialisationException("Error initialising scheduler for underlying provider", ex);
+        }
         try {
             // collect the set of unique schedule specifications
             for (ObserverMethod<?> obsMeth : allObservers) {
