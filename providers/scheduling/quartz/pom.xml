@@ -40,6 +40,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>el-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
@@ -50,12 +55,12 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Dependencies for providers/quartz sub-project -->
+        <!-- Dependencies for Quartz -->
         <!-- Runtime Dependencies -->
         <dependency>
             <groupId>org.opensymphony.quartz</groupId>
             <artifactId>quartz</artifactId>
-            <!-- TODO: (PR) once API and IMPL are separate projects <scope>runtime</scope>-->
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>commons-collections</groupId>

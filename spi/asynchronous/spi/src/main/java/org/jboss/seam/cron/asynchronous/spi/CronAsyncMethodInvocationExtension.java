@@ -20,6 +20,7 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
+import javax.enterprise.inject.spi.AfterDeploymentValidation;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.BeforeShutdown;
@@ -31,7 +32,7 @@ import javax.enterprise.inject.spi.Extension;
 @ApplicationScoped
 public class CronAsyncMethodInvocationExtension implements Extension {
 
-    public void startJobs(@Observes BeforeBeanDiscovery event, BeanManager manager) {
+    public void registerTypes(@Observes BeforeBeanDiscovery event, BeanManager manager) {
         event.addAnnotatedType(manager.createAnnotatedType(AsynchronousInterceptor.class));
     }
 
@@ -39,7 +40,7 @@ public class CronAsyncMethodInvocationExtension implements Extension {
      * Initialises the asynchronous method invoker, if necessary.
      *
      */
-    public void initProviderScheduler(@Observes AfterBeanDiscovery afterDisc, BeanManager beanManager, AsynchronousStrategy asyncStrategy) throws Exception {
+    public void initProviderScheduler(@Observes AfterDeploymentValidation afterVal, BeanManager beanManager, AsynchronousStrategy asyncStrategy) throws Exception {
         asyncStrategy.initMethodInvoker();
     }
 
