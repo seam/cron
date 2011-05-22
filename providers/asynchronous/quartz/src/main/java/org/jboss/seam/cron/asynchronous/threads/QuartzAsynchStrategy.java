@@ -16,7 +16,6 @@
  */
 package org.jboss.seam.cron.asynchronous.threads;
 
-import org.jboss.seam.cron.asynchronous.spi.support.FutureInvokerSupport;
 import java.util.UUID;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
@@ -27,9 +26,10 @@ import javax.inject.Inject;
 
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.asynchronous.impl.exception.AsynchronousMethodExecutionException;
-import org.jboss.seam.cron.asynchronous.spi.AsynchronousStrategy;
-import org.jboss.seam.cron.asynchronous.spi.Invoker;
 import org.jboss.seam.cron.scheduling.impl.exception.SchedulerInitialisationException;
+import org.jboss.seam.cron.spi.asynchronous.AsynchronousStrategy;
+import org.jboss.seam.cron.spi.asynchronous.Invoker;
+import org.jboss.seam.cron.spi.asynchronous.support.FutureInvokerSupport;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;

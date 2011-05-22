@@ -16,8 +16,7 @@
  */
 package org.jboss.seam.cron.asynchronous.threads;
 
-import org.jboss.seam.cron.asynchronous.spi.support.FutureInvokerSupport;
-import org.jboss.seam.cron.asynchronous.spi.Invoker;
+import org.jboss.seam.cron.spi.asynchronous.support.FutureInvokerSupport;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;

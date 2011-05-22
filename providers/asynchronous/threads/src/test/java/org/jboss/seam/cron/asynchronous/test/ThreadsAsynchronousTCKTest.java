@@ -16,7 +16,7 @@
  */
 package org.jboss.seam.cron.asynchronous.test;
 
-import org.jboss.seam.cron.asynchronous.test.tck.SeamCronAsynchronousTCKTest;
+import org.jboss.seam.cron.test.asynchronous.tck.SeamCronAsynchronousTCKTest;
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.seam.cron.asynchronous.threads.ThreadsAsynchronousStrategy;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -29,6 +29,7 @@ public class ThreadsAsynchronousTCKTest extends SeamCronAsynchronousTCKTest {
 
     @Deployment
     public static JavaArchive deployment() {
-        return SeamCronAsynchronousTCKTest.createAsynchronousTestArchive().addPackages(true, ThreadsAsynchronousStrategy.class.getPackage());
+        return SeamCronAsynchronousTCKTest.createAsynchronousTckTestArchive()
+                .addPackages(true, ThreadsAsynchronousStrategy.class.getPackage());
     }
 }

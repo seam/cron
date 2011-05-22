@@ -20,9 +20,9 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
 import javax.enterprise.context.ApplicationScoped;
-import org.jboss.seam.cron.asynchronous.spi.AsynchronousStrategy;
-import org.jboss.seam.cron.asynchronous.spi.support.FutureInvokerSupport;
-import org.jboss.seam.cron.asynchronous.spi.Invoker;
+import org.jboss.seam.cron.spi.asynchronous.AsynchronousStrategy;
+import org.jboss.seam.cron.spi.asynchronous.support.FutureInvokerSupport;
+import org.jboss.seam.cron.spi.asynchronous.Invoker;
 
 /**
  * Simple asynchronous method invocation strategy which wraps the execution

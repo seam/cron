@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.logging.Logger;
+import org.jboss.seam.cron.test.scheduling.SeamCronSchedulingTestBase;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +36,7 @@ import org.quartz.SchedulerException;
  */
 @SuppressWarnings("serial")
 @RunWith(Arquillian.class)
-public class QuartzScheduleProviderTest extends QuartzSchedulingTCKTest {
+public class QuartzScheduleProviderTest extends SeamCronSchedulingTestBase {
 
     private static Logger log = Logger.getLogger(QuartzScheduleProviderTest.class);
 
@@ -44,7 +45,8 @@ public class QuartzScheduleProviderTest extends QuartzSchedulingTCKTest {
 
     @Deployment
     public static JavaArchive createTestArchive() {
-        return QuartzSchedulingTCKTest.createDefaultArchive().addPackage(QuartzScheduleProvider.class.getPackage());
+        return SeamCronSchedulingTestBase.createSchedulingTestArchive()
+                .addPackage(QuartzScheduleProvider.class.getPackage());
     }
 
     @Test

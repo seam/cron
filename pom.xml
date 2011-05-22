@@ -19,10 +19,8 @@
     <modules>
         <module>api</module>
         <module>impl</module>
-        <module>spi/asynchronous/spi</module>
-        <module>spi/asynchronous/tck</module>
-        <module>spi/scheduling/spi</module>
-        <module>spi/scheduling/tck</module>
+        <module>spi</module>
+        <module>tck</module>
         <module>providers/scheduling/quartz</module>
         <module>providers/asynchronous/threads</module>
         <module>providers/asynchronous/quartz</module>

@@ -16,8 +16,8 @@
  */
 package org.jboss.seam.cron.scheduling.quartz;
 
-import org.jboss.seam.cron.scheduling.spi.trigger.TriggerSupplies;
-import org.jboss.seam.cron.scheduling.spi.CronScheduleProvider;
+import org.jboss.seam.cron.spi.scheduling.trigger.TriggerSupplies;
+import org.jboss.seam.cron.spi.scheduling.CronScheduleProvider;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -30,9 +30,9 @@ import javax.inject.Inject;
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.scheduling.api.Every;
 import org.jboss.seam.cron.scheduling.impl.exception.SchedulerInitialisationException;
-import org.jboss.seam.cron.scheduling.spi.trigger.IntervalTriggerDetail;
-import org.jboss.seam.cron.scheduling.spi.trigger.ScheduledTriggerDetail;
-import org.jboss.seam.cron.scheduling.spi.trigger.TriggerDetail;
+import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
+import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
+import org.jboss.seam.cron.spi.scheduling.trigger.TriggerDetail;
 import org.quartz.CronTrigger;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;

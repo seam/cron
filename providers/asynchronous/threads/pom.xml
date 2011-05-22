@@ -27,14 +27,14 @@
         <!-- Compile-time dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>seam-cron-asynchronous-spi</artifactId>
+            <artifactId>seam-cron-spi</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <!-- Test dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>seam-cron-asynchronous-tck</artifactId>
+            <artifactId>seam-cron-tck</artifactId>
             <version>${project.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
