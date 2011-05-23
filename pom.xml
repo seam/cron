@@ -79,7 +79,10 @@
                     <failIfMissing>true</failIfMissing>
                     <aggregate>false</aggregate>
                     <encoding>UTF-8</encoding>
-                    <includes><include>**/*.java</include></includes>
+                    <includes>
+                        <include>src/**/*.java</include>
+                        <include>src/**/*.xml</include>
+                    </includes>
                 </configuration>
                 <executions>
                     <execution>
