@@ -33,7 +33,7 @@
          <directory>src/main/assembly</directory>
          <outputDirectory>.</outputDirectory>
          <includes>
-            <include>../../../../readme.txt</include>
+            <include>../../../../readme.html</include>
             <include>license.txt</include>
          </includes>
       </fileSet>
