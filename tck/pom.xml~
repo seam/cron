@@ -1,0 +1,69 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.jboss.seam.cron</groupId>
+    <artifactId>seam-cron-asynchronous-tck</artifactId>
+    <packaging>jar</packaging>
+    <version>3.0.0-SNAPSHOT</version>
+    <name>Seam Cron Asynchronous TCK</name>
+    <description>The Technology Compatibility Kit for asynchronous method invocation providers for Seam Cron.</description>
+    <url>http://seamframework.org/Seam3/CronModule</url>
+
+    <parent>
+        <artifactId>seam-cron</artifactId>
+        <groupId>org.jboss.seam.cron</groupId>
+        <version>3.0.0-SNAPSHOT</version>
+        <relativePath>../../../</relativePath>
+    </parent>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <!-- Provided dependencies -->
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Compile-time dependencies -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>seam-cron-asynchronous-spi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Would-be Test dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian</groupId>
+            <artifactId>arquillian-junit</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>
