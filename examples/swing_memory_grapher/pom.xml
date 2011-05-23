@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.jboss.seam.cron</groupId>
     <version>3.0.0-SNAPSHOT</version>
-    <artifactId>seam-cron-eg-swing-graph</artifactId>
-    <name>Seam Cron Eg Swing Graph</name>
+    <artifactId>seam-cron-example-swing-graph</artifactId>
+    <name>Seam Cron Example Swing Graph</name>
     <packaging>jar</packaging>
     <build>
         <plugins>
@@ -62,27 +62,6 @@
                         <configuration>
                             <mainClass>org.jboss.weld.environment.se.StartMain</mainClass>
                         </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>com.google.code.maven-license-plugin</groupId>
-                        <artifactId>maven-license-plugin</artifactId>
-                        <version>1.4.0</version>
-                        <configuration>
-                            <basedir>${basedir}</basedir>
-                            <header>${basedir}/src/etc/header.txt</header>
-                            <quiet>false</quiet>
-                            <failIfMissing>true</failIfMissing>
-                            <aggregate>false</aggregate>
-                            <encoding>UTF-8</encoding>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>compile</phase>
-                                <goals>
-                                    <goal>format</goal>
-                                </goals>
-                            </execution>
-                        </executions>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>

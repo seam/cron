@@ -68,7 +68,6 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <!--
             <plugin>
                 <groupId>com.google.code.maven-license-plugin</groupId>
                 <artifactId>maven-license-plugin</artifactId>
@@ -91,7 +90,6 @@
                     </execution>
                 </executions>
             </plugin>
-            -->
         </plugins>
     </build>
 
