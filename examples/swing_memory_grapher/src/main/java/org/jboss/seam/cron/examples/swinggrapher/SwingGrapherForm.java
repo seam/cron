@@ -48,7 +48,7 @@ public class SwingGrapherForm extends javax.swing.JFrame
     /** Creates new form SwingGrapherForm */
     public SwingGrapherForm()
     {
-        super("WebBeans SE Graph Example");
+        super("Seam Cron Swing Graph Example");
         initComponents();
         setSize(new Dimension(800, 600));
 

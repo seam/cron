@@ -13,7 +13,7 @@
     <parent>
         <artifactId>seam-parent</artifactId>
         <groupId>org.jboss.seam</groupId>
-        <version>9</version>
+        <version>10</version>
     </parent>
 
     <modules>
@@ -24,10 +24,10 @@
         <module>providers/scheduling/quartz</module>
         <module>providers/asynchronous/threads</module>
         <module>providers/asynchronous/quartz</module>
-        <module>examples/swing_memory_grapher</module>
     </modules>
 
     <properties>
+        <seam.version>3.0.0.Final</seam.version>
         <arquillian.version>1.0.0.Alpha5</arquillian.version>
     </properties>
     <!-- Dependency management, including extra repositories if needed -->
@@ -99,12 +99,99 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.jboss.weld</groupId>
-                <artifactId>weld-core-bom</artifactId>
-                <version>1.1.0.Final</version>
-                <type>pom</type>
+                <groupId>org.jboss.seam</groupId>
+                <artifactId>seam-bom</artifactId>
+                <version>${seam.version}</version>
                 <scope>import</scope>
+                <type>pom</type>
             </dependency>
+            <dependency>
+                <groupId>javax.el</groupId>
+                <artifactId>el-api</artifactId>
+                <version>2.2</version>
+            </dependency>            
+            
+            <!-- Inter-project dependencies -->
+            <dependency>
+                <groupId>org.jboss.seam.cron</groupId>
+                <artifactId>seam-cron-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.seam.cron</groupId>
+                <artifactId>seam-cron-api</artifactId>
+                <classifier>sources</classifier>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.seam.cron</groupId>
+                <artifactId>seam-cron-api</artifactId>
+                <classifier>javadoc</classifier>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.seam.cron</groupId>
+                <artifactId>seam-cron-impl</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.seam.cron</groupId>
+                <artifactId>seam-cron-impl</artifactId>
+                <classifier>sources</classifier>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.seam.cron</groupId>
+                <artifactId>seam-cron-impl</artifactId>
+                <classifier>javadoc</classifier>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.seam.cron</groupId>
+                <artifactId>seam-cron-spi</artifactId>
+                <version>${project.version}</version>
+            </dependency>    
+            <dependency>
+                <groupId>org.jboss.seam.cron</groupId>
+                <artifactId>seam-cron-spi</artifactId>
+                <classifier>sources</classifier>
+                <version>${project.version}</version>
+            </dependency>    
+            <dependency>
+                <groupId>org.jboss.seam.cron</groupId>
+                <artifactId>seam-cron-spi</artifactId>
+                <classifier>javadoc</classifier>
+                <version>${project.version}</version>
+            </dependency>    
+            <dependency>
+                <groupId>org.jboss.seam.cron</groupId>
+                <artifactId>seam-cron-asynchronous-quartz</artifactId>
+                <version>${project.version}</version>
+            </dependency>    
+            <dependency>
+                <groupId>org.jboss.seam.cron</groupId>
+                <artifactId>seam-cron-asynchronous-threads</artifactId>
+                <version>${project.version}</version>
+            </dependency>         
+            <dependency>
+                <groupId>org.jboss.seam.cron</groupId>
+                <artifactId>seam-cron-scheduling-quartz</artifactId>
+                <version>${project.version}</version>
+            </dependency>            
+            <dependency>
+                <groupId>org.jboss.seam.cron</groupId>
+                <artifactId>seam-cron-reference-guide</artifactId>
+                <type>war</type>
+                <version>${project.version}</version>
+            </dependency>            
+            <dependency>
+                <groupId>org.jboss.seam.cron</groupId>
+                <artifactId>seam-cron-example-swing-graph</artifactId>
+                <type>zip</type>
+                <version>${project.version}</version>
+            </dependency>            
+            
+            
             <!-- Dependencies for API sub-project -->
             <dependency>
                 <groupId>javax.time</groupId>
@@ -122,7 +209,6 @@
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
                 <version>2.4</version>
-            <!-- TODO: (PR) once API and IMPL are separate projects <scope>runtime</scope>-->
             </dependency>
 
             <dependency>
@@ -151,10 +237,55 @@
                 <version>1.1.1</version>
                 <scope>runtime</scope>
             </dependency>
+            
+            <!-- Dependencies for examples -->
+            <dependency>
+                <groupId>jfree</groupId>
+                <artifactId>jfreechart</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+        
         </dependencies>
     </dependencyManagement>
 
     <profiles>
+        <profile>
+            <id>distribution</id>
+            <activation>
+                <property>
+                    <name>dist</name> <!-- TODO: (PR): this should also support 'release', but need to work out the GPG thing first -->
+                </property>
+            </activation>
+            <modules>
+                <module>examples/swing_memory_grapher</module>
+                <module>docs/reference</module>
+                <module>dist</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>swing-example</id>
+            <activation>
+                <property>
+                    <name>swing-example</name>
+                </property>
+            </activation>
+            <modules>
+                <module>examples/swing_memory_grapher</module>
+            </modules>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <skipTests>true</skipTests>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        
+        <!-- Testing Profiles -->
         <profile>
             <id>weld-se-embedded-11</id>
             <dependencies>
@@ -280,5 +411,4 @@
             </dependencyManagement>
         </profile>
     </profiles>
-    
 </project>

@@ -6,37 +6,14 @@
     <artifactId>seam-cron-example-swing-graph</artifactId>
     <name>Seam Cron Example Swing Graph</name>
     <packaging>jar</packaging>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.0.2</version>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-    <repositories>
-        <repository>
-            <id>repository.jboss.org</id>
-            <name>JBoss Release Repository</name>
-            <url>https://repository.jboss.org/nexus/content/groups/public</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>digitalworx-groups</id>
-            <name>Digitalworx Groups</name>
-            <url>http://devsupport01.t3apl.net:8081/content/groups/public/</url>
-        </repository>
-    </repositories>
+    
+    <parent>
+        <artifactId>seam-cron</artifactId>
+        <groupId>org.jboss.seam.cron</groupId>
+        <version>3.0.0-SNAPSHOT</version>
+        <relativePath>../../</relativePath>
+    </parent>
+    
     <profiles>
         <profile>
             <id>run</id>
@@ -61,6 +38,7 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <configuration>
                             <mainClass>org.jboss.weld.environment.se.StartMain</mainClass>
+                            <classpathScope>runtime</classpathScope>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -81,30 +59,26 @@
 
     <dependencies>
         <dependency>
-            <groupId>jfreechart</groupId>
+            <groupId>jfree</groupId>
             <artifactId>jfreechart</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.seam.cron</groupId>
             <artifactId>seam-cron-api</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.seam.cron</groupId>
             <artifactId>seam-cron-scheduling-quartz</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.weld.se</groupId>
             <artifactId>weld-se</artifactId>
-            <version>1.1.0.Final</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.seam.solder</groupId>
             <artifactId>seam-solder</artifactId>
-            <version>3.0.0.Final</version>
         </dependency>
     </dependencies>
 </project>
