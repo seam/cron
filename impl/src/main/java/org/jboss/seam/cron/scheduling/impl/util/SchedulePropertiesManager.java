@@ -32,7 +32,7 @@ public class SchedulePropertiesManager {
     /**
      * The path on the classpath at which the properties file cotaining named schedules is expected to be found.
      */
-    public static final String SCHEDULE_PROPERTIES_PATH = "/scheduler.properties";
+    public static final String SCHEDULE_PROPERTIES_PATH = "/cron.properties";
     private Properties scheduleProperties = null;
     private static SchedulePropertiesManager instance = null;
     private Logger log = Logger.getLogger(SchedulePropertiesManager.class);

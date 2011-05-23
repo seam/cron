@@ -27,7 +27,7 @@ import javax.inject.Qualifier;
  * A binding annotation for use observing the Event.class event.
  * <p/>
  * The value can either be a schedule in Cron format, or a 'named schedule', whereby
- * the cron-formatted schedule appears in the /scheduler.properties file on the classpath
+ * the cron-formatted schedule appears in the /cron.properties file on the classpath
  * as the value of the property with the given name.
  * <p/>
  * Example scheduled event observer:
@@ -36,7 +36,7 @@ import javax.inject.Qualifier;
  * Example named, scheduled event observer:
  * <code>public void doSomething(@Observes @Scheduled("after.hours") Event e) { ... }</code>
  * <p/>
- * Where the 'after.hours' schedule would be specified in /scheduler.properties like so:
+ * Where the 'after.hours' schedule would be specified in /cron.properties like so:
  * <code>after.hours=0 0 * ? * *
  * <p/>
  * Scheduled bindings may be made typesafe using the following pattern:

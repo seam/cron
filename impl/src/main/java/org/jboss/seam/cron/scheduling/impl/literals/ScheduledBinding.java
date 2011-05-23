@@ -49,7 +49,7 @@ public class ScheduledBinding
     /**
      * The schedule specification (in cron format) or name. If the value is a name,
      * then the cron-formatted schedule specification will be read from the
-     * /scheduler.properties file on the classpath using the name as the property key.
+     * /cron.properties file on the classpath using the name as the property key.
      *
      * @return the value.
      */

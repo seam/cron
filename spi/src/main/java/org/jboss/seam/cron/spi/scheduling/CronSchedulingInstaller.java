@@ -87,7 +87,7 @@ public class CronSchedulingInstaller {
 
     /**
      * If the given String is already a schedule then just return it, otherwise check the
-     * scheduler.properties file for schedule spec with the given name and return that.
+     * cron.properties file for schedule spec with the given name and return that.
      * @param scheduleSpec
      * @return
      * @throws SchedulerConfigurationException
