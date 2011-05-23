@@ -14,22 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.spi.scheduling;
+package org.jboss.seam.cron.spi;
 
-import javax.enterprise.context.ApplicationScoped;
-import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
-import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
+import org.jboss.seam.cron.scheduling.impl.exception.CronProviderDestructionException;
+import org.jboss.seam.cron.scheduling.impl.exception.CronProviderInitialisationException;
 
 /**
- * The service contract for underlying providers of scheduled events.
- * 
+ *
  * @author peteroyle
  */
-@ApplicationScoped
-public interface CronScheduleProvider {
+public interface CronProviderLifecycle {
 
-    public void processScheduledTrigger(final ScheduledTriggerDetail schedTriggerDetails) throws Exception;
+    /**
+     * Initialises the underlying provider.
+     *
+     */
+    void initProvider() throws CronProviderInitialisationException;
 
-    public void processIntervalTrigger(final IntervalTriggerDetail intervalTriggerDetails) throws Exception;
-
+    /**
+     * Shutdown the underlying provider, called on application close/undeployment.
+     */
+    void destroyProvider() throws CronProviderDestructionException;
+    
 }

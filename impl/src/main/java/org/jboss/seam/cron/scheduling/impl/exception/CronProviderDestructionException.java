@@ -14,35 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.spi.asynchronous;
-
-import javax.annotation.PreDestroy;
-import javax.enterprise.context.ApplicationScoped;
-import org.jboss.seam.cron.spi.asynchronous.AsynchronousStrategy;
+package org.jboss.seam.cron.scheduling.impl.exception;
 
 /**
+ * Exception thrown when there is a problem starting the Seam Cron module.
+ * 
  * @author Peter Royle
  */
-@ApplicationScoped
-public class CronAsyncMethodInvocationExtension {
-
-//    public void registerTypes(@Observes BeforeBeanDiscovery event, BeanManager manager) {
-//        event.addAnnotatedType(manager.createAnnotatedType(AsynchronousInterceptor.class));
-//    }
-
+public class CronProviderDestructionException
+        extends RuntimeException {
     /**
-     * Initialises the asynchronous method invoker, if necessary.
+     * Create a new instance of SchedulerInitialisationException with the given error message.
      *
+     * @param message The error message.
      */
-    public void initProviderAsynchronous(AsynchronousStrategy asyncStrategy) {
-        asyncStrategy.initMethodInvoker();
+    public CronProviderDestructionException(String message) {
+        super(message);
     }
 
     /**
-     * Shutdown the asynchronous method invoker, if necessary.
+     * Create a new instance of SchedulerInitialisationException with the given error message and cause.
+     *
+     * @param message The error message.
+     * @param cause   The orginal cause of the error.
      */
-    public void stopProviderAsynchronous(AsynchronousStrategy asyncStratey) {
-        asyncStratey.shutdownMethodInvoker();
+    public CronProviderDestructionException(String message, Throwable cause) {
+        super(message, cause);
     }
-
 }

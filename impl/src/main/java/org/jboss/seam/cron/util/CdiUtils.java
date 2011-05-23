@@ -17,8 +17,9 @@
 package org.jboss.seam.cron.util;
 
 import java.lang.annotation.Annotation;
+import java.util.HashSet;
+import java.util.Set;
 import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.UnsatisfiedResolutionException;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 
@@ -42,30 +43,46 @@ public class CdiUtils {
     /**
      * Utility method allowing managed instances of beans to provide entry points
      * for non-managed beans (such as {@link WeldContainer}). Should only called
-     * once Weld has finished booting.
+     * once CDI has finished booting.
      * 
      * @param manager the BeanManager to use to access the managed instance
      * @param type the type of the Bean
      * @param bindings the bean's qualifiers
      * @return a managed instance of the bean
-     * @throws IllegalArgumentException if the given type represents a type
-     *            variable
-     * @throws IllegalArgumentException if two instances of the same qualifier
-     *            type are given
-     * @throws IllegalArgumentException if an instance of an annotation that is
-     *            not a qualifier type is given
-     * @throws UnsatisfiedResolutionException if no beans can be resolved * @throws
-     *            AmbiguousResolutionException if the ambiguous dependency
-     *            resolution rules fail
-     * @throws IllegalArgumentException if the given type is not a bean type of
-     *            the given bean
      * 
      */
     public static <T> T getInstanceByType(BeanManager manager, Class<T> type, Annotation... bindings) {
+        // TODO: (PR): fix this catch and swallow hackery
         try {
             final Bean<?> bean = manager.resolve(manager.getBeans(type));
             CreationalContext<?> cc = manager.createCreationalContext(bean);
             return type.cast(manager.getReference(bean, type, cc));
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+
+    /**
+     * Utility method allowing multiple managed instances of beans to provide entry points
+     * for non-managed beans (such as {@link WeldContainer}). Should only called
+     * once CDI has finished booting.
+     * 
+     * @param manager the BeanManager to use to access the managed instance
+     * @param type the type of the Bean
+     * @param bindings the bean's qualifiers
+     * @return a managed instance of the bean
+     * 
+     */
+    public static <T> Set<T> getInstancesByType(BeanManager manager, Class<T> type, Annotation... bindings) {
+        // TODO: (PR): fix this catch and swallow hackery
+        try {
+            final Set<Bean<?>> beans = manager.getBeans(type);
+            final Set<T> instances = new HashSet<T>();
+            for (Bean<?> bean : beans) {
+                CreationalContext<?> cc = manager.createCreationalContext(bean);
+                instances.add(type.cast(manager.getReference(bean, type, cc)));
+            }
+            return instances;
         } catch (Throwable t) {
             return null;
         }

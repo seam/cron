@@ -16,7 +16,7 @@
  */
 package org.jboss.seam.cron.test.asynchronous;
 
-import org.jboss.seam.cron.spi.asynchronous.CronAsyncMethodInvocationExtension;
+import org.jboss.seam.cron.spi.asynchronous.AsynchronousStrategy;
 import org.jboss.seam.cron.test.SeamCronTestBase;
 import org.jboss.seam.cron.test.asynchronous.beans.SomeAsynchMethods;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -31,7 +31,7 @@ public abstract class SeamCronAsynchronousTestBase extends SeamCronTestBase {
         return SeamCronTestBase.createTestArchive()
                 .addPackage(SeamCronAsynchronousTestBase.class.getPackage())
                 .addPackage(SomeAsynchMethods.class.getPackage())
-                .addPackage(CronAsyncMethodInvocationExtension.class.getPackage());
+                .addPackage(AsynchronousStrategy.class.getPackage());
     }
 
     public SeamCronAsynchronousTestBase() {

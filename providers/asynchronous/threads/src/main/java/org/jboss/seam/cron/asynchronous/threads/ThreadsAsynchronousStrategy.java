@@ -17,11 +17,9 @@
 package org.jboss.seam.cron.asynchronous.threads;
 
 import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
 import javax.enterprise.context.ApplicationScoped;
 import org.jboss.seam.cron.spi.asynchronous.AsynchronousStrategy;
-import org.jboss.seam.cron.spi.asynchronous.support.FutureInvokerSupport;
 import org.jboss.seam.cron.spi.asynchronous.Invoker;
 
 /**
@@ -32,14 +30,6 @@ import org.jboss.seam.cron.spi.asynchronous.Invoker;
  */
 @ApplicationScoped
 public class ThreadsAsynchronousStrategy implements AsynchronousStrategy {
-
-    public void initMethodInvoker() {
-        // nop
-    }
-
-    public void shutdownMethodInvoker() {
-        // nop
-    }
 
     public void executeWithoutReturn(final Invoker invoker) {
         // Execute the method in a background thread and return nothing of value to the caller.

@@ -19,10 +19,7 @@ package org.jboss.seam.cron.test;
 import java.io.File;
 import java.io.Serializable;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.spi.asynchronous.AsynchronousStrategy;
-import org.jboss.seam.cron.spi.asynchronous.CronAsyncMethodInvocationExtension;
-import org.jboss.seam.cron.spi.scheduling.CronScheduleProvider;
-import org.jboss.seam.cron.spi.scheduling.CronSchedulingExtension;
+import org.jboss.seam.cron.spi.scheduling.CronSchedulingInstaller;
 import org.jboss.seam.cron.spi.SeamCronExtension;
 import org.jboss.shrinkwrap.api.ArchivePaths;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -41,7 +38,7 @@ public abstract class SeamCronTestBase implements Serializable {
     	JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
     		.addPackage(SeamCronTestBase.class.getPackage())
                 .addPackage(SeamCronExtension.class.getPackage())
-                .addClasses(CronAsyncMethodInvocationExtension.class, CronSchedulingExtension.class)
+                .addClasses(CronSchedulingInstaller.class)
     		.addAsManifestResource(
     			new File("src/main/resources/META-INF/beans.xml"), 
     			ArchivePaths.create("beans.xml"));

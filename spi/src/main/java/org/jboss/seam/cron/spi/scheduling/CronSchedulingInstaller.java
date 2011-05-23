@@ -27,10 +27,9 @@ import org.jboss.logging.Logger;
 import org.jboss.seam.cron.scheduling.api.Every;
 import org.jboss.seam.cron.scheduling.api.Scheduled;
 import org.jboss.seam.cron.scheduling.impl.exception.SchedulerConfigurationException;
-import org.jboss.seam.cron.scheduling.impl.exception.SchedulerInitialisationException;
+import org.jboss.seam.cron.scheduling.impl.exception.CronProviderInitialisationException;
 import org.jboss.seam.cron.util.CdiUtils;
 import org.jboss.seam.cron.scheduling.impl.util.SchedulePropertiesManager;
-import org.jboss.seam.cron.spi.scheduling.CronScheduleProvider;
 import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
 
@@ -39,22 +38,17 @@ import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
  * @author peteroyle
  */
 @ApplicationScoped
-public class CronSchedulingExtension {
+public class CronSchedulingInstaller {
 
-    private Logger log = Logger.getLogger(CronSchedulingExtension.class);
+    private Logger log = Logger.getLogger(CronSchedulingInstaller.class);
 
     /**
      * Initialises schedulers for all of the observed scheduled events.
      *
      * @param manager    The JSR-299 Bean Manager.
      */
-    public void processScheduledTriggers(BeanManager manager, CronScheduleProvider scheduleProvider, 
+    public void initProviderScheduling(BeanManager manager, CronScheduleProvider scheduleProvider, 
             Set<ObserverMethod> allObservers) {
-        try {
-            scheduleProvider.initScheduler();
-        } catch (Exception ex) {
-            throw new SchedulerInitialisationException("Error initialising provder scheduler", ex);
-        }
         try {
             // collect the set of unique schedule specifications
             for (ObserverMethod<?> obsMeth : allObservers) {
@@ -77,15 +71,8 @@ public class CronSchedulingExtension {
 
 
         } catch (Throwable t) {
-            throw new SchedulerInitialisationException("Error registering schedules with underlying provider", t);
+            throw new CronProviderInitialisationException("Error registering schedules with underlying provider", t);
         }
-    }
-
-    /**
-     * Shutdown the scheduler on application close.
-     */
-    public void stopProvidersScheduler(CronScheduleProvider scheduleProvider) {
-        scheduleProvider.stopScheduler();
     }
 
     /**

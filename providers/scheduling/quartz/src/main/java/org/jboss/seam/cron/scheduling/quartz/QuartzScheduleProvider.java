@@ -16,6 +16,7 @@
  */
 package org.jboss.seam.cron.scheduling.quartz;
 
+import java.util.logging.Level;
 import org.jboss.seam.cron.spi.scheduling.trigger.TriggerSupplies;
 import org.jboss.seam.cron.spi.scheduling.CronScheduleProvider;
 import java.text.ParseException;
@@ -29,7 +30,9 @@ import javax.inject.Inject;
 
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.scheduling.api.Every;
-import org.jboss.seam.cron.scheduling.impl.exception.SchedulerInitialisationException;
+import org.jboss.seam.cron.scheduling.impl.exception.CronProviderDestructionException;
+import org.jboss.seam.cron.scheduling.impl.exception.CronProviderInitialisationException;
+import org.jboss.seam.cron.spi.CronProviderLifecycle;
 import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.TriggerDetail;
@@ -37,6 +40,7 @@ import org.quartz.CronTrigger;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
+import org.quartz.SchedulerConfigException;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerUtils;
@@ -55,7 +59,7 @@ import static org.jboss.seam.cron.scheduling.api.TimeUnit.*;
  * @author Peter Royle
  */
 @ApplicationScoped
-public class QuartzScheduleProvider implements CronScheduleProvider {
+public class QuartzScheduleProvider implements CronProviderLifecycle, CronScheduleProvider {
 
     /**
      * The name of the property containing the observer method bindings to be used
@@ -84,16 +88,24 @@ public class QuartzScheduleProvider implements CronScheduleProvider {
      * Initialises the scheduler.
      *
      */
-    public void initScheduler() throws Exception {
+    public void initProvider() throws CronProviderInitialisationException {
         instanceId = UUID.randomUUID();
         JobStore jobStore = new RAMJobStore();
         ThreadPool threadPool = new SimpleThreadPool(4, Thread.NORM_PRIORITY);
-        threadPool.initialize();
+        try {
+            threadPool.initialize();
+        } catch (SchedulerConfigException ex) {
+            throw new CronProviderInitialisationException("Error initializing Quartz ThreadPool", ex);
+        }
         final DirectSchedulerFactory schedulerFactory = DirectSchedulerFactory.getInstance();
         schedulerName = SCHEDULER_NAME_PREFIX + "_" + instanceId.toString();
-        schedulerFactory.createScheduler(schedulerName, instanceId.toString(), threadPool, jobStore);
-        scheduler = schedulerFactory.getScheduler(schedulerName);
-        scheduler.start();
+        try {
+            schedulerFactory.createScheduler(schedulerName, instanceId.toString(), threadPool, jobStore);
+            scheduler = schedulerFactory.getScheduler(schedulerName);
+            scheduler.start();
+        } catch (SchedulerException ex) {
+            throw new CronProviderInitialisationException("Error initializing Quartz scheduler", ex);
+        }
     }
 
     public void processScheduledTrigger(final ScheduledTriggerDetail schedTriggerDetails) throws ParseException, SchedulerException, InternalError {
@@ -119,7 +131,7 @@ public class QuartzScheduleProvider implements CronScheduleProvider {
     /**
      * Shutdown the scheduler on application close.
      */
-    public void stopScheduler() {
+    public void destroyProvider() throws CronProviderDestructionException {
         try {
             getScheduler().shutdown();
         } catch (SchedulerException ex) {
@@ -145,7 +157,7 @@ public class QuartzScheduleProvider implements CronScheduleProvider {
      * @param jobParams The parameters to be passed to the job executor.
      * @throws SchedulerException
      */
-    private void scheduleJob(Trigger schedTrigger, final TriggerDetail triggerDetails) throws SchedulerInitialisationException {
+    private void scheduleJob(Trigger schedTrigger, final TriggerDetail triggerDetails) throws CronProviderInitialisationException {
 
         // common Second payload sample and start time
         GregorianCalendar gc = new GregorianCalendar();
@@ -162,7 +174,7 @@ public class QuartzScheduleProvider implements CronScheduleProvider {
         try {
             getScheduler().scheduleJob(job, schedTrigger);
         } catch (SchedulerException e) {
-            throw new SchedulerInitialisationException("Error scheduling job " + jobName + " with Quartz provider", e);
+            throw new CronProviderInitialisationException("Error scheduling job " + jobName + " with Quartz provider", e);
         }
         log.info("Scheduler for " + jobName + " initialised");
     }

@@ -26,7 +26,9 @@ import javax.inject.Inject;
 
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.asynchronous.impl.exception.AsynchronousMethodExecutionException;
-import org.jboss.seam.cron.scheduling.impl.exception.SchedulerInitialisationException;
+import org.jboss.seam.cron.scheduling.impl.exception.CronProviderDestructionException;
+import org.jboss.seam.cron.scheduling.impl.exception.CronProviderInitialisationException;
+import org.jboss.seam.cron.spi.CronProviderLifecycle;
 import org.jboss.seam.cron.spi.asynchronous.AsynchronousStrategy;
 import org.jboss.seam.cron.spi.asynchronous.Invoker;
 import org.jboss.seam.cron.spi.asynchronous.support.FutureInvokerSupport;
@@ -47,7 +49,7 @@ import org.quartz.spi.ThreadPool;
  * @author Peter Royle
  */
 @ApplicationScoped
-public class QuartzAsynchStrategy implements AsynchronousStrategy {
+public class QuartzAsynchStrategy implements CronProviderLifecycle, AsynchronousStrategy {
 
     /**
      * The name of the job group for all arbitrarily scheduled events.
@@ -67,7 +69,8 @@ public class QuartzAsynchStrategy implements AsynchronousStrategy {
      * Initialises the scheduler.
      *
      */
-    public void initMethodInvoker() {
+    
+    public void initProvider() throws CronProviderInitialisationException {
         try {
             instanceId = UUID.randomUUID();
             JobStore jobStore = new RAMJobStore();
@@ -79,14 +82,14 @@ public class QuartzAsynchStrategy implements AsynchronousStrategy {
             scheduler = schedulerFactory.getScheduler(schedulerName);
             scheduler.start();
         } catch (SchedulerException ex) {
-            throw new SchedulerInitialisationException("Error initialising Quartz for asynchronous method invocation");
+            throw new CronProviderInitialisationException("Error initialising Quartz for asynchronous method invocation");
         }
     }
 
     /**
      * Shutdown the scheduler on application close.
      */
-    public void shutdownMethodInvoker() {
+    public void destroyProvider() throws CronProviderDestructionException {
         try {
             scheduler.shutdown();
         } catch (SchedulerException ex) {

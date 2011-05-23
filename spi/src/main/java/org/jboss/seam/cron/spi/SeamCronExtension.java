@@ -16,8 +16,7 @@
  */
 package org.jboss.seam.cron.spi;
 
-import org.jboss.seam.cron.spi.asynchronous.CronAsyncMethodInvocationExtension;
-import org.jboss.seam.cron.spi.scheduling.CronSchedulingExtension;
+import org.jboss.seam.cron.spi.scheduling.CronSchedulingInstaller;
 import java.util.HashSet;
 import java.util.Set;
 import javax.enterprise.context.ApplicationScoped;
@@ -29,7 +28,7 @@ import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ObserverMethod;
 import javax.enterprise.inject.spi.ProcessObserverMethod;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.spi.asynchronous.AsynchronousStrategy;
+import org.jboss.seam.cron.scheduling.impl.exception.SchedulerConfigurationException;
 import org.jboss.seam.cron.spi.scheduling.CronScheduleProvider;
 import org.jboss.seam.cron.util.CdiUtils;
 
@@ -48,27 +47,41 @@ public class SeamCronExtension implements Extension {
     }
 
     public void initProviders(@Observes AfterDeploymentValidation afterValid, BeanManager manager,
-            CronSchedulingExtension cronSchedExt, CronAsyncMethodInvocationExtension cronAsyncExt) {
+            CronSchedulingInstaller cronSchedExt) {
+        // init all service providers
+        log.debug("Initialising service providers");
+        Set<CronProviderLifecycle> providerLifecycles = getProviderLifecycles(manager);
+        for (CronProviderLifecycle providerLifecycle : providerLifecycles) {
+            log.info("Initialising service provider: " + providerLifecycle.toString());
+            providerLifecycle.initProvider();
+        }
+        // process scheduling observers if scheduling provider exists
         CronScheduleProvider schedulingProvider = CdiUtils.getInstanceByType(manager, CronScheduleProvider.class);
         if (schedulingProvider != null) {
-            cronSchedExt.processScheduledTriggers(manager, schedulingProvider, allObservers);
-        }
-        AsynchronousStrategy asyncStrategy = CdiUtils.getInstanceByType(manager, AsynchronousStrategy.class);
-        if (asyncStrategy != null) {
-            cronAsyncExt.initProviderAsynchronous(asyncStrategy);
+            cronSchedExt.initProviderScheduling(manager, schedulingProvider, allObservers);
         }
     }
 
     public void stopProviders(@Observes BeforeShutdown event, BeanManager manager,
-            CronSchedulingExtension cronSchedExt, CronAsyncMethodInvocationExtension cronAsyncExt) {
+            CronSchedulingInstaller cronSchedExt) {
 
-        CronScheduleProvider schedulingProvider = CdiUtils.getInstanceByType(manager, CronScheduleProvider.class);
-        if (schedulingProvider != null) {
-            cronSchedExt.stopProvidersScheduler(schedulingProvider);
-        }
-        AsynchronousStrategy asyncStrategy = CdiUtils.getInstanceByType(manager, AsynchronousStrategy.class);
-        if (asyncStrategy != null) {
-            cronAsyncExt.stopProviderAsynchronous(asyncStrategy);
+        Set<CronProviderLifecycle> providerLifecycles = getProviderLifecycles(manager);
+        for (CronProviderLifecycle providerLifecycle : providerLifecycles) {
+            providerLifecycle.destroyProvider();
         }
     }
+    
+    /**
+     * 
+     * @param manager
+     * @param cronSchedExt
+     * @param cronAsyncExt
+     * @return Not null
+     * @throws SchedulerConfigurationException 
+     */
+    private Set<CronProviderLifecycle> getProviderLifecycles(BeanManager manager) throws SchedulerConfigurationException {
+        Set<CronProviderLifecycle> providerLifecycles = CdiUtils.getInstancesByType(manager, CronProviderLifecycle.class);
+        return providerLifecycles;
+    }
+
 }

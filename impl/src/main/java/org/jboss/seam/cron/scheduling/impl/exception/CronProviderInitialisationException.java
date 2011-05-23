@@ -21,24 +21,24 @@ package org.jboss.seam.cron.scheduling.impl.exception;
  * 
  * @author Peter Royle
  */
-public class SchedulerInitialisationException
+public class CronProviderInitialisationException
         extends RuntimeException {
     /**
-     * Create a new instance of SchedulerInitialisationException with the given error message.
+     * Create a new instance of CronProviderInitialisationException with the given error message.
      *
      * @param message The error message.
      */
-    public SchedulerInitialisationException(String message) {
+    public CronProviderInitialisationException(String message) {
         super(message);
     }
 
     /**
-     * Create a new instance of SchedulerInitialisationException with the given error message and cause.
+     * Create a new instance of CronProviderInitialisationException with the given error message and cause.
      *
      * @param message The error message.
      * @param cause   The orginal cause of the error.
      */
-    public SchedulerInitialisationException(String message, Throwable cause) {
+    public CronProviderInitialisationException(String message, Throwable cause) {
         super(message, cause);
     }
 }
