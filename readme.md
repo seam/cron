@@ -1,47 +1,25 @@
-# Seam Cron Swing Example
+# Seam Cron
 
 ## Quick Start
 
-To run this example swing app use the following `mvn` command from this directory: 
+Cron is not yet released, so you'll have to build it from scratch.
+
+Prerequisites: 
+
+ * JDK 5 or above
+ * Maven 3 build tool
+ * Git version control system
+
+Building From Source:
+
+    git clone git://github.com/seam/cron.git
+    cd cron
+    mvn clean install
+
+The above commands will build and install Cron into your local Maven repository. 
+If you want to run a nifty little example swing app use the following `mvn` command: 
 
     mvn install -Drun -Dswing-example
-
-The example is a graph which monitors the amount of free memory available to the
-running JVM. It uses Cron to update the graph every second, run garbage-collection
-every minute and clears the graph data on the 20th second of every other minute.
-
-The significant methods which perform these actions are shown below for reference.
-You can find them in the SwingGrapher.java file.
-
-    /**
-     * Called every second to update the graph data and repaint the graph.
-     * @param second The observed event.
-     */
-    public void updateChart(@Observes @Every(TimeUnit.SECOND) Trigger second)
-    {
-        getCatDataSet().addValue(Runtime.getRuntime().freeMemory(), FREE_MEMORY_LABEL, new Long(System.
-                currentTimeMillis()).toString());
-    }
-
-    /**
-     * Called every minute to request garbage collection.
-     * @param second The observed event.
-     */
-    public void collectGarbage(@Observes @Every(TimeUnit.MINUTE) Trigger minute)
-    {
-        log.info("Requesting garbage collection");
-        System.gc();
-    }
-
-    /**
-     * Clear the graph every 2 minutes, at 20 seconds past the minute.
-     * @param e The event observed.
-     */
-    public void clearGraphData(@Observes @Scheduled("20 */2 * ? * *") Trigger e)
-    {
-        log.info("Clearing data on schedule");
-        getCatDataSet().clear();
-    }
 
 To use Seam Cron in your Maven project, include the following dependencies in your pom:
 
@@ -64,43 +42,132 @@ To use Seam Cron in your Maven project, include the following dependencies in yo
             <scope>runtime</scope>
         </dependency>
 
-## Contents of distribution
 
-    artifacts/
- 
-        Provided libraries
+## What is Seam Cron?
 
-    doc/
+Seam Cron is a CDI portable extension which allows you to 
+elegantly execute scheduled and asynchronous methods from your CDI project.
+Here's a glimpse of what's possible:
 
-        API/SPI Docs and reference guide.
-    
-    examples/
- 
-        Example projects
-  
-    lib/
- 
-        Third-party dependencies for Seam Cron and examples
-  
-    source/
- 
-        Source code for this module
-  
-## Licensing
+    public void howlAtTheMoon(@Observes @AtMidnight CronEvent event) {
+        wolf.howl();
+    }
 
-This distribution, as a whole, is licensed under the terms of the Apache
-Software License, Version 2.0 (ASL).
+`@AtMidnight` is a CDI-style custom qualifier which might look a little like this:
 
-## Seam Cron URLs
+    @Scheduled("00:00")
+    @Qualifier
+    @Retention( RUNTIME )
+    @Target( { PARAMETER })
+    public @interface AtMidnight
+    {
+    }
 
-Seam Cron: http://sfwk.org/Seam3/Cron
-Seam 3 project: http://sfwk.org/Seam3
-Downloads: http://sfwk.org/Seam3/DistributionDownloads
-Forums: http://sfwk.org/Community/Seam3Users
-Source Code: http://github.com/seam/cron
-Issue Tracking: http://issues.jboss.org/browse/SEAMCRON
+Instead of `"00:00"` you could use full cron-style syntax (eg: `@Scheduled("0 0 0 ? * *")`)
+or you could use an arbitrary name (eg: `@Scheduled("at.midnight")`), which would then 
+be resolved into a time using the `cron.properties` file at the root of your classpath:
 
-## Release Notes
+    # cron.properties
+    at.midnight=00:00
 
+Alternatively you could just put the schedule definition directly into the `@Scheduled` 
+annotation on the method to be scheduled, but that would be a rather masochistic thing to do.
 
+If your requirements are fairly simple, for example running a task repeatedly at 
+a specific interval, then you can use the `@Every` qualifier like so:
 
+    public void clockChimes(@Observes @Every(HOUR) Trigger t) { 
+        int chimes = t.getValue() % 12;
+        if (chimes == 0) { chimes = 12; }
+        for (int i=0; i<chimes; i++) {
+            bellTower.getRope().pull();
+        }
+    }
+
+## MEH. What else you got?
+
+You're kidding right?
+
+OK well, there's also this:
+
+    @Inject @HumanSeeking Missile missile;
+
+    public String destroyAllHumans() {
+        initiateRatherDrawnOutMissileLaunchSequence();
+        return "Those humans be good as dead";
+    }
+
+    @Asynchronous
+    public MissileDeployment initiateRatherDrawnOutMissileLaunchSequence() {
+        return missile.launchViaSOAPWebServicesDeployedOnAPentiumIIRunningWindowsNTAndNortonAntiVirus();
+    }
+
+OK, so that asynchronous method returns an instance of `MissileDeployment`. 
+So how do you get your hands on it? Easy!
+
+    public void verifyDeployment(@Observes MissileDeployment deployment) {
+        if ("EPIC FAIL".equals(deployment.getStatus())) {
+            henchmen.head().fire();
+        } else {
+            champagne.pop();
+        }
+    }
+
+The rules concerning return types of @Asynchronous methods are as follows:
+
+* If method return type is void, no event will be fired
+* If the method invocation returns a value of null, no event will be fired. Be careful of this!
+
+You would typically want one dedicated return type per asynchronous method invocation
+for a one-to-one mapping between methods and their observers, but there may be use
+cases for having multiple asynchronous methods all reporting their results to a single
+observer, and Cron would be totally cool with that. Alternatively you might wish
+to introduce some additional CDI-style qualifiers like so:
+
+    @Asynchronous @Credit
+    public Balance addCredit(int dollars) {
+        ...
+        return new Ballance();
+    }
+
+    @Asynchronous @Debit
+    public Balance addDebit(int dollars) {
+        ...
+        return new Ballance();
+    }
+
+    public void reportNewBalance(@Observes Balance balance) {
+        log.report(balance.amount());
+    }
+
+    public void trackSpending(@Observes @Debit Balance balance) {
+        db.saveSomething();
+    }
+
+Finally, if you prefer a more traditional, EJB-esque approach then you can specify
+a return type of Future<T> and use the `AsyncResult` helper to return the result
+of your method call. Seam Cron will automatically wrap this in a legit Future<T>
+which the calling code can use as expected immediately.
+
+    @Asynchronous
+    public Future<Box> doSomeHeavyLiftingInTheBackground() {
+        ...
+        return new AsyncResult(new Box());
+    }
+
+And the calling code:
+
+    @Inject LiftingBean liftingBean;
+
+    public void someMethod() {
+        Future<Box> future = liftingBean.doSomeHeavyLiftingInTheBackground();
+        // blocks until asynch method returns or gives up
+        Box result = future.get(10, SECONDS);
+    }
+
+## This is awesome but not awesome enough yet.
+
+I know, it's true. But you can help. If you know exactly what you need and have 
+the skillpower to get it done, then please fork this project and submit a pull 
+request. Alternatively submit a feature request or bug report over at JIRA:
+https://issues.jboss.org/browse/SEAMCRON
