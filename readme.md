@@ -18,6 +18,28 @@ check out a nifty little sample swing app use the following `mvn` command:
 
     mvn install -Drun -Dswing-example
 
+To use this in your Maven project, include the following dependencies in your pom:
+
+        <dependency>
+            <groupId>org.jboss.seam.cron</groupId>
+            <artifactId>seam-cron-api</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.seam.cron</groupId>
+            <artifactId>seam-cron-scheduling-quartz</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.seam.cron</groupId>
+            <artifactId>seam-cron-asynchronous-quartz</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+            <scope>runtime</scope>
+        </dependency>
+
+
 ## What is Seam Cron?
 
 Seam Cron is a CDI portable extension which allows you to 
