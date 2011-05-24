@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -16,7 +16,7 @@
  */
 package org.jboss.seam.cron.test.asynchronous;
 
-import org.jboss.seam.cron.spi.asynchronous.AsynchronousStrategy;
+import org.jboss.seam.cron.spi.asynchronous.CronAsynchronousProvider;
 import org.jboss.seam.cron.test.SeamCronTestBase;
 import org.jboss.seam.cron.test.asynchronous.beans.SomeAsynchMethods;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -25,16 +25,13 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
  *
  * @author peteroyle
  */
-public abstract class SeamCronAsynchronousTestBase extends SeamCronTestBase {
+public abstract class SeamCronAsynchronousTestBase {
 
     public static JavaArchive createAsynchronousTestArchive() {
         return SeamCronTestBase.createTestArchive()
                 .addPackage(SeamCronAsynchronousTestBase.class.getPackage())
                 .addPackage(SomeAsynchMethods.class.getPackage())
-                .addPackage(AsynchronousStrategy.class.getPackage());
-    }
-
-    public SeamCronAsynchronousTestBase() {
+                .addPackage(CronAsynchronousProvider.class.getPackage());
     }
     
 }

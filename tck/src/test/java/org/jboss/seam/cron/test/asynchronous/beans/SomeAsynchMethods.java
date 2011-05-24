@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -16,14 +16,14 @@
  */
 package org.jboss.seam.cron.test.asynchronous.beans;
 
-import org.jboss.seam.cron.asynchronous.api.AsyncResult;
+import org.jboss.seam.cron.api.asynchronous.AsyncResult;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.asynchronous.api.Asynchronous;
+import org.jboss.seam.cron.api.asynchronous.Asynchronous;
 
 /**
  * @author Peter Royle
@@ -31,14 +31,14 @@ import org.jboss.seam.cron.asynchronous.api.Asynchronous;
 @ApplicationScoped
 public class SomeAsynchMethods {
 
-    public static AtomicInteger count = new AtomicInteger(0);
+    public static final AtomicInteger count = new AtomicInteger(0);
     public static final int NUM_LOOPS = 2;
     public static final int SLEEP_PER_LOOP = 1000;
     private CountDownLatch statusLatch;
     private CountDownLatch heystackLatch;
     private Status statusEvent;
     private Integer haystackCount;
-    private static Logger log = Logger.getLogger(SomeAsynchMethods.class);
+    private static final Logger log = Logger.getLogger(SomeAsynchMethods.class);
 
     public void reset() {
         statusEvent = null;
@@ -61,7 +61,7 @@ public class SomeAsynchMethods {
     }
 
     @Asynchronous
-    public Status returnStatusObject(String statusToSet) {
+    public Status returnStatusObject(final String statusToSet) {
         return new Status(statusToSet);
     }
 
@@ -78,7 +78,7 @@ public class SomeAsynchMethods {
 
     @Asynchronous
     @HaystackCount
-    public Integer countNeedlesInTheHaystack(int numToReturn) {
+    public Integer countNeedlesInTheHaystack(final int numToReturn) {
         return numToReturn;
     }
     

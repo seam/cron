@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 
 import javax.inject.Qualifier;
 
-import org.jboss.seam.cron.scheduling.api.Scheduled;
+import org.jboss.seam.cron.api.scheduling.Scheduled;
 
 /**
  * A typesafe representation of the schedule named "test.one" for use as a binding

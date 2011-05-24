@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -18,7 +18,7 @@ package org.jboss.seam.cron.asynchronous.test;
 
 import org.jboss.seam.cron.test.asynchronous.tck.SeamCronAsynchronousTCKTest;
 import org.jboss.arquillian.api.Deployment;
-import org.jboss.seam.cron.asynchronous.threads.ThreadsAsynchronousStrategy;
+import org.jboss.seam.cron.asynchronous.threads.ThreadsAsynchronousProvider;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 
 /**
@@ -30,6 +30,6 @@ public class ThreadsAsynchronousTCKTest extends SeamCronAsynchronousTCKTest {
     @Deployment
     public static JavaArchive deployment() {
         return SeamCronAsynchronousTCKTest.createAsynchronousTckTestArchive()
-                .addPackages(true, ThreadsAsynchronousStrategy.class.getPackage());
+                .addPackages(true, ThreadsAsynchronousProvider.class.getPackage());
     }
 }

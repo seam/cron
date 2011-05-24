@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -31,9 +31,9 @@ import org.jboss.seam.cron.spi.asynchronous.Invoker;
  */
 public class FutureInvoker implements RunnableFuture {
 
-    RunnableFuture delegate;
+    private final RunnableFuture delegate;
 
-    public FutureInvoker(Invoker invoker) {
+    public FutureInvoker(final Invoker invoker) {
         delegate = new FutureTask(new CallableFutureInvoker(new FutureInvokerSupport(invoker)));
     }
 
@@ -45,7 +45,7 @@ public class FutureInvoker implements RunnableFuture {
         return delegate.isCancelled();
     }
 
-    public Object get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+    public Object get(final long timeout, final TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         return delegate.get(timeout, unit);
     }
 
@@ -53,7 +53,7 @@ public class FutureInvoker implements RunnableFuture {
         return delegate.get();
     }
 
-    public boolean cancel(boolean mayInterruptIfRunning) {
+    public boolean cancel(final boolean mayInterruptIfRunning) {
         return delegate.cancel(mayInterruptIfRunning);
     }
 

@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -29,7 +29,7 @@ import javax.enterprise.inject.spi.BeanManager;
  */
 public class CdiUtils {
 
-    public static Annotation getQualifier(Annotation binding, Class qualifierType) {
+    public static Annotation getQualifier(final Annotation binding, final Class qualifierType) {
         Annotation qualifier = null;
         if (qualifierType.isAssignableFrom(binding.getClass())) {
             qualifier = binding;
@@ -51,11 +51,11 @@ public class CdiUtils {
      * @return a managed instance of the bean
      * 
      */
-    public static <T> T getInstanceByType(BeanManager manager, Class<T> type, Annotation... bindings) {
+    public static <T> T getInstanceByType(final BeanManager manager, final Class<T> type, final Annotation... bindings) {
         // TODO: (PR): fix this catch and swallow hackery
         try {
             final Bean<?> bean = manager.resolve(manager.getBeans(type));
-            CreationalContext<?> cc = manager.createCreationalContext(bean);
+            final CreationalContext<?> cc = manager.createCreationalContext(bean);
             return type.cast(manager.getReference(bean, type, cc));
         } catch (Throwable t) {
             return null;
@@ -73,13 +73,13 @@ public class CdiUtils {
      * @return a managed instance of the bean
      * 
      */
-    public static <T> Set<T> getInstancesByType(BeanManager manager, Class<T> type, Annotation... bindings) {
+    public static <T> Set<T> getInstancesByType(final BeanManager manager, final Class<T> type, final Annotation... bindings) {
         // TODO: (PR): fix this catch and swallow hackery
         try {
             final Set<Bean<?>> beans = manager.getBeans(type);
             final Set<T> instances = new HashSet<T>();
             for (Bean<?> bean : beans) {
-                CreationalContext<?> cc = manager.createCreationalContext(bean);
+                final CreationalContext<?> cc = manager.createCreationalContext(bean);
                 instances.add(type.cast(manager.getReference(bean, type, cc)));
             }
             return instances;

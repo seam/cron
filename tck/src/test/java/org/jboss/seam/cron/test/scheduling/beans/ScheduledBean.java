@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -18,8 +18,8 @@ package org.jboss.seam.cron.test.scheduling.beans;
 
 
 
-import org.jboss.seam.cron.scheduling.api.Every;
-import org.jboss.seam.cron.scheduling.api.Scheduled;
+import org.jboss.seam.cron.api.scheduling.Every;
+import org.jboss.seam.cron.api.scheduling.Scheduled;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -27,8 +27,8 @@ import java.util.Date;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.scheduling.api.Trigger;
-import static org.jboss.seam.cron.scheduling.api.TimeUnit.*;
+import org.jboss.seam.cron.api.scheduling.Trigger;
+import static org.jboss.seam.cron.api.scheduling.TimeUnit.*;
 
 /**
  * Test all events, but minute and hour (to shorten test time).
@@ -37,7 +37,7 @@ import static org.jboss.seam.cron.scheduling.api.TimeUnit.*;
  */
 @ApplicationScoped
 public class ScheduledBean {
-    private Logger log = Logger.getLogger( ScheduledBean.class );
+    private final Logger log = Logger.getLogger( ScheduledBean.class );
     private boolean scheduledEventObserved = false;
     private boolean namedEventObserved = false;
     private boolean typesafeEventObserved = false;
@@ -47,7 +47,7 @@ public class ScheduledBean {
     public void onSchedule(@Observes
                            @Scheduled("*/5 * * ? * *")
                            Trigger event) {
-        Calendar c = Calendar.getInstance();
+        final Calendar c = Calendar.getInstance();
         c.setTimeInMillis(event.getTimeFired());
         firedCorrectly = firedCorrectly & ((c.get(Calendar.SECOND) % 5) == 0);
         log.info("Scheduled event fired at " + c.getTime());
@@ -57,7 +57,7 @@ public class ScheduledBean {
     public void onNamedSchedule(@Observes
                                 @Scheduled("test.one")
                                 Trigger event) {
-        Calendar c = Calendar.getInstance();
+        final Calendar c = Calendar.getInstance();
         c.setTimeInMillis(event.getTimeFired());
         firedCorrectly = firedCorrectly & ((c.get(Calendar.SECOND) % 5) == 0);
         log.info("Named event fired at " + c.getTime());
@@ -67,7 +67,7 @@ public class ScheduledBean {
     public void onTypesafeSchedule(@Observes
                                    @Frequent
                                    Trigger event) {
-        Calendar c = Calendar.getInstance();
+        final Calendar c = Calendar.getInstance();
         c.setTimeInMillis(event.getTimeFired());
         firedCorrectly = firedCorrectly & ((c.get(Calendar.SECOND) % 5) == 0);
         log.info("Typesafe event fired at " + c.getTime());

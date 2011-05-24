@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -51,9 +51,9 @@ import org.jboss.seam.cron.spi.asynchronous.Invoker;
 public class FutureInvokerSupport implements Callable {
 
     private Invoker executor;
-    private BlockingQueue queue = new ArrayBlockingQueue(1);
+    private final BlockingQueue queue = new ArrayBlockingQueue(1);
     // can't add null to a BlockingQueue, so we might have to add a marker instead
-    private static Boolean RESULT_AS_NULL = true;
+    private static final Boolean RESULT_AS_NULL = true;
 
     public FutureInvokerSupport(Invoker executor) {
         this.executor = executor;

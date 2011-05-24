@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -31,11 +31,11 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
  */
 public abstract class SeamCronTestBase implements Serializable {
 
-    private static Logger log = Logger.getLogger(SeamCronTestBase.class);
+    private static final Logger log = Logger.getLogger(SeamCronTestBase.class);
         
     public static JavaArchive createTestArchive() 
     {
-    	JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
+    	final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
     		.addPackage(SeamCronTestBase.class.getPackage())
                 .addPackage(SeamCronExtension.class.getPackage())
                 .addClasses(CronSchedulingInstaller.class)

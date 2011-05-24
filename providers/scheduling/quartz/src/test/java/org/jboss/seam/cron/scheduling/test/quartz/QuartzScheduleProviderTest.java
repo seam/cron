@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -36,9 +36,9 @@ import org.quartz.SchedulerException;
  */
 @SuppressWarnings("serial")
 @RunWith(Arquillian.class)
-public class QuartzScheduleProviderTest extends SeamCronSchedulingTestBase {
+public class QuartzScheduleProviderTest {
 
-    private static Logger log = Logger.getLogger(QuartzScheduleProviderTest.class);
+    private static final Logger log = Logger.getLogger(QuartzScheduleProviderTest.class);
 
     @Inject
     QuartzScheduleProvider qStarter;
@@ -52,7 +52,7 @@ public class QuartzScheduleProviderTest extends SeamCronSchedulingTestBase {
     @Test
     public void testScheduleDoesGetRegistered() throws SchedulerException {
         log.info("Testing scheduler gets registered.");
-        List<String> jobGroupNames = Arrays.asList(qStarter.getScheduler().getJobGroupNames());
+        final List<String> jobGroupNames = Arrays.asList(qStarter.getScheduler().getJobGroupNames());
         assert jobGroupNames.contains(QuartzScheduleProvider.SCHEDULE_JOB_GROUP);
     }
 

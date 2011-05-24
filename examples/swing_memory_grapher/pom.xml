@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
     
     <parent>
-        <artifactId>seam-cron</artifactId>
+        <artifactId>seam-cron-parent</artifactId>
         <groupId>org.jboss.seam.cron</groupId>
         <version>3.0.0-SNAPSHOT</version>
         <relativePath>../../</relativePath>

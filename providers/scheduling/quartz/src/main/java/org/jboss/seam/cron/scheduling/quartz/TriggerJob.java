@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -34,7 +34,7 @@ public class TriggerJob extends ProviderContextTriggerSupport<JobExecutionContex
         implements Job {
 
     @Override
-    public TriggerSupplies fetchTriggerSupplies(JobExecutionContext context) {
+    public TriggerSupplies fetchTriggerSupplies(final JobExecutionContext context) {
         return (TriggerSupplies) context.getJobDetail().getJobDataMap().get(QuartzScheduleProvider.TRIGGER_SUPPLIES);
     }
 
@@ -46,7 +46,7 @@ public class TriggerJob extends ProviderContextTriggerSupport<JobExecutionContex
      * @throws JobExecutionException
      */
     @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
+    public void execute(final JobExecutionContext context) throws JobExecutionException {
         fireTrigger(context);
     }
 }

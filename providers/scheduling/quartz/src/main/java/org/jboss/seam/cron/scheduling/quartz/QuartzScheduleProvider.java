@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -18,7 +18,7 @@ package org.jboss.seam.cron.scheduling.quartz;
 
 import java.util.logging.Level;
 import org.jboss.seam.cron.spi.scheduling.trigger.TriggerSupplies;
-import org.jboss.seam.cron.spi.scheduling.CronScheduleProvider;
+import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -29,9 +29,9 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.scheduling.api.Every;
-import org.jboss.seam.cron.scheduling.impl.exception.CronProviderDestructionException;
-import org.jboss.seam.cron.scheduling.impl.exception.CronProviderInitialisationException;
+import org.jboss.seam.cron.api.scheduling.Every;
+import org.jboss.seam.cron.impl.scheduling.exception.CronProviderDestructionException;
+import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationException;
 import org.jboss.seam.cron.spi.CronProviderLifecycle;
 import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
@@ -49,7 +49,7 @@ import org.quartz.simpl.RAMJobStore;
 import org.quartz.simpl.SimpleThreadPool;
 import org.quartz.spi.JobStore;
 import org.quartz.spi.ThreadPool;
-import static org.jboss.seam.cron.scheduling.api.TimeUnit.*;
+import static org.jboss.seam.cron.api.scheduling.TimeUnit.*;
 
 /**
  * Methods of this class are called at various stages of the JSR-299 initialisation
@@ -59,7 +59,7 @@ import static org.jboss.seam.cron.scheduling.api.TimeUnit.*;
  * @author Peter Royle
  */
 @ApplicationScoped
-public class QuartzScheduleProvider implements CronProviderLifecycle, CronScheduleProvider {
+public class QuartzScheduleProvider implements CronProviderLifecycle, CronSchedulingProvider {
 
     /**
      * The name of the property containing the observer method bindings to be used
@@ -90,8 +90,8 @@ public class QuartzScheduleProvider implements CronProviderLifecycle, CronSchedu
      */
     public void initProvider() throws CronProviderInitialisationException {
         instanceId = UUID.randomUUID();
-        JobStore jobStore = new RAMJobStore();
-        ThreadPool threadPool = new SimpleThreadPool(4, Thread.NORM_PRIORITY);
+        final JobStore jobStore = new RAMJobStore();
+        final ThreadPool threadPool = new SimpleThreadPool(4, Thread.NORM_PRIORITY);
         try {
             threadPool.initialize();
         } catch (SchedulerConfigException ex) {
@@ -109,7 +109,7 @@ public class QuartzScheduleProvider implements CronProviderLifecycle, CronSchedu
     }
 
     public void processScheduledTrigger(final ScheduledTriggerDetail schedTriggerDetails) throws ParseException, SchedulerException, InternalError {
-        Trigger schedTrigger = new CronTrigger(schedTriggerDetails.toString(), SCHEDULE_JOB_GROUP, schedTriggerDetails.getCronScheduleSpec());
+        final Trigger schedTrigger = new CronTrigger(schedTriggerDetails.toString(), SCHEDULE_JOB_GROUP, schedTriggerDetails.getCronScheduleSpec());
         scheduleJob(schedTrigger, schedTriggerDetails);
     }
 
@@ -157,18 +157,18 @@ public class QuartzScheduleProvider implements CronProviderLifecycle, CronSchedu
      * @param jobParams The parameters to be passed to the job executor.
      * @throws SchedulerException
      */
-    private void scheduleJob(Trigger schedTrigger, final TriggerDetail triggerDetails) throws CronProviderInitialisationException {
+    private void scheduleJob(final Trigger schedTrigger, final TriggerDetail triggerDetails) throws CronProviderInitialisationException {
 
         // common Second payload sample and start time
-        GregorianCalendar gc = new GregorianCalendar();
+        final GregorianCalendar gc = new GregorianCalendar();
         gc.add(GregorianCalendar.SECOND, 1);
-        Date startTime = new Date(gc.getTimeInMillis());
+        final Date startTime = new Date(gc.getTimeInMillis());
         schedTrigger.setStartTime(startTime);
 
         final String jobName = triggerDetails.toString() + "-trigger";
         schedTrigger.setName(jobName);
 
-        JobDetail job = new JobDetail(jobName, schedTrigger.getGroup(), TriggerJob.class);
+        final JobDetail job = new JobDetail(jobName, schedTrigger.getGroup(), TriggerJob.class);
         job.setJobDataMap(new JobDataMap());
         job.getJobDataMap().put(TRIGGER_SUPPLIES, new TriggerSupplies(beanManager, triggerDetails.getQualifier()));
         try {

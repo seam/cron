@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -20,10 +20,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.scheduling.api.Every;
-import org.jboss.seam.cron.scheduling.api.Scheduled;
-import org.jboss.seam.cron.scheduling.api.Trigger;
-import org.jboss.seam.cron.spi.scheduling.CronScheduleProvider;
+import org.jboss.seam.cron.api.scheduling.Every;
+import org.jboss.seam.cron.api.scheduling.Scheduled;
+import org.jboss.seam.cron.api.scheduling.Trigger;
+import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 import org.jboss.seam.cron.util.CdiUtils;
 
 /**
@@ -31,7 +31,7 @@ import org.jboss.seam.cron.util.CdiUtils;
  * Base class allowing scheduling providers to easily fire the
  * appropriate CDI event when required. Simply provide the necessary
  * objects (represented by #{@link TriggerSupplies} to the constructor when the
- * schedule is first registered (see #{@link CronScheduleProvider}). Then call
+ * schedule is first registered (see #{@link CronSchedulingProvider}). Then call
  * #{@literal fireTrigger()} at the scheduled time(s).
  * </p>
  * <p>
@@ -50,12 +50,12 @@ public abstract class TriggerSupport {
     protected int value = 0;
     protected final GregorianCalendar gc = new GregorianCalendar();
     protected TriggerSupplies supplies = null;
-    private Logger log = Logger.getLogger(TriggerSupport.class);
+    private final Logger log = Logger.getLogger(TriggerSupport.class);
 
     protected TriggerSupport() {
     }
 
-    public TriggerSupport(TriggerSupplies supplies) {
+    public TriggerSupport(final TriggerSupplies supplies) {
         this.supplies = supplies;
     }
 

@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -24,12 +24,12 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.ObserverMethod;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.scheduling.api.Every;
-import org.jboss.seam.cron.scheduling.api.Scheduled;
-import org.jboss.seam.cron.scheduling.impl.exception.SchedulerConfigurationException;
-import org.jboss.seam.cron.scheduling.impl.exception.CronProviderInitialisationException;
+import org.jboss.seam.cron.api.scheduling.Every;
+import org.jboss.seam.cron.api.scheduling.Scheduled;
+import org.jboss.seam.cron.impl.scheduling.exception.SchedulerConfigurationException;
+import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationException;
 import org.jboss.seam.cron.util.CdiUtils;
-import org.jboss.seam.cron.scheduling.impl.util.SchedulePropertiesManager;
+import org.jboss.seam.cron.impl.scheduling.util.SchedulePropertiesManager;
 import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
 
@@ -40,15 +40,15 @@ import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
 @ApplicationScoped
 public class CronSchedulingInstaller {
 
-    private Logger log = Logger.getLogger(CronSchedulingInstaller.class);
+    private final Logger log = Logger.getLogger(CronSchedulingInstaller.class);
 
     /**
      * Initialises schedulers for all of the observed scheduled events.
      *
      * @param manager    The JSR-299 Bean Manager.
      */
-    public void initProviderScheduling(BeanManager manager, CronScheduleProvider scheduleProvider, 
-            Set<ObserverMethod> allObservers) {
+    public void initProviderScheduling(final BeanManager manager, final CronSchedulingProvider scheduleProvider, 
+            final Set<ObserverMethod> allObservers) {
         try {
             // collect the set of unique schedule specifications
             for (ObserverMethod<?> obsMeth : allObservers) {
@@ -99,7 +99,7 @@ public class CronSchedulingInstaller {
         if (scheduleSpec.contains(" ")) {
             cronScheduleSpec = scheduleSpec;
         } else {
-            Properties schedProperties = SchedulePropertiesManager.instance().getScheduleProperties();
+            final Properties schedProperties = SchedulePropertiesManager.instance().getScheduleProperties();
             cronScheduleSpec = schedProperties.getProperty(scheduleSpec);
 
             if (StringUtils.isEmpty(cronScheduleSpec)) {

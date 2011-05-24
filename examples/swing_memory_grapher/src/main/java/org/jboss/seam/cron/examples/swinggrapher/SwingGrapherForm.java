@@ -61,9 +61,9 @@ public class SwingGrapherForm extends javax.swing.JFrame
     public void initChart()
     {
         log.info("Initializing");
-        JFreeChart chart = ChartFactory.createLineChart3D(
+        final JFreeChart chart = ChartFactory.createLineChart3D(
                 "Free Memory", "Time", "Bytes", catDataSet, PlotOrientation.VERTICAL, true, true, true);
-        ChartPanel chartPanel = new ChartPanel(chart);
+        final ChartPanel chartPanel = new ChartPanel(chart);
         setContentPane(chartPanel);
     }
 

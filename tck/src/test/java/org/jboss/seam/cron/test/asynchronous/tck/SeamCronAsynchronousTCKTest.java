@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -40,10 +40,10 @@ import static org.jboss.seam.cron.test.asynchronous.beans.SomeAsynchMethods.SLEE
  */
 @SuppressWarnings("serial")
 @RunWith(Arquillian.class)
-public class SeamCronAsynchronousTCKTest extends SeamCronAsynchronousTestBase {
+public class SeamCronAsynchronousTCKTest {
     
     private static final int NUM_EXECUTIONS = 3;
-    private static Logger log = Logger.getLogger(SeamCronAsynchronousTCKTest.class);
+    private static final Logger log = Logger.getLogger(SeamCronAsynchronousTCKTest.class);
 
     public static JavaArchive createAsynchronousTckTestArchive() {
         return SeamCronAsynchronousTestBase.createAsynchronousTestArchive()

@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -24,7 +24,7 @@ import javax.inject.Inject;
 import junit.framework.Assert;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.spi.scheduling.CronScheduleProvider;
+import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,11 +34,11 @@ import org.junit.runner.RunWith;
  */
 @SuppressWarnings("serial")
 @RunWith(Arquillian.class)
-public class SeamCronSchedulingTCKTest extends SeamCronSchedulingTestBase {
+public class SeamCronSchedulingTCKTest {
 
     private static final int MAX_TIME_TO_WAIT = 20000;
     private static final int SLEEP_TIME = 2000;
-    private static Logger log = Logger.getLogger(SeamCronSchedulingTCKTest.class);
+    private static final Logger log = Logger.getLogger(SeamCronSchedulingTCKTest.class);
 
     public static JavaArchive createSchedulingTckTestArchive() {
         return SeamCronSchedulingTestBase.createSchedulingTestArchive()
@@ -48,7 +48,7 @@ public class SeamCronSchedulingTCKTest extends SeamCronSchedulingTestBase {
     @Inject
     ScheduledBean bean;
     @Inject
-    CronScheduleProvider cronSchedProv;
+    CronSchedulingProvider cronSchedProv;
 
     @Test
     public void testEventsGetsFired() {

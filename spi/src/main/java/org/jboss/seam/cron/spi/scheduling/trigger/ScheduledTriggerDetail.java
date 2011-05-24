@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -28,7 +28,7 @@ public class ScheduledTriggerDetail extends TriggerDetail {
 
     private final String cronScheduleSpec;
 
-    public ScheduledTriggerDetail(String dereferencedScheduleSpec, Annotation qualifier) {
+    public ScheduledTriggerDetail(final String dereferencedScheduleSpec, final Annotation qualifier) {
         super(qualifier);
         this.cronScheduleSpec = dereferencedScheduleSpec;
     }
@@ -38,7 +38,7 @@ public class ScheduledTriggerDetail extends TriggerDetail {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
         }

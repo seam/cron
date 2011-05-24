@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -25,11 +25,11 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.asynchronous.impl.exception.AsynchronousMethodExecutionException;
-import org.jboss.seam.cron.scheduling.impl.exception.CronProviderDestructionException;
-import org.jboss.seam.cron.scheduling.impl.exception.CronProviderInitialisationException;
+import org.jboss.seam.cron.impl.asynchronous.exception.AsynchronousMethodExecutionException;
+import org.jboss.seam.cron.impl.scheduling.exception.CronProviderDestructionException;
+import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationException;
 import org.jboss.seam.cron.spi.CronProviderLifecycle;
-import org.jboss.seam.cron.spi.asynchronous.AsynchronousStrategy;
+import org.jboss.seam.cron.spi.asynchronous.CronAsynchronousProvider;
 import org.jboss.seam.cron.spi.asynchronous.Invoker;
 import org.jboss.seam.cron.spi.asynchronous.support.FutureInvokerSupport;
 import org.quartz.JobDetail;
@@ -49,7 +49,7 @@ import org.quartz.spi.ThreadPool;
  * @author Peter Royle
  */
 @ApplicationScoped
-public class QuartzAsynchStrategy implements CronProviderLifecycle, AsynchronousStrategy {
+public class QuartzAsynchStrategy implements CronProviderLifecycle, CronAsynchronousProvider {
 
     /**
      * The name of the job group for all arbitrarily scheduled events.

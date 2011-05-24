@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -31,7 +31,7 @@ public abstract class QuartzSchedulingTCKTest extends SeamCronSchedulingTCKTest 
 
     public static JavaArchive createDefaultArchive() 
     {
-    	JavaArchive archive = SeamCronSchedulingTCKTest.createTestArchive()
+    	JavaArchive archive = SeamCronSchedulingTCKTest.createSchedulingTckTestArchive()
     		.addPackages(true,QuartzScheduleProvider.class.getPackage());
     	
         log.debug(archive.toString(true));

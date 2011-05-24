@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -27,9 +27,9 @@ import org.quartz.JobExecutionException;
  */
 public class AsyncMethodInvocationJob implements Job {
 
-    public void execute(JobExecutionContext context) throws JobExecutionException {
+    public void execute(final JobExecutionContext context) throws JobExecutionException {
         try {
-            FutureInvokerSupport resultCallable = (FutureInvokerSupport) context.getJobDetail().getJobDataMap().get(QuartzAsynchStrategy.DELAYED_RESULT_SUPPORT);
+            final FutureInvokerSupport resultCallable = (FutureInvokerSupport) context.getJobDetail().getJobDataMap().get(QuartzAsynchStrategy.DELAYED_RESULT_SUPPORT);
             resultCallable.executeInvocationContext();
         } catch (Exception ex) {
             throw new JobExecutionException("Error invoking method inside a Quartz Job", ex);

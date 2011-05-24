@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -16,17 +16,28 @@
  */
 package org.jboss.seam.cron.spi;
 
-import org.jboss.seam.cron.scheduling.impl.exception.CronProviderDestructionException;
-import org.jboss.seam.cron.scheduling.impl.exception.CronProviderInitialisationException;
+import org.jboss.seam.cron.impl.scheduling.exception.CronProviderDestructionException;
+import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationException;
+import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 
 /**
- *
+ * <p>
+ * If you are implementing a provider for scheduled or asynchronous method 
+ * invocation, and you need to initialize and tear down some infrastructure
+ * before and after you provider can be used, then provide an implementation of 
+ * this interface. It is usually most convenient to add this interface to
+ * your #{@link CronSchedulingProvider}, but it could be provided as a separate 
+ * class if you wish. You could even provide multiple implementations of this
+ * interface if desired, noting that the order in which they are initialized and
+ * destroyed cannot be guaranteed.
+ * </p>
+ * 
  * @author peteroyle
  */
 public interface CronProviderLifecycle {
 
     /**
-     * Initialises the underlying provider.
+     * Initializes the underlying provider.
      *
      */
     void initProvider() throws CronProviderInitialisationException;

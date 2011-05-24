@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -22,7 +22,7 @@ import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.test.scheduling.beans.IncrementalScheduledBean;
-import org.jboss.seam.cron.scheduling.impl.exception.InternalException;
+import org.jboss.seam.cron.impl.scheduling.exception.InternalException;
 import org.jboss.seam.cron.test.SeamCronTestBase;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Assert;
@@ -34,9 +34,9 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 public class IntervalScheduleTCKLongTest extends SeamCronTestBase {
+    
     public static final int SLEEP_TIME = 100000;
-
-    private static Logger log = Logger.getLogger(IntervalScheduleTCKLongTest.class);
+    private static final Logger log = Logger.getLogger(IntervalScheduleTCKLongTest.class);
     
     @Inject
     IncrementalScheduledBean everyTestBean;

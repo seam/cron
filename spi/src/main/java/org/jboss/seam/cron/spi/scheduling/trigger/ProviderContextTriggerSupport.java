@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -16,7 +16,7 @@
  */
 package org.jboss.seam.cron.spi.scheduling.trigger;
 
-import org.jboss.seam.cron.spi.scheduling.CronScheduleProvider;
+import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 
 /**
  * Base class allowing scheduling providers to easily fire the
@@ -24,7 +24,7 @@ import org.jboss.seam.cron.spi.scheduling.CronScheduleProvider;
  * this class is useful when you cannot pass the objects
  * necessary for firing the appropriate event (represented by #{@link TriggerSupplies})
  * directly into the worker when the schedule is first registered
- * (see #{@link CronScheduleProvider}). Instead some providers need to
+ * (see #{@link CronSchedulingProvider}). Instead some providers need to
  * copy the #{@link TriggerSupplies} into some other context, and retrieve them
  * back from that context when the worker is executed. This part is done
  * inside the #{@literal fetchTriggerSupplies} method.
@@ -43,14 +43,14 @@ public abstract class ProviderContextTriggerSupport<T> extends TriggerSupport {
      *
      * @return
      */
-    public abstract TriggerSupplies fetchTriggerSupplies(T providerContext);
+    public abstract TriggerSupplies fetchTriggerSupplies(final T providerContext);
 
     /**
      * Fires the appropriate trigger payload with the appropriate qualifier
      * (to in turn execute the application-specific code that observes those events).
      *
      */
-    public void fireTrigger(T providerContext) {
+    public void fireTrigger(final T providerContext) {
         supplies = fetchTriggerSupplies(providerContext);
         fireTrigger();
     }

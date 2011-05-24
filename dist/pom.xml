@@ -5,13 +5,13 @@
 
    <parent>
       <groupId>org.jboss.seam.cron</groupId>
-      <artifactId>seam-cron</artifactId>
+      <artifactId>seam-cron-parent</artifactId>
       <version>3.0.0-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
    <artifactId>seam-cron-distribution</artifactId>
-   <name>Seam Faces Distribution</name>
+   <name>Seam Cron Distribution</name>
    <description>Builds a Seam Cron release distribution</description>
    <packaging>pom</packaging>
 
@@ -47,6 +47,19 @@
       <dependency>
          <groupId>org.jboss.seam.cron</groupId>
          <artifactId>seam-cron-api</artifactId>
+         <classifier>javadoc</classifier>
+         <optional>true</optional>
+      </dependency>
+
+      <dependency>
+         <groupId>org.jboss.seam.cron</groupId>
+         <artifactId>seam-cron-impl</artifactId>
+         <classifier>sources</classifier>
+         <optional>true</optional>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.seam.cron</groupId>
+         <artifactId>seam-cron-impl</artifactId>
          <classifier>javadoc</classifier>
          <optional>true</optional>
       </dependency>

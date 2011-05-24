@@ -21,10 +21,10 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.scheduling.api.Every;
-import org.jboss.seam.cron.scheduling.api.Scheduled;
-import org.jboss.seam.cron.scheduling.api.TimeUnit;
-import org.jboss.seam.cron.scheduling.api.Trigger;
+import org.jboss.seam.cron.api.scheduling.Every;
+import org.jboss.seam.cron.api.scheduling.Scheduled;
+import org.jboss.seam.cron.api.scheduling.TimeUnit;
+import org.jboss.seam.cron.api.scheduling.Trigger;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
@@ -38,7 +38,7 @@ public class SwingGrapher
      * The label for the Free Memory axis.
      */
     public static final String FREE_MEMORY_LABEL = "Free Memory";
-    private DefaultCategoryDataset catDataSet = new DefaultCategoryDataset();
+    private final DefaultCategoryDataset catDataSet = new DefaultCategoryDataset();
     @Inject Logger log;
 
     /**

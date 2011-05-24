@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -25,16 +25,13 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
  *
  * @author peteroyle
  */
-public abstract class SeamCronSchedulingTestBase extends SeamCronTestBase {
+public abstract class SeamCronSchedulingTestBase {
 
     public static JavaArchive createSchedulingTestArchive() {
         return SeamCronTestBase.createTestArchive()
                 .addPackage(SeamCronSchedulingTestBase.class.getPackage())
                 .addPackage(ScheduledBean.class.getPackage())
                 .addPackages(true, CronSchedulingInstaller.class.getPackage());
-    }
-
-    public SeamCronSchedulingTestBase() {
     }
     
 }

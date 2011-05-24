@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -28,44 +28,45 @@ import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ObserverMethod;
 import javax.enterprise.inject.spi.ProcessObserverMethod;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.scheduling.impl.exception.SchedulerConfigurationException;
-import org.jboss.seam.cron.spi.scheduling.CronScheduleProvider;
+import org.jboss.seam.cron.impl.scheduling.exception.SchedulerConfigurationException;
+import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 import org.jboss.seam.cron.util.CdiUtils;
 
 /**
- *
+ * The CDI Extention implementation which bootstraps Seam Cron. Not useful to service providers.
+ * 
  * @author Peter Royle
  */
 @ApplicationScoped
 public class SeamCronExtension implements Extension {
 
     private final Set<ObserverMethod> allObservers = new HashSet<ObserverMethod>();
-    private Logger log = Logger.getLogger(SeamCronExtension.class);
+    private final Logger log = Logger.getLogger(SeamCronExtension.class);
 
     public void registerCronEventObserver(@Observes ProcessObserverMethod pom) {
         allObservers.add(pom.getObserverMethod());
     }
 
-    public void initProviders(@Observes AfterDeploymentValidation afterValid, BeanManager manager,
-            CronSchedulingInstaller cronSchedExt) {
+    public void initProviders(@Observes AfterDeploymentValidation afterValid, final BeanManager manager,
+            final CronSchedulingInstaller cronSchedExt) {
         // init all service providers
         log.debug("Initialising service providers");
-        Set<CronProviderLifecycle> providerLifecycles = getProviderLifecycles(manager);
+        final Set<CronProviderLifecycle> providerLifecycles = getProviderLifecycles(manager);
         for (CronProviderLifecycle providerLifecycle : providerLifecycles) {
             log.info("Initialising service provider: " + providerLifecycle.toString());
             providerLifecycle.initProvider();
         }
         // process scheduling observers if scheduling provider exists
-        CronScheduleProvider schedulingProvider = CdiUtils.getInstanceByType(manager, CronScheduleProvider.class);
+        final CronSchedulingProvider schedulingProvider = CdiUtils.getInstanceByType(manager, CronSchedulingProvider.class);
         if (schedulingProvider != null) {
             cronSchedExt.initProviderScheduling(manager, schedulingProvider, allObservers);
         }
     }
 
-    public void stopProviders(@Observes BeforeShutdown event, BeanManager manager,
-            CronSchedulingInstaller cronSchedExt) {
+    public void stopProviders(@Observes BeforeShutdown event, final BeanManager manager,
+            final CronSchedulingInstaller cronSchedExt) {
 
-        Set<CronProviderLifecycle> providerLifecycles = getProviderLifecycles(manager);
+        final Set<CronProviderLifecycle> providerLifecycles = getProviderLifecycles(manager);
         for (CronProviderLifecycle providerLifecycle : providerLifecycles) {
             providerLifecycle.destroyProvider();
         }
@@ -79,8 +80,8 @@ public class SeamCronExtension implements Extension {
      * @return Not null
      * @throws SchedulerConfigurationException 
      */
-    private Set<CronProviderLifecycle> getProviderLifecycles(BeanManager manager) throws SchedulerConfigurationException {
-        Set<CronProviderLifecycle> providerLifecycles = CdiUtils.getInstancesByType(manager, CronProviderLifecycle.class);
+    private Set<CronProviderLifecycle> getProviderLifecycles(final BeanManager manager) throws SchedulerConfigurationException {
+        final Set<CronProviderLifecycle> providerLifecycles = CdiUtils.getInstancesByType(manager, CronProviderLifecycle.class);
         return providerLifecycles;
     }
 

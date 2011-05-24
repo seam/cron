@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -24,11 +24,17 @@ import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.asynchronous.api.Asynchronous;
+import org.jboss.seam.cron.api.asynchronous.Asynchronous;
 
 /**
- * Interceptor for asynchronous methods. Method may be directly marked as
- * #{@link Asynchronous} or may exist on a type marked as #{@link Asynchronous}.
+ * <p>
+ * Interceptor for asynchronous methods. Service providers for asynchronous 
+ * method invocation should enable this interceptor in the beans.xml which ships
+ * with their implementation jar. 
+ * </p><p>
+ * Method may be directly marked as #{@link Asynchronous} or may exist on a type 
+ * marked as #{@link Asynchronous}.
+ * </p>
  * 
  * @author Peter Royle
  * @Asnychronous or may exist on a type marked as @Asynchronous.
@@ -43,7 +49,7 @@ public class AsynchronousInterceptor {
     @Inject
     Instance<Invoker> iceCopies;
     @Inject 
-    Instance<AsynchronousStrategy> asyncStgyCopies;
+    Instance<CronAsynchronousProvider> asyncStgyCopies;
     
     @AroundInvoke
     public Object executeAsynchronously(final InvocationContext ctx) throws Exception {
@@ -53,7 +59,7 @@ public class AsynchronousInterceptor {
 
         final Invoker ice = iceCopies.get();
         ice.setInvocationContext(ctx);
-        final AsynchronousStrategy asyncStrategy = asyncStgyCopies.get();
+        final CronAsynchronousProvider asyncStrategy = asyncStgyCopies.get();
 
         if (Future.class.isAssignableFrom(ctx.getMethod().getReturnType())) {
             // swap the "dummy" Future for a truly asynchronous future to return to the caller immediately

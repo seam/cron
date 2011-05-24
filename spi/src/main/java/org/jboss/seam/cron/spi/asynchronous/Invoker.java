@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -24,10 +24,9 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import javax.interceptor.InvocationContext;
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.asynchronous.api.AsyncResult;
-import org.jboss.seam.cron.asynchronous.api.Asynchronous;
-import org.jboss.seam.cron.asynchronous.impl.exception.AsynchronousMethodExecutionException;
-import org.jboss.seam.cron.scheduling.impl.exception.InternalException;
+import org.jboss.seam.cron.api.asynchronous.AsyncResult;
+import org.jboss.seam.cron.api.asynchronous.Asynchronous;
+import org.jboss.seam.cron.impl.scheduling.exception.InternalException;
 
 /**
  * This class handles the invocation of the #{@link Asynchronous} method, unwrapping of the
@@ -43,7 +42,7 @@ public class Invoker {
     BeanManager beanMan;
     private InvocationContext ic;
     private boolean popResultsFromFuture = false;
-    private Logger log = Logger.getLogger(Invoker.class);
+    private final Logger log = Logger.getLogger(Invoker.class);
 
     public Invoker() {
     }
@@ -51,7 +50,7 @@ public class Invoker {
     /**
      * @param ic The #{@link InvocationContext} which will be executed.
      */
-    public void setInvocationContext(InvocationContext ic) {
+    public void setInvocationContext(final InvocationContext ic) {
         this.ic = ic;
     }
 
@@ -61,7 +60,7 @@ public class Invoker {
      * already been wrapped in an #{@link AsyncResult} by the #{@link AsynchronousInterceptor}.
      * @param popResultsFromFuture 
      */
-    public void setPopResultsFromFuture(boolean popResultsFromFuture) {
+    public void setPopResultsFromFuture(final boolean popResultsFromFuture) {
         this.popResultsFromFuture = popResultsFromFuture;
     }
 
@@ -88,7 +87,7 @@ public class Invoker {
         }
 
         // grab qualifiers from the method to use for the post-execution event
-        ArrayList<Annotation> qualifiers = new ArrayList<Annotation>();
+        final ArrayList<Annotation> qualifiers = new ArrayList<Annotation>();
         for (Annotation ant : method.getAnnotations()) {
             if (beanMan.isQualifier(ant.annotationType())) {
                 qualifiers.add(ant);

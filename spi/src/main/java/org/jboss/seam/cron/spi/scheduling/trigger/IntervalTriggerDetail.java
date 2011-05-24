@@ -1,6 +1,6 @@
 /**
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat, Inc. and/or its affiliates, and individual
+ * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
  * distribution for a full listing of individual contributors.
  *
@@ -16,8 +16,8 @@
  */
 package org.jboss.seam.cron.spi.scheduling.trigger;
 
-import org.jboss.seam.cron.scheduling.api.Every;
-import org.jboss.seam.cron.scheduling.api.TimeUnit;
+import org.jboss.seam.cron.api.scheduling.Every;
+import org.jboss.seam.cron.api.scheduling.TimeUnit;
 
 /**
  * Simple container for the qualifying annotation and payload type of
@@ -30,7 +30,7 @@ public class IntervalTriggerDetail extends TriggerDetail {
     private final TimeUnit repeatUnit;
     private final Integer repeatInterval;
 
-    public IntervalTriggerDetail(Every qualifier) {
+    public IntervalTriggerDetail(final Every qualifier) {
         super(qualifier);
         this.repeatUnit = qualifier.value();
         this.repeatInterval = qualifier.nth();
@@ -45,7 +45,7 @@ public class IntervalTriggerDetail extends TriggerDetail {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
         }
