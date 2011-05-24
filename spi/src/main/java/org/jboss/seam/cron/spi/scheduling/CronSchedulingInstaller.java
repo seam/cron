@@ -32,9 +32,14 @@ import org.jboss.seam.cron.util.CdiUtils;
 import org.jboss.seam.cron.impl.scheduling.util.SchedulePropertiesManager;
 import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
+import org.jboss.seam.cron.spi.scheduling.trigger.TriggerDetail;
 
 /**
- *
+ * Scans all scheduling annotations and captures the configuration as a #{@link Set}
+ * of #{@link TriggerDetail}s, then forwards those configurations on to the 
+ * #{@link CronSchedulingProvider} implementation so that the underlying service 
+ * can be configured appropriately. Not directly useful to providers.
+ * 
  * @author peteroyle
  */
 @ApplicationScoped
@@ -43,7 +48,7 @@ public class CronSchedulingInstaller {
     private final Logger log = Logger.getLogger(CronSchedulingInstaller.class);
 
     /**
-     * Initialises schedulers for all of the observed scheduled events.
+     * Initializes schedulers for all of the observed scheduled events.
      *
      * @param manager    The JSR-299 Bean Manager.
      */

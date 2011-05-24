@@ -27,15 +27,15 @@ import org.jboss.seam.cron.spi.asynchronous.Invoker;
  * the #{@literal executeInvocationContext()} method is called. This comes in
  * handy when returning Futures (eg: #{@literal new FutureTask(
  * new FutureInvokerSupport(invoker))}).
- * </p>
- * <p>
+ * </p><p>
  * In the simplest case #{@literal executeInvocationContext()} could be called 
- * in the same thread prior to calling #{@literal call()}. In more complex cases
- * #{@literal executeInvocationContext()} could be called by a separate
- * thread at any time before or after the current thread calls #{@literal call()}.
- * The former is useful when your method of executing in the background is
- * also #{@link Runnable} or #{@link Callable} and can thus be used to return a #{@link RunnableFuture};
- * The latter is useful when your method of executing in the background is 
+ * in the same thread prior to calling #{@literal call()}. This is useful when 
+ * your method of executing in the background is also #{@link Runnable} or 
+ * #{@link Callable} and can thus be used to return a #{@link RunnableFuture}.
+ * </p><p>
+ * In more complex cases #{@literal executeInvocationContext()} could be called 
+ * by a separate thread at any time before or after the current thread calls 
+ * #{@literal call()}. This is useful when your method of executing in the background is 
  * fairly arbitrary (eg a Quartz Job scheduled for the near future), and you need
  * to be able to return a #{@literal new FutureTask(callable)} immediately
  * but trigger the processing on that callable some arbitrary way (ie: inside the
@@ -43,7 +43,7 @@ import org.jboss.seam.cron.spi.asynchronous.Invoker;
  * </p>
  * <p>
  * See the Seam Cron Asynchronous Provider projects for the Threads and Quartz providers
- * to see this in action.
+ * to see this in action (providers/scheduling/quartz and providers/asynchronous/threads).
  * </p>
  *
  * @author peteroyle
@@ -55,7 +55,7 @@ public class FutureInvokerSupport implements Callable {
     // can't add null to a BlockingQueue, so we might have to add a marker instead
     private static final Boolean RESULT_AS_NULL = true;
 
-    public FutureInvokerSupport(Invoker executor) {
+    public FutureInvokerSupport(final Invoker executor) {
         this.executor = executor;
     }
 

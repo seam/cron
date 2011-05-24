@@ -36,7 +36,12 @@ import static org.jboss.seam.cron.test.asynchronous.beans.SomeAsynchMethods.NUM_
 import static org.jboss.seam.cron.test.asynchronous.beans.SomeAsynchMethods.SLEEP_PER_LOOP;
 
 /**
- * Test @Asynchronous method execution.
+ * Providers must extend this test case and append their provider-specific 
+ * asynchronous support classes to the #{@link JavaArchive} returned by 
+ * #{@literal createSchedulingTckTestArchive} so that these TCK tests
+ * will be run against their implementation during their test phase.
+ * 
+ * @author Peter Royle
  */
 @SuppressWarnings("serial")
 @RunWith(Arquillian.class)

@@ -33,7 +33,8 @@ import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 import org.jboss.seam.cron.util.CdiUtils;
 
 /**
- * The CDI Extention implementation which bootstraps Seam Cron. Not useful to service providers.
+ * The CDI Extention implementation which bootstraps Seam Cron. Not directly 
+ * useful to service providers.
  * 
  * @author Peter Royle
  */

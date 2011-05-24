@@ -19,6 +19,7 @@ package org.jboss.seam.cron.spi.scheduling.trigger;
 import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 
 /**
+ * <p>
  * Base class allowing scheduling providers to easily fire the
  * appropriate CDI event when required. As opposed to {#@link TriggerSupport},
  * this class is useful when you cannot pass the objects
@@ -28,6 +29,9 @@ import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
  * copy the #{@link TriggerSupplies} into some other context, and retrieve them
  * back from that context when the worker is executed. This part is done
  * inside the #{@literal fetchTriggerSupplies} method.
+ * </p><p>
+ * See #{@literal TriggerJob} in providers/scheduling/quartz for an example of this.
+ * </p>
  *
  * @author Peter Royle
  * 
@@ -41,7 +45,8 @@ public abstract class ProviderContextTriggerSupport<T> extends TriggerSupport {
      * by ${@link ProviderContextTriggerSupport} to fire the appropriate event, and looking
      * them up in this method's implementation using their own context.
      *
-     * @return
+     * @param providerContext Some context provided by the underlying scheduling engine.
+     * @return a new #{@link TriggerSupplies} instance.
      */
     public abstract TriggerSupplies fetchTriggerSupplies(final T providerContext);
 
@@ -49,6 +54,7 @@ public abstract class ProviderContextTriggerSupport<T> extends TriggerSupport {
      * Fires the appropriate trigger payload with the appropriate qualifier
      * (to in turn execute the application-specific code that observes those events).
      *
+     * @param providerContext Some context provided by the underlying scheduling engine.
      */
     public void fireTrigger(final T providerContext) {
         supplies = fetchTriggerSupplies(providerContext);

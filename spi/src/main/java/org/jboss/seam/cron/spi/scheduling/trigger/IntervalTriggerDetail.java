@@ -21,7 +21,7 @@ import org.jboss.seam.cron.api.scheduling.TimeUnit;
 
 /**
  * Simple container for the qualifying annotation and payload type of
- * a scheduled event to be fired.
+ * a repeating-interval trigger to be fired.
  * 
  * @author Peter Royle
  */
@@ -36,10 +36,16 @@ public class IntervalTriggerDetail extends TriggerDetail {
         this.repeatInterval = qualifier.nth();
     }
 
+    /**
+     * @return The unit of time which applies to the repeat interval.
+     */
     public TimeUnit getRepeatUnit() {
         return repeatUnit;
     }
 
+    /**
+     * @return The number of "repeat units" to wait between firing each trigger.
+     */
     public Integer getRepeatInterval() {
         return repeatInterval;
     }

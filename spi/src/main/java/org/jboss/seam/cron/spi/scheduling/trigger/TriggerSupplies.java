@@ -23,7 +23,7 @@ import javax.enterprise.inject.spi.BeanManager;
 
 /**
  * Represents the objects required in order for a #{@link DefaultTriggerHelper}
- * to be able to fire the appropriate event when asked.
+ * to be able to fire the appropriate event when required to.
  *
  * @author Peter Royle
  */
@@ -37,10 +37,16 @@ public class TriggerSupplies {
         this.qualifier = qualifier;
     }
 
+    /**
+     * @return the CDI #{@link BeanManager}.
+     */
     public BeanManager getBeanManager() {
         return beanManager;
     }
 
+    /**
+     * @return the original qualifier on the schedule definition.
+     */
     public Annotation getQualifier() {
         return qualifier;
     }

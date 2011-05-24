@@ -60,7 +60,7 @@ public class Invoker {
      * already been wrapped in an #{@link AsyncResult} by the #{@link AsynchronousInterceptor}.
      * @param popResultsFromFuture 
      */
-    public void setPopResultsFromFuture(final boolean popResultsFromFuture) {
+    protected void setPopResultsFromFuture(final boolean popResultsFromFuture) {
         this.popResultsFromFuture = popResultsFromFuture;
     }
 

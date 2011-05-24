@@ -28,8 +28,22 @@ import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
 @ApplicationScoped
 public interface CronSchedulingProvider {
 
+    /**
+     * Given the details of a scheduled trigger, set up the underlying scheduling
+     * engine to fire the appropriate trigger at the scheduled times.
+     * 
+     * @param schedTriggerDetails Details of the schedule and qualified trigger to fire.
+     * @throws Exception Anything that the underlying provider might throw.
+     */
     public void processScheduledTrigger(final ScheduledTriggerDetail schedTriggerDetails) throws Exception;
 
+    /**
+     * Given the details of a repeating-interval trigger, set up the underlying scheduling
+     * engine to fire the appropriate trigger at the appropriate times.
+     * 
+     * @param schedTriggerDetails Details of the interval and qualified trigger to fire.
+     * @throws Exception Anything that the underlying provider might throw.
+     */
     public void processIntervalTrigger(final IntervalTriggerDetail intervalTriggerDetails) throws Exception;
 
 }

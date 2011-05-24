@@ -30,7 +30,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Test all kinds of events.
+ * Providers must extend this test case and append their provider-specific 
+ * scheduling support classes to the #{@link JavaArchive} returned by 
+ * #{@literal createSchedulingTckTestArchive} so that these TCK tests
+ * will be run against their implementation during their test phase.
+ * 
+ * @author Peter Royle
  */
 @SuppressWarnings("serial")
 @RunWith(Arquillian.class)

@@ -19,7 +19,9 @@ package org.jboss.seam.cron.spi.scheduling.trigger;
 import java.lang.annotation.Annotation;
 
 /**
- *
+ * Simple container for the qualifying annotation and payload type of
+ * a scheduled event to be fired.
+ * 
  * @author peteroyle
  */
 public abstract class TriggerDetail {
