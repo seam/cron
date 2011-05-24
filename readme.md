@@ -1,5 +1,23 @@
 # Seam Cron
 
+## Quick Start
+
+Cron is not yet released, so you'll have to build it from scratch. You'll need:
+
+ * 1 cup Maven 3
+ * 1 tbsp Git
+
+Method:
+
+    git clone git://github.com/seam/cron.git
+    cd cron
+    mvn clean install
+
+That will build and install Cron into your local Maven repo. If you want to
+check out a nifty little sample swing app use the following `mvn` command: 
+
+    mvn install -Drun -Dswing-example
+
 ## What is Seam Cron?
 
 Seam Cron is a CDI portable extension which allows you to 
