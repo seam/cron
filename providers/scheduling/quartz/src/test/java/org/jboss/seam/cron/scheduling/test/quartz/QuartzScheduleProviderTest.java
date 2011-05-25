@@ -45,8 +45,10 @@ public class QuartzScheduleProviderTest {
 
     @Deployment
     public static JavaArchive createTestArchive() {
-        return SeamCronSchedulingTestBase.createSchedulingTestArchive()
-                .addPackage(QuartzScheduleProvider.class.getPackage());
+        JavaArchive archive = SeamCronSchedulingTestBase.createSchedulingTestArchive()
+                .addPackage(QuartzScheduleProvider.class.getPackage())
+                .addAsResource("cron.properties");
+        return archive;
     }
 
     @Test

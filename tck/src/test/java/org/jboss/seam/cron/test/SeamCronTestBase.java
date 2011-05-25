@@ -21,6 +21,7 @@ import java.io.Serializable;
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.spi.scheduling.CronSchedulingInstaller;
 import org.jboss.seam.cron.spi.SeamCronExtension;
+import org.jboss.seam.solder.resourceLoader.ResourceLoader;
 import org.jboss.shrinkwrap.api.ArchivePaths;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -36,6 +37,7 @@ public abstract class SeamCronTestBase implements Serializable {
     public static JavaArchive createTestArchive() 
     {
     	final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
+                .addPackages(true, ResourceLoader.class.getPackage()) // arquillian needs explicit knowledge of thirdy-party producers
     		.addPackage(SeamCronTestBase.class.getPackage())
                 .addPackage(SeamCronExtension.class.getPackage())
                 .addClasses(CronSchedulingInstaller.class)
