@@ -292,6 +292,9 @@
         <!-- Testing Profiles -->
         <profile>
             <id>weld-se-embedded-11</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <dependencies>
                 <dependency>
                     <groupId>org.jboss.arquillian.container</groupId>
@@ -341,9 +344,6 @@
         </profile>
         <profile>
             <id>openwebbeans-embedded-1</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <dependencies>
                 <dependency>
                     <groupId>org.jboss.arquillian.container</groupId>

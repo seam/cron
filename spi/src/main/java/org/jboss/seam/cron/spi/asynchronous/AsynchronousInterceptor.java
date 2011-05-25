@@ -25,6 +25,7 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.api.asynchronous.Asynchronous;
+import org.jboss.seam.cron.impl.asynchronous.exception.AsynchronousMethodExecutionException;
 
 /**
  * <p>
@@ -43,37 +44,83 @@ import org.jboss.seam.cron.api.asynchronous.Asynchronous;
 @Interceptor
 public class AsynchronousInterceptor {
 
+    // We need to track where the method is being invoked from so that we can
+    // handle it properly.
+    protected static final String INVOKED_IN_THREAD = "INVOKED_FROM_THREAD";
+    public ThreadLocal<Boolean> invokedFromInterceptorInThread = new ThreadLocal<Boolean>();
     Logger log = Logger.getLogger(AsynchronousInterceptor.class);
     @Inject
     BeanManager beanMan;
     @Inject
     Instance<Invoker> iceCopies;
-    @Inject 
+    @Inject
     Instance<CronAsynchronousProvider> asyncStgyCopies;
-    
-    @AroundInvoke
-    public Object executeAsynchronously(final InvocationContext ctx) throws Exception {
-        Object result;
 
-        if (log.isTraceEnabled()) {
-            log.trace("Intercepting method invocation of " + ctx.getMethod().getName() + " to make it @Asynchronous");
-        }
-        
-        final Invoker ice = iceCopies.get();
-        ice.setInvocationContext(ctx);
-        final CronAsynchronousProvider asyncStrategy = asyncStgyCopies.get();
-
-        if (Future.class.isAssignableFrom(ctx.getMethod().getReturnType())) {
-            // swap the "dummy" Future for a truly asynchronous future to return to the caller immediately
-            ice.setPopResultsFromFuture(true);
-            result = asyncStrategy.executeAndReturnFuture(ice);
-        } else {
-            asyncStrategy.executeWithoutReturn(ice);
-            result = null;
-        }
-
-        // this will either be a Future, or null
-        return result;
+    public AsynchronousInterceptor() {
     }
 
+    @AroundInvoke
+    private Object executeAsynchronously(final InvocationContext ctx) throws Exception {
+
+        if (invokedFromInterceptorInThread.get() == null) {
+
+            if (ctx.getContextData().get(INVOKED_IN_THREAD) == null) {
+
+                // Step 1. When the method is invoked originally, the interceptor 
+                // which wraps it will land here, because the InvocationContext 
+                // hasn't been fiddled with in the background thread.
+
+                Object result = null;
+
+                if (log.isTraceEnabled()) {
+                    log.trace("Intercepting method invocation of " + ctx.getMethod().getName() + " to make it @Asynchronous");
+                }
+                final Invoker ice = iceCopies.get();
+                ice.setInvocationContext(ctx);
+                final CronAsynchronousProvider asyncStrategy = asyncStgyCopies.get();
+
+                if (Future.class.isAssignableFrom(ctx.getMethod().getReturnType())) {
+                    // swap the "dummy" Future for a truly asynchronous future to return to the caller immediately
+                    ice.setPopResultsFromFuture(true);
+                    result = asyncStrategy.executeAndReturnFuture(ice);
+                } else {
+                    asyncStrategy.executeWithoutReturn(ice);
+                    result = null;
+                }
+
+                // this will either be a Future, or null
+                return result;
+
+            } else {
+
+                // Step 2. The new thread (created in Step 1 above) will assign 
+                // INVOKED_IN_THREAD to TRUE in the InvocationContext and then 
+                // invoke ctx.proceed(). The interceptor which wraps that invocation 
+                // will land here.
+
+                if (Boolean.TRUE.equals(ctx.getContextData().get(INVOKED_IN_THREAD))) {
+                    if (log.isTraceEnabled()) {
+                        log.trace("Executing original method in new thread for " + ctx.getMethod().getName());
+                    }
+                    invokedFromInterceptorInThread.set(Boolean.TRUE);
+                    return ctx.proceed();
+                } else {
+                    throw new AsynchronousMethodExecutionException("The framework got into an illegal state while atempting to keep track of Interceptors arounf asynchronous method invocations. This is certainly a bug. Please file it in the SEAMCRON Jira with full stack trace");
+                }
+            }
+        } else {
+
+            // The interceptor around the backgrounded method invocation 
+            // will set the invokedFromInterceptorInThread ThreadLocal to true
+            // (see Step 2 above) and then invoke ctx.proceed(); The interceptor
+            // around that invocation will land here. This simply forwards 
+            // execution to the originating method.
+
+            if (log.isTraceEnabled()) {
+                log.trace("Bypassing interceptor in new thread for " + ctx.getMethod().getName());
+            }
+            return ctx.proceed();
+        }
+
+    }
 }

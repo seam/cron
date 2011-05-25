@@ -27,6 +27,7 @@ import org.jboss.logging.Logger;
 import org.jboss.seam.cron.api.asynchronous.AsyncResult;
 import org.jboss.seam.cron.api.asynchronous.Asynchronous;
 import org.jboss.seam.cron.impl.scheduling.exception.InternalException;
+import static org.jboss.seam.cron.spi.asynchronous.AsynchronousInterceptor.INVOKED_IN_THREAD;
 
 /**
  * This class handles the invocation of the #{@link Asynchronous} method, unwrapping of the
@@ -78,14 +79,17 @@ public class Invoker {
         Object result;
 
         // housekeeping
-        if (ic.getMethod() == null) {
-            throw new InternalException("Failed to provide an InvocationContext to this " + this.getClass().getName());
+        if (ic == null || ic.getMethod() == null) {
+            throw new InternalException("Failed to provide an InvocationContext/method to this " + this.getClass().getName());
         }
+        
         final Method method = ic.getMethod();
         if (log.isTraceEnabled()) {
             log.trace("Running Invocation Context for " + method.getName());
         }
 
+        
+        
         // grab qualifiers from the method to use for the post-execution event
         final ArrayList<Annotation> qualifiers = new ArrayList<Annotation>();
         for (Annotation ant : method.getAnnotations()) {
@@ -94,6 +98,7 @@ public class Invoker {
             }
         }
 
+        ic.getContextData().put(INVOKED_IN_THREAD, Boolean.TRUE);
         result = ic.proceed();
         if (popResultsFromFuture) {
             // pop the value out of the "dummy" AsynchResult as it will be wrapped
