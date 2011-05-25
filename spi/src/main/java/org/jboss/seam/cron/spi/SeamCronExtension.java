@@ -44,6 +44,13 @@ public class SeamCronExtension implements Extension {
     private final Set<ObserverMethod> allObservers = new HashSet<ObserverMethod>();
     private final Logger log = Logger.getLogger(SeamCronExtension.class);
 
+    /**
+     * Because "Extension classes should be public and have a public constructor 
+     * for maximum portability"
+     */
+    public SeamCronExtension() {
+    }
+    
     public void registerCronEventObserver(@Observes ProcessObserverMethod pom) {
         allObservers.add(pom.getObserverMethod());
     }
@@ -62,6 +69,11 @@ public class SeamCronExtension implements Extension {
         if (schedulingProvider != null) {
             cronSchedExt.initProviderScheduling(manager, schedulingProvider, allObservers);
         }
+        // TODO: (PR): If there's an asynch provider present, check if the interceptor is enabled. See https://jira.jboss.org/jira/browse/WELDX-91
+//        final CronAsynchronousProvider asyncProvider = CdiUtils.getInstanceByType(manager, CronAsynchronousProvider.class);
+//        if (asyncProvider != null) {
+//            assert interceptors.isInterceptorEnabled(AsynchronousInterceptor.class);
+//        }
     }
 
     public void stopProviders(@Observes BeforeShutdown event, final BeanManager manager,

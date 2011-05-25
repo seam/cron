@@ -135,7 +135,7 @@ public class QuartzScheduleProvider implements CronProviderLifecycle, CronSchedu
         try {
             getScheduler().shutdown();
         } catch (SchedulerException ex) {
-            log.error("Error shutting down scheduler", ex);
+            log.warn("Error shutting down scheduler", ex);
         }
     }
 

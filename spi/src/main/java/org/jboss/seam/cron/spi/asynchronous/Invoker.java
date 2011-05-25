@@ -107,10 +107,12 @@ public class Invoker {
             }
             beanMan.fireEvent(result, qualifiers.toArray(new Annotation[qualifiers.size()]));
         } else {
-            if (method.getReturnType().equals(Void.TYPE)) {
-                log.debug("Method invocation on " + method.getName() + ":" + method.getClass().getName() + " returns void, so not firing a post-execution event");
-            } else {
-                log.debug("Method invocation on " + method.getName() + ":" + method.getClass().getName() + " returned null, so not firing an event");
+            if (log.isTraceEnabled()) {
+                if (method.getReturnType().equals(Void.TYPE)) {
+                    log.trace("Method invocation on " + method.getName() + ":" + method.getClass().getName() + " returns void, so not firing a post-execution event");
+                } else {
+                    log.trace("Method invocation on " + method.getName() + ":" + method.getClass().getName() + " returned null, so not firing an event");
+                }
             }
         }
 

@@ -93,7 +93,7 @@ public class QuartzAsynchStrategy implements CronProviderLifecycle, CronAsynchro
         try {
             scheduler.shutdown();
         } catch (SchedulerException ex) {
-            log.error("Error shutting down scheduler", ex);
+            log.warn("Error shutting down scheduler", ex);
         }
     }
 

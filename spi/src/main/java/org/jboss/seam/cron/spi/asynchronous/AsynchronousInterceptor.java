@@ -55,8 +55,10 @@ public class AsynchronousInterceptor {
     public Object executeAsynchronously(final InvocationContext ctx) throws Exception {
         Object result;
 
-        log.trace("Intercepting method invocation of " + ctx.getMethod().getName() + " to make it @Asynchronous");
-
+        if (log.isTraceEnabled()) {
+            log.trace("Intercepting method invocation of " + ctx.getMethod().getName() + " to make it @Asynchronous");
+        }
+        
         final Invoker ice = iceCopies.get();
         ice.setInvocationContext(ctx);
         final CronAsynchronousProvider asyncStrategy = asyncStgyCopies.get();
