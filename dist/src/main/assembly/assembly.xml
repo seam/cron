@@ -50,6 +50,7 @@
             <include>org.jboss.seam.cron:seam-cron-impl</include>
             <include>org.jboss.seam.cron:seam-cron-spi</include>
             <include>org.jboss.seam.cron:seam-cron-asynchronous-quartz</include>
+            <include>org.jboss.seam.cron:seam-cron-asynchronous-threads</include>
             <include>org.jboss.seam.cron:seam-cron-scheduling-quartz</include>
          </includes>
          <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>

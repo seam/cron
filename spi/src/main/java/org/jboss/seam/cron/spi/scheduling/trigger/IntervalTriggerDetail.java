@@ -17,7 +17,7 @@
 package org.jboss.seam.cron.spi.scheduling.trigger;
 
 import org.jboss.seam.cron.api.scheduling.Every;
-import org.jboss.seam.cron.api.scheduling.TimeUnit;
+import org.jboss.seam.cron.api.scheduling.Interval;
 
 /**
  * Simple container for the qualifying annotation and payload type of
@@ -27,7 +27,7 @@ import org.jboss.seam.cron.api.scheduling.TimeUnit;
  */
 public class IntervalTriggerDetail extends TriggerDetail {
 
-    private final TimeUnit repeatUnit;
+    private final Interval repeatUnit;
     private final Integer repeatInterval;
 
     public IntervalTriggerDetail(final Every qualifier) {
@@ -39,7 +39,7 @@ public class IntervalTriggerDetail extends TriggerDetail {
     /**
      * @return The unit of time which applies to the repeat interval.
      */
-    public TimeUnit getRepeatUnit() {
+    public Interval getRepeatUnit() {
         return repeatUnit;
     }
 

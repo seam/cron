@@ -40,5 +40,5 @@ import javax.inject.Qualifier;
 })
 public @interface Every {
     int nth() default 1;
-    TimeUnit value();
+    Interval value();
 }

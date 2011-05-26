@@ -26,9 +26,9 @@ public class EveryLiteral
         implements Every {
 
     private final int nth;
-    private final TimeUnit value;
+    private final Interval value;
 
-    public EveryLiteral(final int nth, final TimeUnit value) {
+    public EveryLiteral(final int nth, final Interval value) {
         this.nth = nth;
         this.value = value;
     }
@@ -37,7 +37,7 @@ public class EveryLiteral
         return nth;
     }
 
-    public TimeUnit value() {
+    public Interval value() {
         return value;
     }
     

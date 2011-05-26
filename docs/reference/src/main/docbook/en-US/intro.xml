@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  JBoss, Home of Professional Open Source
+  Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
+  contributors by the @authors tag. See the copyright.txt in the
+  distribution for a full listing of individual contributors.
+ 
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
+<chapter id="intro">
+
+    <title>Introduction</title>
+
+    <para>
+        Seam Cron is a CDI portable extension for scheduled and asynchronous 
+        method invocation. It wraps common scheduling and backgrounding tasks 
+        in an intuitive, type-safe, event driven API.
+    </para>
+
+    <section id="mission">
+        <title>Mission statement</title>
+
+        <para>
+            Seam Cron aims to simplify configuration and deployment of scheduled 
+            tasks across multiple CDI containers and for multiple scheduling
+            engine implementations.
+        </para>
+    </section>
+
+    <section id="intro_examples">
+        <title>Introductory Examples</title>
+
+        <section>
+        <title>Scheduling</title>
+        
+        <para>
+            Seam Cron uses standard CDI <literal>@Observer</literal> methods for both configuration 
+            and execution of scheduled methods.
+        </para>
+        
+        <programlisting role="Java"><![CDATA[
+public void generateDailyReport(@Observes @Scheduled("01:00") Trigger trigger) { ... }]]>
+        </programlisting>
+        <para>
+            The method above will be executed at 1:00 AM daily. For more detailed schedule 
+            definitions use a cron-style expression. In the following example, the method 
+            will execute at 1:00 AM on the 3rd Wednesday of every month.
+        </para>
+        <programlisting role="Java"><![CDATA[
+public void deliverNewsletters(@Observes @Scheduled("0 0 1 ? * 4") Trigger trigger) { .. }]]>
+        </programlisting>
+        <para>
+            Alternatively, use any valid property name instead of a schedule definition, 
+            and then specify the definition for that name in the <literal>cron.properties</literal> file at 
+            the root of your classpath. Here is an example.
+        </para>
+        <programlisting><![CDATA[
+# cron.properties
+newsletter.delivery=0 0 1 ? * 4
+        ]]></programlisting>
+        <programlisting role="Java"><![CDATA[
+// NewsletterBean.java
+public void deliverNewsletters(@Observes @Scheduled("newsletter.delivery") Trigger trigger) { ... }
+        ]]></programlisting>
+        <para>
+            To replace the <literal>@Scheduled</literal> annotation with something more type-safe create
+            a custom qualifier with the <literal>@Scheduled</literal> annotation applied to it like so:
+        </para>
+        <programlisting role="Java"><![CDATA[
+@Scheduled("newsletter.delivery")
+@Qualifier
+@Retention( RUNTIME )
+@Target( { PARAMETER })
+public @interface NewsletterDelivery {}
+        ]]></programlisting>
+        <para>
+            Now your scheduled observer methods are fully type-safe and higly readable:
+        </para>
+        <programlisting role="Java"><![CDATA[
+public void deliverNewsletters(@Observes @NewsletterDelivery Trigger trigger) { ... }
+        ]]></programlisting>
+        <para>
+            If your requirements are fairly simple, for example running a task repeatedly 
+            at a specific <literal>Interval</literal>, then you can use the <literal>@Every</literal>
+            qualifier as in the example below. Valid interval values are <literal>SECOND</literal>,
+            <literal>MINUTE</literal> and <literal>HOUR</literal>. <literal>@Every</literal>
+            also takes an optional "<literal>nth</literal>" parameter which defaults to 1.
+        </para>
+        <programlisting role="Java"><![CDATA[
+public void clockChimes(@Observes @Every(HOUR) Trigger t) { 
+    int chimes = t.getValue() % 12;
+    if (chimes == 0) { chimes = 12; }
+    for (int i=0; i<chimes; i++) {
+        bellTower.getRope().pull();
+    }
+}
+public void workBreak(@Observes @Every(nth=30, value=MINUTE) Trigger t) { 
+    ...
+}
+        ]]></programlisting>
+        </section>
+        
+        <section>
+            
+        <title>Asynchronous Method Invocation</title>
+        
+        <para>
+            Seam Cron provides the <literal>@Asynchronous</literal> annotation which
+            when applied to a method causes that method to be invoked asynchronously.
+            When applied to a type, all methods in that type will be invoked asynchronously.
+        </para>
+        <programlisting role="Java"><![CDATA[
+@Inject DocumentIndex index;
+
+@Asynchronous
+public DocumentIndexStats reindexDocuments() {
+    return index.reindex();
+}
+        ]]></programlisting>
+        <para>
+            To obtain a reference to the result once the invocation is finished simply
+            observe the return type of the method as follows:
+        </para>
+        <programlisting role="Java"><![CDATA[
+public void reportIndexStats(@Observes DocumentIndexStats stats) {
+    log.info("Index Updated: " + stats.toString());
+}
+
+        ]]></programlisting>
+        <para>
+            The rules concerning return types of <literal>@Asynchronous</literal> methods are as follows:
+            <itemizedlist>
+               <listitem>
+                  <para>If method return type is void, no event will be fired</para>
+               </listitem>
+               <listitem>
+                  <para>If the method invocation returns a value of null, no event will be 
+                fired. This is definately something to be aware of!</para>
+               </listitem>
+            </itemizedlist>
+            You would typically want one dedicated return type per asynchronous method invocation 
+            for a one-to-one mapping between methods and their observers, but you may also
+            have multiple asynchronous methods all reporting their results to a single 
+            observer. Alternatively you might wish to introduce some additional 
+            qualifiers. Below is an example covering these concepts.
+        </para>
+        <programlisting role="Java"><![CDATA[
+@Asynchronous @Credit
+public Balance addCredit(int dollars) {
+    ...
+    return new Ballance();
+}
+
+@Asynchronous @Debit
+public Balance addDebit(int dollars) {
+    ...
+    return new Ballance();
+}
+
+public void reportNewBalance(@Observes Balance balance) {
+    log.report(balance.amount());
+}
+
+public void trackSpending(@Observes @Debit Balance balance) {
+    db.saveSpendingRecord(balance);
+}
+        ]]></programlisting>
+        <para>
+            Finally, if you prefer a more traditional, EJB-esque approach then you 
+            can specify a return type of <literal>Future</literal> and use the <literal>AsyncResult</literal>
+            helper to return the result of your method call. Seam Cron will automatically 
+            wrap this in a legit <literal>Future</literal> which the calling code can use
+            as expected immediately.
+        </para>
+        <programlisting role="Java"><![CDATA[
+@Asynchronous
+public Future<Box> doSomeHeavyLiftingInTheBackground() {
+    ...
+    return new AsyncResult(new Box());
+}
+        ]]></programlisting>
+        <para>
+            The calling code would look like this:
+        </para>
+        <programlisting role="Java"><![CDATA[
+@Inject LiftingBean liftingBean;
+
+public void someMethod() {
+    Future<Box> future = liftingBean.doSomeHeavyLiftingInTheBackground();
+    // blocks until asynch method returns or gives up
+    Box result = future.get(10, SECONDS);
+}
+        ]]></programlisting>
+        </section>
+    </section>
+</chapter>

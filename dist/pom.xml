@@ -37,6 +37,24 @@
          <artifactId>seam-cron-spi</artifactId>
          <optional>true</optional>
       </dependency>
+      
+      <dependency>
+         <groupId>org.jboss.seam.cron</groupId>
+         <artifactId>seam-cron-scheduling-quartz</artifactId>
+         <optional>true</optional>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.seam.cron</groupId>
+         <artifactId>seam-cron-asynchronous-quartz</artifactId>
+         <optional>true</optional>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.seam.cron</groupId>
+         <artifactId>seam-cron-asynchronous-threads</artifactId>
+         <optional>true</optional>
+      </dependency>
+
+      
 
       <dependency>
          <groupId>org.jboss.seam.cron</groupId>

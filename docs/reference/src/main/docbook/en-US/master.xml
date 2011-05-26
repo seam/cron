@@ -25,7 +25,8 @@
 
    <toc />
 
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="preface.xml" />
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="intro.xml" />
+   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="configuration.xml" />
 
 <!--
 vim:et:ts=3:sw=3:tw=120

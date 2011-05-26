@@ -22,11 +22,11 @@ import javax.enterprise.event.Observes;
  * Represents the time intervals observable using #{@link Observes} #{@link Every(timeUnit)}
  * @author Peter Royle
  */
-public enum TimeUnit {
+public enum Interval {
 
     SECOND, MINUTE, HOUR;
 
-    private TimeUnit() {
+    private Interval() {
     }
 
 }

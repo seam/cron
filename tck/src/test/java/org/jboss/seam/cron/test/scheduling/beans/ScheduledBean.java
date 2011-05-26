@@ -28,7 +28,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.api.scheduling.Trigger;
-import static org.jboss.seam.cron.api.scheduling.TimeUnit.*;
+import static org.jboss.seam.cron.api.scheduling.Interval.*;
 
 /**
  * Test all events, but minute and hour (to shorten test time).

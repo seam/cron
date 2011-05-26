@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.api.scheduling.Every;
 import org.jboss.seam.cron.api.scheduling.Scheduled;
-import org.jboss.seam.cron.api.scheduling.TimeUnit;
+import org.jboss.seam.cron.api.scheduling.Interval;
 import org.jboss.seam.cron.api.scheduling.Trigger;
 import org.jfree.data.category.DefaultCategoryDataset;
 
@@ -55,7 +55,7 @@ public class SwingGrapher
      * Called every second to update the graph data and repaint the graph.
      * @param second The observed event.
      */
-    public void updateChart(@Observes @Every(TimeUnit.SECOND) Trigger second)
+    public void updateChart(@Observes @Every(Interval.SECOND) Trigger second)
     {
         getCatDataSet().addValue(Runtime.getRuntime().freeMemory(), FREE_MEMORY_LABEL, new Long(System.
                 currentTimeMillis()).toString());
@@ -65,7 +65,7 @@ public class SwingGrapher
      * Called every minute to request garbage collection.
      * @param second The observed event.
      */
-    public void collectGarbage(@Observes @Every(TimeUnit.MINUTE) Trigger minute)
+    public void collectGarbage(@Observes @Every(Interval.MINUTE) Trigger minute)
     {
         log.info("Requesting garbage collection");
         System.gc();

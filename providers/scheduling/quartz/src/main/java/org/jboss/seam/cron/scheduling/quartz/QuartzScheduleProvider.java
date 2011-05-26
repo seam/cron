@@ -49,7 +49,7 @@ import org.quartz.simpl.RAMJobStore;
 import org.quartz.simpl.SimpleThreadPool;
 import org.quartz.spi.JobStore;
 import org.quartz.spi.ThreadPool;
-import static org.jboss.seam.cron.api.scheduling.TimeUnit.*;
+import static org.jboss.seam.cron.api.scheduling.Interval.*;
 
 /**
  * Methods of this class are called at various stages of the JSR-299 initialisation

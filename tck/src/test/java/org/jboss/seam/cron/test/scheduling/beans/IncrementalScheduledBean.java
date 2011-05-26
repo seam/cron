@@ -20,7 +20,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.time.Instant;
 import org.jboss.seam.cron.api.scheduling.Every;
-import org.jboss.seam.cron.api.scheduling.TimeUnit;
+import org.jboss.seam.cron.api.scheduling.Interval;
 import org.jboss.seam.cron.api.scheduling.Trigger;
 import org.jboss.seam.cron.impl.scheduling.exception.InternalException;
 
@@ -36,7 +36,7 @@ public class IncrementalScheduledBean {
     private Exception errorDetected = null;
     private boolean wasEventObserved = false;
 
-    public void every40Seconds(@Observes @Every(nth = 40, value = TimeUnit.SECOND) Trigger t) throws Exception {
+    public void every40Seconds(@Observes @Every(nth = 40, value = Interval.SECOND) Trigger t) throws Exception {
         wasEventObserved = true;
         final Instant newInstant = Instant.millis(t.getTimeFired());
         if (lastTriggerSecond != null) {
