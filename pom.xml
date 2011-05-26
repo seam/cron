@@ -10,6 +10,12 @@
     <description>The parent and build aggregator for Seam Cron - Typesafe CDI Scheduling and Asynchronous method invocation</description>
     <url>http://seamframework.org/Seam3/CronModule</url>
 
+    <scm>
+       <connection>scm:git:git://github.com/seam/cron.git</connection>
+       <developerConnection>scm:git:git@github.com:seam/cron.git</developerConnection>
+       <url>http://github.com/seam/cron</url>
+    </scm>
+
     <parent>
         <artifactId>seam-parent</artifactId>
         <groupId>org.jboss.seam</groupId>
