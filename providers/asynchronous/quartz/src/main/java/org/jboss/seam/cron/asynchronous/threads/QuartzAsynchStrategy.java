@@ -69,7 +69,6 @@ public class QuartzAsynchStrategy implements CronProviderLifecycle, CronAsynchro
      * Initialises the scheduler.
      *
      */
-    
     public void initProvider() throws CronProviderInitialisationException {
         try {
             instanceId = UUID.randomUUID();

@@ -16,6 +16,7 @@
  */
 package org.jboss.seam.cron.scheduling.test.quartz;
 
+import org.jboss.arquillian.api.Deployment;
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.scheduling.quartz.QuartzScheduleProvider;
 import org.jboss.seam.cron.test.scheduling.tck.SeamCronSchedulingTCKTest;
@@ -25,17 +26,15 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
  *
  * @author Peter Royle
  */
-public abstract class QuartzSchedulingTCKTest extends SeamCronSchedulingTCKTest {
+public class QuartzSchedulingTCKTest extends SeamCronSchedulingTCKTest {
 
     private static Logger log = Logger.getLogger(QuartzSchedulingTCKTest.class);
 
-    public static JavaArchive createDefaultArchive() 
-    {
-    	JavaArchive archive = SeamCronSchedulingTCKTest.createSchedulingTckTestArchive()
-    		.addPackages(true,QuartzScheduleProvider.class.getPackage());
-    	
+    @Deployment
+    public static JavaArchive createDefaultArchive() {
+        JavaArchive archive = SeamCronSchedulingTCKTest.createSchedulingTckTestArchive().addPackages(true, QuartzScheduleProvider.class.getPackage());
+
         log.debug(archive.toString(true));
-    	return archive;
+        return archive;
     }
-    
 }

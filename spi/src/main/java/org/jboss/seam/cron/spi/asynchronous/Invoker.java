@@ -88,8 +88,6 @@ public class Invoker {
             log.trace("Running Invocation Context for " + method.getName());
         }
 
-        
-        
         // grab qualifiers from the method to use for the post-execution event
         final ArrayList<Annotation> qualifiers = new ArrayList<Annotation>();
         for (Annotation ant : method.getAnnotations()) {
