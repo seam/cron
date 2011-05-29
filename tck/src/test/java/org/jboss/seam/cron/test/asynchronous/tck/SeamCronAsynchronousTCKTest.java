@@ -91,7 +91,7 @@ public class SeamCronAsynchronousTCKTest {
         assertNull(asynchBean.getHaystackCount());
         String statusToSet = "orange";
         asynchBean.returnStatusObject(statusToSet);
-        asynchBean.getStatusLatch().await(2, TimeUnit.SECONDS);
+        asynchBean.getStatusLatch().await(4, TimeUnit.SECONDS);
         assertNotNull(asynchBean.getStatusEvent());
         assertNull(asynchBean.getHaystackCount());
         assertEquals(statusToSet, asynchBean.getStatusEvent().getDescription());
@@ -106,7 +106,7 @@ public class SeamCronAsynchronousTCKTest {
         assertNull(asynchBean.getHaystackCount());
         Integer numNeedles = 11;
         asynchBean.countNeedlesInTheHaystack(numNeedles);
-        asynchBean.getHeystackLatch().await(2, TimeUnit.SECONDS);
+        asynchBean.getHeystackLatch().await(4, TimeUnit.SECONDS);
         assertNotNull(asynchBean.getHaystackCount());
         assertNull(asynchBean.getStatusEvent());
         assertEquals(numNeedles, asynchBean.getHaystackCount());
@@ -122,7 +122,7 @@ public class SeamCronAsynchronousTCKTest {
         String statusToSet = "blue";
         Future<Status> result = asynchBean.returnStatusInFuture(statusToSet);
         assertNotNull(result);
-        Status resultStatus = result.get(2, TimeUnit.SECONDS);
+        Status resultStatus = result.get(4, TimeUnit.SECONDS);
         assertNotNull(resultStatus);
         assertNotNull(resultStatus.getDescription());
         assertEquals(statusToSet, resultStatus.getDescription());
