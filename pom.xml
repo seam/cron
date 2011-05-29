@@ -263,7 +263,7 @@
             <id>distribution</id>
             <activation>
                 <property>
-                    <name>dist</name> <!-- TODO: (PR): this should also support 'release', but need to work out the GPG thing first -->
+                    <name>release</name>
                 </property>
             </activation>
             <modules>
@@ -300,6 +300,9 @@
             <id>weld-se-embedded-11</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>release</name>
+                </property>                
             </activation>
             <dependencies>
                 <dependency>
