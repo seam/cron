@@ -350,6 +350,12 @@
                     <version>3.1</version>
                     <scope>test</scope>
                 </dependency>
+                <dependency>
+                    <groupId>org.apache.geronimo.ext.tomcat</groupId>
+                    <artifactId>jasper-el</artifactId>
+                    <version>7.0.0.1</version>
+                    <scope>test</scope>
+                </dependency>
             </dependencies>
         </profile>
         <profile>
