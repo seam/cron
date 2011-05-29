@@ -20,7 +20,6 @@ import java.util.UUID;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 
@@ -48,8 +47,7 @@ import org.quartz.spi.ThreadPool;
  *
  * @author Peter Royle
  */
-@ApplicationScoped
-public class QuartzAsynchStrategy implements CronProviderLifecycle, CronAsynchronousProvider {
+public class QuartzAsynchronousProvider implements CronProviderLifecycle, CronAsynchronousProvider {
 
     /**
      * The name of the job group for all arbitrarily scheduled events.
@@ -61,7 +59,7 @@ public class QuartzAsynchStrategy implements CronProviderLifecycle, CronAsynchro
     private String schedulerName;
     private Scheduler scheduler;
     private UUID instanceId;
-    private static final Logger log = Logger.getLogger(QuartzAsynchStrategy.class);
+    private static final Logger log = Logger.getLogger(QuartzAsynchronousProvider.class);
     @Inject
     BeanManager beanManager;
 

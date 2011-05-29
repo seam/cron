@@ -51,4 +51,9 @@ public class TriggerSupplies {
         return qualifier;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getName() + "{" + "beanManager=" + beanManager + ", qualifier=" + qualifier + '}';
+    }
+    
 }

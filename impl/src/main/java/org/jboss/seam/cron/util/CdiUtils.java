@@ -17,8 +17,6 @@
 package org.jboss.seam.cron.util;
 
 import java.lang.annotation.Annotation;
-import java.util.HashSet;
-import java.util.Set;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
@@ -62,29 +60,4 @@ public class CdiUtils {
         }
     }
 
-    /**
-     * Utility method allowing multiple managed instances of beans to provide entry points
-     * for non-managed beans (such as {@link WeldContainer}). Should only called
-     * once CDI has finished booting.
-     * 
-     * @param manager the BeanManager to use to access the managed instance
-     * @param type the type of the Bean
-     * @param bindings the bean's qualifiers
-     * @return a managed instance of the bean
-     * 
-     */
-    public static <T> Set<T> getInstancesByType(final BeanManager manager, final Class<T> type, final Annotation... bindings) {
-        // TODO: (PR): fix this catch and swallow hackery
-        try {
-            final Set<Bean<?>> beans = manager.getBeans(type);
-            final Set<T> instances = new HashSet<T>();
-            for (Bean<?> bean : beans) {
-                final CreationalContext<?> cc = manager.createCreationalContext(bean);
-                instances.add(type.cast(manager.getReference(bean, type, cc)));
-            }
-            return instances;
-        } catch (Throwable t) {
-            return null;
-        }
-    }
 }

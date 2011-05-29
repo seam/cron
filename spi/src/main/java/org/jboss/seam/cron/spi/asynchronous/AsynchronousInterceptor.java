@@ -26,6 +26,7 @@ import javax.interceptor.InvocationContext;
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.api.asynchronous.Asynchronous;
 import org.jboss.seam.cron.impl.asynchronous.exception.AsynchronousMethodExecutionException;
+import org.jboss.seam.cron.spi.SeamCronExtension;
 
 /**
  * <p>
@@ -53,8 +54,7 @@ public class AsynchronousInterceptor {
     BeanManager beanMan;
     @Inject
     Instance<Invoker> iceCopies;
-    @Inject
-    Instance<CronAsynchronousProvider> asyncStgyCopies;
+    @Inject SeamCronExtension cronExtension;
 
     public AsynchronousInterceptor() {
     }
@@ -77,7 +77,7 @@ public class AsynchronousInterceptor {
                 }
                 final Invoker ice = iceCopies.get();
                 ice.setInvocationContext(ctx);
-                final CronAsynchronousProvider asyncStrategy = asyncStgyCopies.get();
+                final CronAsynchronousProvider asyncStrategy = cronExtension.getAsynchronousProvider();
 
                 if (Future.class.isAssignableFrom(ctx.getMethod().getReturnType())) {
                     // swap the "dummy" Future for a truly asynchronous future to return to the caller immediately

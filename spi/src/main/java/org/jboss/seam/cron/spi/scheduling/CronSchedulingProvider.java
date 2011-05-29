@@ -16,7 +16,6 @@
  */
 package org.jboss.seam.cron.spi.scheduling;
 
-import javax.enterprise.context.ApplicationScoped;
 import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
 
@@ -25,7 +24,6 @@ import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
  * 
  * @author peteroyle
  */
-@ApplicationScoped
 public interface CronSchedulingProvider {
 
     /**

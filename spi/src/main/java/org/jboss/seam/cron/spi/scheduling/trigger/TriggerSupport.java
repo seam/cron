@@ -68,6 +68,10 @@ public abstract class TriggerSupport {
 
         gc.setTime(new Date());
 
+        if (log.isTraceEnabled()) {
+            log.trace("Firing scheduled trigger with these supplies: " + (supplies != null ? supplies.toString() : supplies));
+        }
+        
         Trigger eventPayload = null;
         final Scheduled schedQualifier = (Scheduled) CdiUtils.getQualifier(supplies.getQualifier(), Scheduled.class);
         if (schedQualifier != null) {
@@ -88,7 +92,7 @@ public abstract class TriggerSupport {
                 }
             }
         }
-        log.trace("Firing time event for " + eventPayload + " with binding " + supplies.getQualifier());
+        log.trace("Firing time event for " + eventPayload + " with qualifier " + supplies.getQualifier());
         supplies.getBeanManager().fireEvent(eventPayload, supplies.getQualifier());
     }
 

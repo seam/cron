@@ -16,7 +16,6 @@
  */
 package org.jboss.seam.cron.scheduling.quartz;
 
-import java.util.logging.Level;
 import org.jboss.seam.cron.spi.scheduling.trigger.TriggerSupplies;
 import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 import java.text.ParseException;
@@ -24,7 +23,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 
@@ -52,13 +50,12 @@ import org.quartz.spi.ThreadPool;
 import static org.jboss.seam.cron.api.scheduling.Interval.*;
 
 /**
- * Methods of this class are called at various stages of the JSR-299 initialisation
+ * Methods of this class are called at various stages of the JSR-299 initialization
  * to set up and start the appropriate schedules in line with the scheduled events
  * being observed by the application.
  *
  * @author Peter Royle
  */
-@ApplicationScoped
 public class QuartzScheduleProvider implements CronProviderLifecycle, CronSchedulingProvider {
 
     /**

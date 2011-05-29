@@ -18,7 +18,6 @@ package org.jboss.seam.cron.asynchronous.threads;
 
 import java.util.concurrent.Future;
 import java.util.concurrent.RunnableFuture;
-import javax.enterprise.context.ApplicationScoped;
 import org.jboss.seam.cron.spi.asynchronous.CronAsynchronousProvider;
 import org.jboss.seam.cron.spi.asynchronous.Invoker;
 
@@ -28,7 +27,6 @@ import org.jboss.seam.cron.spi.asynchronous.Invoker;
  *
  * @author peteroyle
  */
-@ApplicationScoped
 public class ThreadsAsynchronousProvider implements CronAsynchronousProvider {
 
     public void executeWithoutReturn(final Invoker invoker) {

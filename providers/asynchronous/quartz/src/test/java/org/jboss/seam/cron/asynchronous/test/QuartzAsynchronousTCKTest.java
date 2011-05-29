@@ -17,7 +17,7 @@
 package org.jboss.seam.cron.asynchronous.test;
 
 import org.jboss.arquillian.api.Deployment;
-import org.jboss.seam.cron.asynchronous.threads.QuartzAsynchStrategy;
+import org.jboss.seam.cron.asynchronous.threads.QuartzAsynchronousProvider;
 import org.jboss.seam.cron.test.asynchronous.tck.SeamCronAsynchronousTCKTest;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 
@@ -30,6 +30,6 @@ public class QuartzAsynchronousTCKTest extends SeamCronAsynchronousTCKTest {
     @Deployment
     public static JavaArchive deployment() {
         return SeamCronAsynchronousTCKTest.createAsynchronousTckTestArchive()
-                .addPackages(true, QuartzAsynchStrategy.class.getPackage());
+                .addPackages(true, QuartzAsynchronousProvider.class.getPackage());
     }
 }

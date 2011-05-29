@@ -29,7 +29,7 @@ public class AsyncMethodInvocationJob implements Job {
 
     public void execute(final JobExecutionContext context) throws JobExecutionException {
         try {
-            final FutureInvokerSupport resultCallable = (FutureInvokerSupport) context.getJobDetail().getJobDataMap().get(QuartzAsynchStrategy.DELAYED_RESULT_SUPPORT);
+            final FutureInvokerSupport resultCallable = (FutureInvokerSupport) context.getJobDetail().getJobDataMap().get(QuartzAsynchronousProvider.DELAYED_RESULT_SUPPORT);
             resultCallable.executeInvocationContext();
         } catch (Exception ex) {
             throw new JobExecutionException("Error invoking method inside a Quartz Job", ex);
