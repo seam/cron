@@ -23,7 +23,7 @@
 <bookinfo>
    <title>Seam Cron Module</title>
    <subtitle>Reference Guide</subtitle>
-   <releaseinfo>3.0.0-Alpha1</releaseinfo>
+   <releaseinfo>3.0.0.Alpha1</releaseinfo>
 
    <xi:include href="author_group.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
