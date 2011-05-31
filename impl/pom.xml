@@ -4,7 +4,7 @@
     <groupId>org.jboss.seam.cron</groupId>
     <artifactId>seam-cron-impl</artifactId>
     <packaging>jar</packaging>
-    <version>3.0.0.Alpha1</version>
+    <version>3.0.0-SNAPSHOT</version>
     <name>Seam Cron Implementation</name>
     <description>The Extension implementation for Seam Cron</description>
     <url>http://seamframework.org/Seam3/CronModule</url>
@@ -12,7 +12,7 @@
     <parent>
         <artifactId>seam-cron-parent</artifactId>
         <groupId>org.jboss.seam.cron</groupId>
-        <version>3.0.0.Alpha1</version>
+        <version>3.0.0-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
 
