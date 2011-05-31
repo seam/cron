@@ -4,7 +4,7 @@
     <groupId>org.jboss.seam.cron</groupId>
     <artifactId>seam-cron-asynchronous-quartz</artifactId>
     <packaging>jar</packaging>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.0.Alpha1</version>
     <name>Seam Cron Asynchronous Provider: Quartz</name>
     <description>The Quartz provider of asynchronous method invocation for Seam Cron.
     "Schedules" an @Asynchronous method to be executed a very short time into the future,
@@ -15,7 +15,7 @@
     <parent>
         <artifactId>seam-cron-parent</artifactId>
         <groupId>org.jboss.seam.cron</groupId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>3.0.0.Alpha1</version>
         <relativePath>../../../</relativePath>
     </parent>
 
