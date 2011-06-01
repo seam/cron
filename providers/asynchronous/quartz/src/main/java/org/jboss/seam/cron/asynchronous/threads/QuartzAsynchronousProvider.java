@@ -24,7 +24,7 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.impl.asynchronous.exception.AsynchronousMethodExecutionException;
+import org.jboss.seam.cron.impl.asynchronous.exception.AsynchronousMethodInvocationException;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderDestructionException;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationException;
 import org.jboss.seam.cron.spi.CronProviderLifecycle;
@@ -104,7 +104,7 @@ public class QuartzAsynchronousProvider implements CronProviderLifecycle, CronAs
         return asyncResult;
     }
 
-    private FutureInvokerSupport executeMethodAsScheduledJob(final Invoker invoker) throws AsynchronousMethodExecutionException {
+    private FutureInvokerSupport executeMethodAsScheduledJob(final Invoker invoker) throws AsynchronousMethodInvocationException {
         final FutureInvokerSupport drs = new FutureInvokerSupport(invoker);
         try {
             final String name = UUID.randomUUID().toString();
@@ -112,7 +112,7 @@ public class QuartzAsynchronousProvider implements CronProviderLifecycle, CronAs
             jobDetail.getJobDataMap().put(DELAYED_RESULT_SUPPORT, drs);
             scheduler.scheduleJob(jobDetail, TriggerUtils.makeImmediateTrigger(name, 0, 1));
         } catch (SchedulerException ex) {
-            throw new AsynchronousMethodExecutionException("Error invoking method asynchronously", ex);
+            throw new AsynchronousMethodInvocationException("Error invoking method asynchronously", ex);
         }
         return drs;
     }

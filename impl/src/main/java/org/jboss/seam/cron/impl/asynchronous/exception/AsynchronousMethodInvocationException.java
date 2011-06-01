@@ -22,25 +22,25 @@ package org.jboss.seam.cron.impl.asynchronous.exception;
  *
  * @author Peter Royle
  */
-public class AsynchronousMethodExecutionException
+public class AsynchronousMethodInvocationException
         extends RuntimeException {
     
     /**
-     * Create a new instance of #{@link AsynchronousMethodExecutionException} with the given error message.
+     * Create a new instance of #{@link AsynchronousMethodInvocationException} with the given error message.
      * 
      * @param message The error message.
      */
-    public AsynchronousMethodExecutionException(String message) {
+    public AsynchronousMethodInvocationException(String message) {
         super(message);
     }
 
     /**
-     * Create a new instance of #{@link AsynchronousMethodExecutionException} with the given error message and cause.
+     * Create a new instance of #{@link AsynchronousMethodInvocationException} with the given error message and cause.
      * 
      * @param message The error message.
      * @param cause   The original cause.
      */
-    public AsynchronousMethodExecutionException(String message, Throwable cause) {
+    public AsynchronousMethodInvocationException(String message, Throwable cause) {
         super(message, cause);
     }
 }

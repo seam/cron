@@ -2,25 +2,6 @@
 
 ## Quick Start
 
-Cron is not yet released, so you'll have to build it from scratch.
-
-Prerequisites: 
-
- * JDK 5 or above
- * Maven 3 build tool
- * Git version control system
-
-Building From Source:
-
-    git clone git://github.com/seam/cron.git
-    cd cron
-    mvn clean install
-
-The above commands will build and install Cron into your local Maven repository. 
-If you want to run a nifty little example swing app use the following `mvn` command: 
-
-    mvn install -Drun -Dswing-example
-
 To use Seam Cron in your Maven project, include the following dependencies in your pom:
 
         <dependency>
@@ -41,7 +22,6 @@ To use Seam Cron in your Maven project, include the following dependencies in yo
             <version>3.0.0.Alpha1</version>
             <scope>runtime</scope>
         </dependency>
-
 
 ## What is Seam Cron?
 
@@ -171,3 +151,22 @@ I know, it's true. But you can help. If you know exactly what you need and have
 the skillpower to get it done, then please fork this project and submit a pull 
 request. Alternatively submit a feature request or bug report over at JIRA:
 https://issues.jboss.org/browse/SEAMCRON
+
+## Building From Source:
+
+### Prerequisites: 
+
+ * JDK 5 or above
+ * Maven 3 build tool
+ * Git version control system
+
+### Method:
+
+    git clone git://github.com/seam/cron.git
+    cd cron
+    mvn clean install
+
+The above commands will build and install Cron into your local Maven repository. 
+If you want to run a nifty little example swing app use the following `mvn` command: 
+
+    mvn install -Drun -Dswing-example

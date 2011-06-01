@@ -25,7 +25,7 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.api.asynchronous.Asynchronous;
-import org.jboss.seam.cron.impl.asynchronous.exception.AsynchronousMethodExecutionException;
+import org.jboss.seam.cron.impl.scheduling.exception.InternalException;
 import org.jboss.seam.cron.spi.SeamCronExtension;
 
 /**
@@ -47,7 +47,7 @@ public class AsynchronousInterceptor {
 
     // We need to track where the method is being invoked from so that we can
     // handle it properly.
-    protected static final String INVOKED_IN_THREAD = "INVOKED_FROM_THREAD";
+    protected static final String INVOKED_IN_THREAD = "INVOKED_IN_THREAD";
     public ThreadLocal<Boolean> invokedFromInterceptorInThread = new ThreadLocal<Boolean>();
     Logger log = Logger.getLogger(AsynchronousInterceptor.class);
     @Inject
@@ -105,7 +105,7 @@ public class AsynchronousInterceptor {
                     invokedFromInterceptorInThread.set(Boolean.TRUE);
                     return ctx.proceed();
                 } else {
-                    throw new AsynchronousMethodExecutionException("The framework got into an illegal state while atempting to keep track of Interceptors arounf asynchronous method invocations. This is certainly a bug. Please file it in the SEAMCRON Jira with full stack trace");
+                    throw new InternalException("The framework got into an illegal state while atempting to keep track of Interceptors around asynchronous method invocations. This is certainly a bug. Please file it in the SEAMCRON Jira with full stack trace");
                 }
             }
         } else {
