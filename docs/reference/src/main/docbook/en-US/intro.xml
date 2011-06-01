@@ -49,7 +49,7 @@
             and execution of scheduled methods.
         </para>
         
-        <programlisting role="Java"><![CDATA[
+        <programlisting role="JAVA"><![CDATA[
 public void generateDailyReport(@Observes @Scheduled("01:00") Trigger trigger) { ... }]]>
         </programlisting>
         <para>
@@ -57,7 +57,7 @@ public void generateDailyReport(@Observes @Scheduled("01:00") Trigger trigger) {
             definitions use a cron-style expression. In the following example, the method 
             will execute at 1:00 AM on the 3rd Wednesday of every month.
         </para>
-        <programlisting role="Java"><![CDATA[
+        <programlisting role="JAVA"><![CDATA[
 public void deliverNewsletters(@Observes @Scheduled("0 0 1 ? * 4") Trigger trigger) { .. }]]>
         </programlisting>
         <para>
@@ -69,7 +69,7 @@ public void deliverNewsletters(@Observes @Scheduled("0 0 1 ? * 4") Trigger trigg
 # cron.properties
 newsletter.delivery=0 0 1 ? * 4
         ]]></programlisting>
-        <programlisting role="Java"><![CDATA[
+        <programlisting role="JAVA"><![CDATA[
 // NewsletterBean.java
 public void deliverNewsletters(@Observes @Scheduled("newsletter.delivery") Trigger trigger) { ... }
         ]]></programlisting>
@@ -77,7 +77,7 @@ public void deliverNewsletters(@Observes @Scheduled("newsletter.delivery") Trigg
             To replace the <literal>@Scheduled</literal> annotation with something more type-safe create
             a custom qualifier with the <literal>@Scheduled</literal> annotation applied to it like so:
         </para>
-        <programlisting role="Java"><![CDATA[
+        <programlisting role="JAVA"><![CDATA[
 @Scheduled("newsletter.delivery")
 @Qualifier
 @Retention( RUNTIME )
@@ -87,7 +87,7 @@ public @interface NewsletterDelivery {}
         <para>
             Now your scheduled observer methods are fully type-safe and higly readable:
         </para>
-        <programlisting role="Java"><![CDATA[
+        <programlisting role="JAVA"><![CDATA[
 public void deliverNewsletters(@Observes @NewsletterDelivery Trigger trigger) { ... }
         ]]></programlisting>
         <para>
@@ -97,7 +97,7 @@ public void deliverNewsletters(@Observes @NewsletterDelivery Trigger trigger) { 
             <literal>MINUTE</literal> and <literal>HOUR</literal>. <literal>@Every</literal>
             also takes an optional "<literal>nth</literal>" parameter which defaults to 1.
         </para>
-        <programlisting role="Java"><![CDATA[
+        <programlisting role="JAVA"><![CDATA[
 public void clockChimes(@Observes @Every(HOUR) Trigger t) { 
     int chimes = t.getValue() % 12;
     if (chimes == 0) { chimes = 12; }
@@ -120,7 +120,7 @@ public void workBreak(@Observes @Every(nth=30, value=MINUTE) Trigger t) {
             when applied to a method causes that method to be invoked asynchronously.
             When applied to a type, all methods in that type will be invoked asynchronously.
         </para>
-        <programlisting role="Java"><![CDATA[
+        <programlisting role="JAVA"><![CDATA[
 @Inject DocumentIndex index;
 
 @Asynchronous
@@ -132,7 +132,7 @@ public DocumentIndexStats reindexDocuments() {
             To obtain a reference to the result once the invocation is finished simply
             observe the return type of the method as follows:
         </para>
-        <programlisting role="Java"><![CDATA[
+        <programlisting role="JAVA"><![CDATA[
 public void reportIndexStats(@Observes DocumentIndexStats stats) {
     log.info("Index Updated: " + stats.toString());
 }
@@ -155,7 +155,7 @@ public void reportIndexStats(@Observes DocumentIndexStats stats) {
             observer. Alternatively you might wish to introduce some additional 
             qualifiers. Below is an example covering these concepts.
         </para>
-        <programlisting role="Java"><![CDATA[
+        <programlisting role="JAVA"><![CDATA[
 @Asynchronous @Credit
 public Balance addCredit(int dollars) {
     ...
@@ -183,7 +183,7 @@ public void trackSpending(@Observes @Debit Balance balance) {
             wrap this in a legit <literal>Future</literal> which the calling code can use
             as expected immediately.
         </para>
-        <programlisting role="Java"><![CDATA[
+        <programlisting role="JAVA"><![CDATA[
 @Asynchronous
 public Future<Box> doSomeHeavyLiftingInTheBackground() {
     ...
@@ -193,7 +193,7 @@ public Future<Box> doSomeHeavyLiftingInTheBackground() {
         <para>
             The calling code would look like this:
         </para>
-        <programlisting role="Java"><![CDATA[
+        <programlisting role="JAVA"><![CDATA[
 @Inject LiftingBean liftingBean;
 
 public void someMethod() {
