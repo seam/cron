@@ -17,6 +17,7 @@
 package org.jboss.seam.cron.spi.scheduling;
 
 import java.lang.annotation.Annotation;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 import javax.enterprise.context.ApplicationScoped;
@@ -61,7 +62,8 @@ public class CronSchedulingInstaller {
     public void initProviderScheduling(final BeanManager manager, final CronSchedulingProvider scheduleProvider, 
             final Set<ObserverMethod> allObservers) {
         try {
-            // collect the set of unique schedule specifications
+            // process the set of unique schedule specifications
+            Set<TriggerDetail> configuredTriggers = new HashSet<TriggerDetail>();
             for (ObserverMethod<?> obsMeth : allObservers) {
                 for (Object bindingObj : obsMeth.getObservedQualifiers()) {
                     final Annotation orginalQualifier = (Annotation) bindingObj;
@@ -71,11 +73,18 @@ public class CronSchedulingInstaller {
                     if (schedQualifier != null) {
                         String cronScheduleSpec = lookupNamedScheduleIfNecessary(schedQualifier.value());
                         ScheduledTriggerDetail payload = new ScheduledTriggerDetail(cronScheduleSpec, orginalQualifier);
-                        scheduleProvider.processScheduledTrigger(payload);
+                        if (!configuredTriggers.contains(payload)) {
+                            scheduleProvider.processScheduledTrigger(payload);
+                            configuredTriggers.add(payload);
+                        }
                     }
                     if (everyQualifier != null) {
                         IntervalTriggerDetail payload = createEventPayloadFromEveryBinding(everyQualifier);
-                        scheduleProvider.processIntervalTrigger(payload);
+                        if (!configuredTriggers.contains(payload)) {
+                            scheduleProvider.processIntervalTrigger(payload);
+                            configuredTriggers.add(payload);
+                            System.out.println("Adding payload: " + payload);
+                        }
                     }
                 }
             }
