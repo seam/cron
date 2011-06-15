@@ -29,7 +29,6 @@
         <module>providers/scheduling/quartz</module>
         <module>providers/asynchronous/threads</module>
         <module>providers/asynchronous/quartz</module>
-        <module>combined</module>
     </modules>
 
     <properties>
