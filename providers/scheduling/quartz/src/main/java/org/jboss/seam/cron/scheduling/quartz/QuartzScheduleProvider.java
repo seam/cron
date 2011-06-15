@@ -88,7 +88,7 @@ public class QuartzScheduleProvider implements CronProviderLifecycle, CronSchedu
     public void initProvider() throws CronProviderInitialisationException {
         instanceId = UUID.randomUUID();
         final JobStore jobStore = new RAMJobStore();
-        final ThreadPool threadPool = new SimpleThreadPool(4, Thread.NORM_PRIORITY);
+        final ThreadPool threadPool = new SimpleThreadPool(100, Thread.NORM_PRIORITY);
         try {
             threadPool.initialize();
         } catch (SchedulerConfigException ex) {
