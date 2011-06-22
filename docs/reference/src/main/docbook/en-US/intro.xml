@@ -85,7 +85,7 @@ public void deliverNewsletters(@Observes @Scheduled("newsletter.delivery") Trigg
 public @interface NewsletterDelivery {}
         ]]></programlisting>
         <para>
-            Now your scheduled observer methods are fully type-safe and higly readable:
+            Now your scheduled observer methods are fully type-safe and highly readable:
         </para>
         <programlisting role="JAVA"><![CDATA[
 public void deliverNewsletters(@Observes @NewsletterDelivery Trigger trigger) { ... }
@@ -146,7 +146,7 @@ public void reportIndexStats(@Observes DocumentIndexStats stats) {
                </listitem>
                <listitem>
                   <para>If the method invocation returns a value of null, no event will be 
-                fired. This is definately something to be aware of!</para>
+                fired. This is definitely something to be aware of!</para>
                </listitem>
             </itemizedlist>
             You would typically want one dedicated return type per asynchronous method invocation 
