@@ -27,8 +27,10 @@
         <module>spi</module>
         <module>tck</module>
         <module>providers/scheduling/quartz</module>
+        <module>providers/scheduling/queuj</module>
         <module>providers/asynchronous/threads</module>
         <module>providers/asynchronous/quartz</module>
+        <module>providers/asynchronous/queuj</module>
     </modules>
 
     <properties>
@@ -178,6 +180,11 @@
             </dependency>    
             <dependency>
                 <groupId>org.jboss.seam.cron</groupId>
+                <artifactId>seam-cron-asynchronous-queuj</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.seam.cron</groupId>
                 <artifactId>seam-cron-asynchronous-threads</artifactId>
                 <version>${project.version}</version>
             </dependency>         
@@ -186,6 +193,11 @@
                 <artifactId>seam-cron-scheduling-quartz</artifactId>
                 <version>${project.version}</version>
             </dependency>            
+            <dependency>
+                <groupId>org.jboss.seam.cron</groupId>
+                <artifactId>seam-cron-scheduling-queuj</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.jboss.seam.cron</groupId>
                 <artifactId>seam-cron-reference-guide</artifactId>
@@ -246,6 +258,26 @@
                 <scope>runtime</scope>
             </dependency>
             
+            <!-- Dependencies for providers/queuj sub-project -->
+            <!-- Runtime Dependencies -->
+            <dependency>
+                <groupId>com.workplacesystems.queuj</groupId>
+                <artifactId>queuj</artifactId>
+                <version>1.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-pool</groupId>
+                <artifactId>commons-pool</artifactId>
+                <version>1.5.4</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.1.1</version>
+                <scope>runtime</scope>
+            </dependency>
+
             <!-- Dependencies for examples -->
             <dependency>
                 <groupId>jfree</groupId>

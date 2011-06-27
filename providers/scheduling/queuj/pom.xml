@@ -1,0 +1,89 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.jboss.seam.cron</groupId>
+    <artifactId>seam-cron-scheduling-queuj</artifactId>
+    <packaging>jar</packaging>
+    <version>3.0.0-SNAPSHOT</version>
+    <name>Seam Cron Scheduling Provider: QueuJ</name>
+    <description>The QueuJ provider of scheduling for Seam Cron.</description>
+    <url>http://seamframework.org/Seam3/CronModule</url>
+
+    <parent>
+        <artifactId>seam-cron-parent</artifactId>
+        <groupId>org.jboss.seam.cron</groupId>
+        <version>3.0.0-SNAPSHOT</version>
+        <relativePath>../../../</relativePath>
+    </parent>
+
+    <dependencies>
+        <!-- Provided dependencies -->
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Compile-time dependencies -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>seam-cron-spi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>seam-cron-tck</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.spec.javax.el</groupId>
+            <artifactId>jboss-el-api_2.2_spec</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian</groupId>
+            <artifactId>arquillian-junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Dependencies for QueuJ -->
+        <!-- Runtime Dependencies -->
+        <dependency>
+            <groupId>com.workplacesystems.queuj</groupId>
+            <artifactId>queuj</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-pool</groupId>
+            <artifactId>commons-pool</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- Dependencies for Quartz (used for CronExpression) -->
+        <!-- Runtime Dependencies -->
+        <dependency>
+            <groupId>org.opensymphony.quartz</groupId>
+            <artifactId>quartz</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+
+</project>
