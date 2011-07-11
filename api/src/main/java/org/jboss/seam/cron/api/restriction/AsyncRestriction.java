@@ -14,33 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.spi.scheduling.trigger;
+package org.jboss.seam.cron.api.restriction;
 
-import java.lang.annotation.Annotation;
-import java.util.Set;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+import javax.inject.Qualifier;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Simple container for the qualifying annotation and payload type of
- * a scheduled event to be fired.
- * 
- * @author peteroyle
+ * Use this annotation to cause the annotated method to be called for each
+ * asynchronous job in the specified queue when deciding whether the
+ * asynchronous job can or cannot currently be run.
+ *
+ * @author Dave Oxley
  */
-public abstract class TriggerDetail {
-
-    private final Annotation qualifier;
-    private final Set<Annotation> allQualifiers;
-
-    public TriggerDetail(final Annotation qualifier, final Set<Annotation> allQualifiers) {
-        this.qualifier = qualifier;
-        this.allQualifiers = allQualifiers;
-    }
-
-    public Annotation getQualifier() {
-        return qualifier;
-    }
-
-    public Set<Annotation> getQualifiers() {
-        return allQualifiers;
-    }
-
+@Qualifier
+@Retention(RUNTIME)
+@Target({ElementType.PARAMETER,
+        ElementType.METHOD,
+        ElementType.FIELD,
+        ElementType.TYPE
+})
+public @interface AsyncRestriction {
 }

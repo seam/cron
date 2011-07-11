@@ -23,9 +23,11 @@ import java.util.Set;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.ObserverMethod;
+import javax.enterprise.inject.spi.ProcessObserverMethod;
 import javax.inject.Inject;
 import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.Logger;
+import org.jboss.seam.cron.api.queue.Queue;
 import org.jboss.seam.cron.api.scheduling.Every;
 import org.jboss.seam.cron.api.scheduling.Scheduled;
 import org.jboss.seam.cron.impl.scheduling.exception.SchedulerConfigurationException;
@@ -60,11 +62,23 @@ public class CronSchedulingInstaller {
      * @param manager    The JSR-299 Bean Manager.
      */
     public void initProviderScheduling(final BeanManager manager, final CronSchedulingProvider scheduleProvider, 
-            final Set<ObserverMethod> allObservers) {
+            final Set<ProcessObserverMethod> allObservers) {
         try {
             // process the set of unique schedule specifications
             Set<TriggerDetail> configuredTriggers = new HashSet<TriggerDetail>();
-            for (ObserverMethod<?> obsMeth : allObservers) {
+            for (ProcessObserverMethod pom : allObservers) {
+                ObserverMethod<?> obsMeth = pom.getObserverMethod();
+
+                String queueId = null;
+                for (Object bindingObj : obsMeth.getObservedQualifiers()) {
+                    final Annotation orginalQualifier = (Annotation) bindingObj;
+                    final Queue queue = (Queue) CdiUtils.getQualifier(orginalQualifier, Queue.class);
+                    if (queue != null) {
+                        queueId = queue.value();
+                        break;
+                    }
+                }
+
                 for (Object bindingObj : obsMeth.getObservedQualifiers()) {
                     final Annotation orginalQualifier = (Annotation) bindingObj;
                     final Scheduled schedQualifier = (Scheduled) CdiUtils.getQualifier(orginalQualifier, Scheduled.class);
@@ -72,16 +86,16 @@ public class CronSchedulingInstaller {
                     // gather the details of all @Scheduled and @Every triggers
                     if (schedQualifier != null) {
                         String cronScheduleSpec = lookupNamedScheduleIfNecessary(schedQualifier.value());
-                        ScheduledTriggerDetail payload = new ScheduledTriggerDetail(cronScheduleSpec, orginalQualifier);
+                        ScheduledTriggerDetail payload = new ScheduledTriggerDetail(cronScheduleSpec, orginalQualifier, obsMeth.getObservedQualifiers());
                         if (!configuredTriggers.contains(payload)) {
-                            scheduleProvider.processScheduledTrigger(payload);
+                            scheduleProvider.processScheduledTrigger(queueId, payload);
                             configuredTriggers.add(payload);
                         }
                     }
                     if (everyQualifier != null) {
-                        IntervalTriggerDetail payload = createEventPayloadFromEveryBinding(everyQualifier);
+                        IntervalTriggerDetail payload = createEventPayloadFromEveryBinding(everyQualifier, obsMeth.getObservedQualifiers());
                         if (!configuredTriggers.contains(payload)) {
-                            scheduleProvider.processIntervalTrigger(payload);
+                            scheduleProvider.processIntervalTrigger(queueId, payload);
                             configuredTriggers.add(payload);
                             System.out.println("Adding payload: " + payload);
                         }
@@ -101,8 +115,8 @@ public class CronSchedulingInstaller {
      * @param everyBinding
      * @return a fully populated #{@link ScheduledTriggerDetail}.
      */
-    public IntervalTriggerDetail createEventPayloadFromEveryBinding(final Every everyBinding) {
-        return new IntervalTriggerDetail(everyBinding);
+    public IntervalTriggerDetail createEventPayloadFromEveryBinding(final Every everyBinding, final Set<Annotation> allQualifiers) {
+        return new IntervalTriggerDetail(everyBinding, allQualifiers);
     }
 
     /**

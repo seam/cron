@@ -19,6 +19,7 @@ package org.jboss.seam.cron.test;
 import java.io.File;
 import java.io.Serializable;
 import org.jboss.logging.Logger;
+import org.jboss.seam.cron.spi.queue.CronQueueInstaller;
 import org.jboss.seam.cron.spi.scheduling.CronSchedulingInstaller;
 import org.jboss.seam.cron.spi.SeamCronExtension;
 import org.jboss.seam.solder.resourceLoader.ResourceLoader;
@@ -40,6 +41,7 @@ public abstract class SeamCronTestBase implements Serializable {
                 .addPackage(ResourceLoader.class.getPackage()) // arquillian needs explicit knowledge of thirdy-party producers
     		.addPackage(SeamCronTestBase.class.getPackage())
                 .addPackage(SeamCronExtension.class.getPackage())
+                .addClasses(CronQueueInstaller.class)
                 .addClasses(CronSchedulingInstaller.class)
     		.addAsManifestResource(
     			new File("src/main/resources/META-INF/beans.xml"), 

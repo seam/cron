@@ -14,33 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.spi.scheduling.trigger;
+package org.jboss.seam.cron.spi.queue;
 
-import java.lang.annotation.Annotation;
-import java.util.Set;
+import java.lang.reflect.Method;
 
 /**
- * Simple container for the qualifying annotation and payload type of
- * a scheduled event to be fired.
+ * Contains the details necessary for the queue provider to call a concurrency
+ * restriction method using the BeanManager.
  * 
- * @author peteroyle
+ * @author Dave Oxley
  */
-public abstract class TriggerDetail {
+public class RestrictDetail {
 
-    private final Annotation qualifier;
-    private final Set<Annotation> allQualifiers;
+    private final Class<?> beanClass;
+    private final Method method;
+    private final String queueId;
 
-    public TriggerDetail(final Annotation qualifier, final Set<Annotation> allQualifiers) {
-        this.qualifier = qualifier;
-        this.allQualifiers = allQualifiers;
+    public RestrictDetail(final Class<?> beanClass, final Method method, final String queueId) {
+        this.beanClass = beanClass;
+        this.method = method;
+        this.queueId = queueId;
     }
 
-    public Annotation getQualifier() {
-        return qualifier;
+    public Class<?> getBeanClass() {
+        return beanClass;
     }
 
-    public Set<Annotation> getQualifiers() {
-        return allQualifiers;
+    public Method getMethod() {
+        return method;
     }
 
+    public String getQueueId() {
+        return queueId;
+    }
 }

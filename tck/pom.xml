@@ -52,6 +52,10 @@
             <artifactId>seam-cron-spi</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.workplacesystems.utilsj</groupId>
+            <artifactId>utilsj</artifactId>
+        </dependency>
 
         <!-- Would-be Test dependencies -->
         <dependency>

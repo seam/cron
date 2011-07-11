@@ -17,6 +17,7 @@
 package org.jboss.seam.cron.spi.scheduling.trigger;
 
 import java.lang.annotation.Annotation;
+import java.util.Set;
 
 /**
  * Simple container for the qualifying annotation, payload type and schedule
@@ -28,8 +29,8 @@ public class ScheduledTriggerDetail extends TriggerDetail {
 
     private final String cronScheduleSpec;
 
-    public ScheduledTriggerDetail(final String dereferencedScheduleSpec, final Annotation qualifier) {
-        super(qualifier);
+    public ScheduledTriggerDetail(final String dereferencedScheduleSpec, final Annotation qualifier, final Set<Annotation> allQualifiers) {
+        super(qualifier, allQualifiers);
         this.cronScheduleSpec = dereferencedScheduleSpec;
     }
 
@@ -55,6 +56,9 @@ public class ScheduledTriggerDetail extends TriggerDetail {
         if (this.getQualifier() != other.getQualifier() && (this.getQualifier() == null || !this.getQualifier().equals(other.getQualifier()))) {
             return false;
         }
+        if (this.getQualifiers() != other.getQualifiers() && (this.getQualifiers() == null || !this.getQualifiers().equals(other.getQualifiers()))) {
+            return false;
+        }
         return true;
     }
 
@@ -63,11 +67,12 @@ public class ScheduledTriggerDetail extends TriggerDetail {
         int hash = 7;
         hash = 17 * hash + (this.cronScheduleSpec != null ? this.cronScheduleSpec.hashCode() : 0);
         hash = 17 * hash + (this.getQualifier() != null ? this.getQualifier().hashCode() : 0);
+        hash = 17 * hash + (this.getQualifiers() != null ? this.getQualifiers().hashCode() : 0);
         return hash;
     }
 
     @Override
     public String toString() {
-        return getClass().getName() + "{" + "scheduleSpec=" + cronScheduleSpec + ", qualifier=" + getQualifier() + '}';
+        return getClass().getName() + "{" + "scheduleSpec=" + cronScheduleSpec + ", qualifier=" + getQualifier() + ", qualifiers=" + getQualifiers() + '}';
     }
 }

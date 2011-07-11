@@ -25,6 +25,7 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import org.jboss.logging.Logger;
 import org.jboss.seam.cron.api.asynchronous.Asynchronous;
+import org.jboss.seam.cron.api.queue.Queue;
 import org.jboss.seam.cron.impl.scheduling.exception.InternalException;
 import org.jboss.seam.cron.spi.SeamCronExtension;
 
@@ -75,6 +76,10 @@ public class AsynchronousInterceptor {
                 if (log.isTraceEnabled()) {
                     log.trace("Intercepting method invocation of " + ctx.getMethod().getName() + " to make it @Asynchronous");
                 }
+
+                Queue queue = ctx.getMethod().getAnnotation(Queue.class);
+                String queueId = queue == null ? null : queue.value();
+
                 final Invoker ice = iceCopies.get();
                 ice.setInvocationContext(ctx);
                 final CronAsynchronousProvider asyncStrategy = cronExtension.getAsynchronousProvider();
@@ -82,9 +87,9 @@ public class AsynchronousInterceptor {
                 if (Future.class.isAssignableFrom(ctx.getMethod().getReturnType())) {
                     // swap the "dummy" Future for a truly asynchronous future to return to the caller immediately
                     ice.setPopResultsFromFuture(true);
-                    result = asyncStrategy.executeAndReturnFuture(ice);
+                    result = asyncStrategy.executeAndReturnFuture(queueId, ice);
                 } else {
-                    asyncStrategy.executeWithoutReturn(ice);
+                    asyncStrategy.executeWithoutReturn(queueId, ice);
                     result = null;
                 }
 

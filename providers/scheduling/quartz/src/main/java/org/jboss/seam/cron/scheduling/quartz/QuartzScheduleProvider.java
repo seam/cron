@@ -105,12 +105,12 @@ public class QuartzScheduleProvider implements CronProviderLifecycle, CronSchedu
         }
     }
 
-    public void processScheduledTrigger(final ScheduledTriggerDetail schedTriggerDetails) throws ParseException, SchedulerException, InternalError {
+    public void processScheduledTrigger(final String queueId, final ScheduledTriggerDetail schedTriggerDetails) throws ParseException, SchedulerException, InternalError {
         final Trigger schedTrigger = new CronTrigger(schedTriggerDetails.toString(), SCHEDULE_JOB_GROUP, schedTriggerDetails.getCronScheduleSpec());
         scheduleJob(schedTrigger, schedTriggerDetails);
     }
 
-    public void processIntervalTrigger(final IntervalTriggerDetail intervalTriggerDetails) throws ParseException, SchedulerException, InternalError {
+    public void processIntervalTrigger(final String queueId, final IntervalTriggerDetail intervalTriggerDetails) throws ParseException, SchedulerException, InternalError {
         Trigger schedTrigger = null;
         if (SECOND.equals(intervalTriggerDetails.getRepeatUnit())) {
             schedTrigger = TriggerUtils.makeSecondlyTrigger(intervalTriggerDetails.getRepeatInterval());
@@ -167,7 +167,7 @@ public class QuartzScheduleProvider implements CronProviderLifecycle, CronSchedu
 
         final JobDetail job = new JobDetail(jobName, schedTrigger.getGroup(), TriggerJob.class);
         job.setJobDataMap(new JobDataMap());
-        job.getJobDataMap().put(TRIGGER_SUPPLIES, new TriggerSupplies(beanManager, triggerDetails.getQualifier()));
+        job.getJobDataMap().put(TRIGGER_SUPPLIES, new TriggerSupplies(beanManager, triggerDetails.getQualifier(), triggerDetails.getQualifiers()));
         try {
             getScheduler().scheduleJob(job, schedTrigger);
         } catch (SchedulerException e) {

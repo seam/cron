@@ -64,6 +64,7 @@ public class SeamCronAsynchronousTCKTest {
         for (int i = 0; i < NUM_EXECUTIONS; i++) {
             asynchBean.increment();
         }
+        System.out.println("increment methods all called");
 
         // If executions were asynchronous then at least some of the increments
         // would have been executed by now, but not all (ie: none of those which
