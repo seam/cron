@@ -69,7 +69,7 @@ public class CronQueueInstaller {
                 }
 
                 if (queueQualifier != null && restrictQualifier != null) {
-                    RestrictDetail restrictDetail = new RestrictDetail(obsMeth.getBeanClass(), annMeth.getJavaMember(), queueQualifier.value());
+                    RestrictDetail restrictDetail = new RestrictDetail(obsMeth.getBeanClass(), annMeth.getJavaMember(), obsMeth.getObservedQualifiers(), queueQualifier.value());
                     queueProvider.processAsynRestriction(restrictDetail);
                 }
             }

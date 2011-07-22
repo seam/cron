@@ -16,7 +16,9 @@
  */
 package org.jboss.seam.cron.spi.queue;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Set;
 
 /**
  * Contains the details necessary for the queue provider to call a concurrency
@@ -28,11 +30,13 @@ public class RestrictDetail {
 
     private final Class<?> beanClass;
     private final Method method;
+    private final Set<Annotation> bindings;
     private final String queueId;
 
-    public RestrictDetail(final Class<?> beanClass, final Method method, final String queueId) {
+    public RestrictDetail(final Class<?> beanClass, final Method method, Set<Annotation> bindings, final String queueId) {
         this.beanClass = beanClass;
         this.method = method;
+        this.bindings = bindings;
         this.queueId = queueId;
     }
 
@@ -42,6 +46,10 @@ public class RestrictDetail {
 
     public Method getMethod() {
         return method;
+    }
+
+    public Set<Annotation> getBindings() {
+        return bindings;
     }
 
     public String getQueueId() {

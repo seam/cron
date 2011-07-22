@@ -20,11 +20,10 @@ import com.workplacesystems.queuj.Process;
 import com.workplacesystems.queuj.Queue;
 import com.workplacesystems.queuj.QueueRestriction;
 import com.workplacesystems.queuj.utils.QueujException;
-import java.util.Set;
-import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.spi.Bean;
+import java.lang.annotation.Annotation;
 import javax.enterprise.inject.spi.BeanManager;
 import org.jboss.seam.cron.spi.queue.RestrictDetail;
+import org.jboss.seam.cron.util.CdiUtils;
 
 /**
  * 
@@ -45,10 +44,7 @@ public class CronQueueRestriction extends QueueRestriction {
         try {
             QueuJStatusIndexes statusIndexes = new QueuJStatusIndexes(queue, process);
 
-            Set<Bean<?>> beans = beanManager.getBeans(restrictDetail.getBeanClass());
-            Bean<?> targetBean = beans.iterator().next();
-            CreationalContext<?> ctx = beanManager.createCreationalContext(targetBean);
-            Object instance = beanManager.getReference(targetBean, targetBean.getBeanClass(), ctx);
+            Object instance = CdiUtils.getInstanceByType(beanManager, restrictDetail.getBeanClass(), restrictDetail.getBindings().toArray(new Annotation[] {}));
             Object result = restrictDetail.getMethod().invoke(instance, statusIndexes);
 
             return (Boolean)result;
