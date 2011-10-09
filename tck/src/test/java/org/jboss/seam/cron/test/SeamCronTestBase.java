@@ -18,13 +18,13 @@ package org.jboss.seam.cron.test;
 
 import java.io.File;
 import java.io.Serializable;
-import org.jboss.logging.Logger;
 import org.jboss.seam.cron.spi.scheduling.CronSchedulingInstaller;
 import org.jboss.seam.cron.spi.SeamCronExtension;
-import org.jboss.seam.solder.resourceLoader.ResourceLoader;
 import org.jboss.shrinkwrap.api.ArchivePaths;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.jboss.solder.logging.Logger;
+import org.jboss.solder.resourceLoader.ResourceLoader;
 
 /**
  *

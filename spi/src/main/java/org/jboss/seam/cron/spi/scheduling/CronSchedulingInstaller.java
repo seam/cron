@@ -25,7 +25,6 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.ObserverMethod;
 import javax.inject.Inject;
 import org.apache.commons.lang.StringUtils;
-import org.jboss.logging.Logger;
 import org.jboss.seam.cron.api.scheduling.Every;
 import org.jboss.seam.cron.api.scheduling.Scheduled;
 import org.jboss.seam.cron.impl.scheduling.exception.SchedulerConfigurationException;
@@ -34,7 +33,8 @@ import org.jboss.seam.cron.util.CdiUtils;
 import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.TriggerDetail;
-import org.jboss.seam.solder.resourceLoader.Resource;
+import org.jboss.solder.logging.Logger;
+import org.jboss.solder.resourceLoader.Resource;
 
 /**
  * Scans all scheduling annotations and captures the configuration as a #{@link Set}

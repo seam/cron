@@ -16,11 +16,11 @@
  */
 package org.jboss.seam.cron.scheduling.test.queuj;
 
-import org.jboss.arquillian.api.Deployment;
-import org.jboss.logging.Logger;
+import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.seam.cron.scheduling.queuj.QueuJScheduleProvider;
 import org.jboss.seam.cron.test.scheduling.tck.SeamCronSchedulingTCKTest;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.jboss.solder.logging.Logger;
 
 /**
  *

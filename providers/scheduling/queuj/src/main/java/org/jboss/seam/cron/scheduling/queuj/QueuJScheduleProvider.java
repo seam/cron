@@ -27,7 +27,6 @@ import java.util.Locale;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 
-import org.jboss.logging.Logger;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderDestructionException;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationException;
 import org.jboss.seam.cron.spi.CronProviderLifecycle;
@@ -35,6 +34,7 @@ import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.TriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.TriggerSupplies;
+import org.jboss.solder.logging.Logger;
 
 /**
  * Methods of this class are called at various stages of the JSR-299 initialization
