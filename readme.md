@@ -165,6 +165,8 @@ https://issues.jboss.org/browse/SEAMCRON
     git clone git://github.com/seam/cron.git
     cd cron
     mvn clean install
+or
+    mvn clean install -s settings.xml
 
 The above commands will build and install Cron into your local Maven repository. 
 If you want to run a nifty little example swing app use the following `mvn` command: 
