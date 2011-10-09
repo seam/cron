@@ -23,10 +23,10 @@ import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-import org.jboss.logging.Logger;
 import org.jboss.seam.cron.api.asynchronous.Asynchronous;
 import org.jboss.seam.cron.impl.scheduling.exception.InternalException;
 import org.jboss.seam.cron.spi.SeamCronExtension;
+import org.jboss.solder.logging.Logger;
 
 /**
  * <p>

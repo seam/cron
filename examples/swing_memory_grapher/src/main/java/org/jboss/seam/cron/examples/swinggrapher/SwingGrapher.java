@@ -20,11 +20,11 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import org.jboss.logging.Logger;
 import org.jboss.seam.cron.api.scheduling.Every;
 import org.jboss.seam.cron.api.scheduling.Scheduled;
 import org.jboss.seam.cron.api.scheduling.Interval;
 import org.jboss.seam.cron.api.scheduling.Trigger;
+import org.jboss.solder.logging.Logger;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
