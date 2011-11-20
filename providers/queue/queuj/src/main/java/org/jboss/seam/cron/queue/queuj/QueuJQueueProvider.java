@@ -26,12 +26,12 @@ import java.util.HashMap;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 
-import org.jboss.logging.Logger;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderDestructionException;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationException;
 import org.jboss.seam.cron.spi.CronProviderLifecycle;
 import org.jboss.seam.cron.spi.queue.CronQueueProvider;
 import org.jboss.seam.cron.spi.queue.RestrictDetail;
+import org.jboss.solder.logging.Logger;
 
 /**
  * Queue provider allows properties to be set against Asyncrhonous and Scheduled

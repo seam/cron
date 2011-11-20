@@ -16,7 +16,7 @@
  */
 package org.jboss.seam.cron.queue.test;
 
-import org.jboss.arquillian.api.Deployment;
+import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.seam.cron.asynchronous.queuj.QueuJAsynchronousProvider;
 import org.jboss.seam.cron.queue.queuj.QueuJQueueProvider;
 import org.jboss.seam.cron.scheduling.queuj.QueuJScheduleProvider;

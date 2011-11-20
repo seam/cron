@@ -28,7 +28,6 @@ import java.util.concurrent.FutureTask;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 
-import org.jboss.logging.Logger;
 import org.jboss.seam.cron.impl.asynchronous.exception.AsynchronousMethodInvocationException;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderDestructionException;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationException;
@@ -38,6 +37,7 @@ import org.jboss.seam.cron.spi.asynchronous.CronAsynchronousProvider;
 import org.jboss.seam.cron.spi.asynchronous.Invoker;
 import org.jboss.seam.cron.spi.asynchronous.support.FutureInvokerSupport;
 import org.jboss.seam.cron.spi.queue.CronQueueProvider;
+import org.jboss.solder.logging.Logger;
 
 /**
  * Simple asynchronous method invocation which schedules @Asynchronous methods

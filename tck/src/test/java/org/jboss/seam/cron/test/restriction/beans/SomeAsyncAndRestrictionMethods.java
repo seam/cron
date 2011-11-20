@@ -20,11 +20,11 @@ import com.workplacesystems.utilsj.collections.helpers.HasLessThan;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
-import org.jboss.logging.Logger;
 import org.jboss.seam.cron.api.asynchronous.Asynchronous;
 import org.jboss.seam.cron.api.queue.Queue;
 import org.jboss.seam.cron.api.restriction.AsyncRestriction;
 import org.jboss.seam.cron.api.restriction.StatusIndexes;
+import org.jboss.solder.logging.Logger;
 
 /**
  *

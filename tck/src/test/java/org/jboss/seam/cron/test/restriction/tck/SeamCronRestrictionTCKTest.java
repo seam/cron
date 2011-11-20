@@ -18,11 +18,11 @@ package org.jboss.seam.cron.test.restriction.tck;
 
 import javax.inject.Inject;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.logging.Logger;
 import org.jboss.seam.cron.test.restriction.SeamCronRestrictionTestBase;
 import org.jboss.seam.cron.test.restriction.beans.IntervalAndAsyncBean;
 import org.jboss.seam.cron.test.restriction.beans.SomeAsyncAndRestrictionMethods;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.jboss.solder.logging.Logger;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;

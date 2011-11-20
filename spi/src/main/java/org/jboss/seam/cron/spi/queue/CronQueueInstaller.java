@@ -23,11 +23,11 @@ import javax.enterprise.inject.spi.AnnotatedMethod;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.ObserverMethod;
 import javax.enterprise.inject.spi.ProcessObserverMethod;
-import org.jboss.logging.Logger;
 import org.jboss.seam.cron.api.queue.Queue;
 import org.jboss.seam.cron.api.restriction.AsyncRestriction;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationException;
 import org.jboss.seam.cron.util.CdiUtils;
+import org.jboss.solder.logging.Logger;
 
 /**
  * Scans all queue annotations and captures the configuration as a
