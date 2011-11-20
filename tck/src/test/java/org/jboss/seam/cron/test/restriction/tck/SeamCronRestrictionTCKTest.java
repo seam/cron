@@ -68,6 +68,7 @@ public class SeamCronRestrictionTCKTest {
         }
 
         assertTrue(SomeAsyncAndRestrictionMethods.highestRunningCount <= SomeAsyncAndRestrictionMethods.MAX_CONCURRENT);
+        assertTrue(SomeAsyncAndRestrictionMethods.highestRunningCount > 1);
         assertTrue(IntervalAndAsyncBean.highestRunningCount <= IntervalAndAsyncBean.MAX_CONCURRENT);
 
     }
