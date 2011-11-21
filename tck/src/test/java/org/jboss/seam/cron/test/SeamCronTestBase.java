@@ -37,18 +37,34 @@ public abstract class SeamCronTestBase implements Serializable {
         
     public static JavaArchive createTestArchive() 
     {
-    	final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
-                .addPackage(ResourceLoader.class.getPackage()) // arquillian needs explicit knowledge of thirdy-party producers
-    		.addPackage(SeamCronTestBase.class.getPackage())
-                .addPackage(SeamCronExtension.class.getPackage())
-                .addClasses(CronQueueInstaller.class)
-                .addClasses(CronSchedulingInstaller.class)
+    	final JavaArchive archive = createTestArchiveTestImpl()
     		.addAsManifestResource(
     			new File("src/main/resources/META-INF/beans.xml"), 
     			ArchivePaths.create("beans.xml"));
     	
         log.debug(archive.toString(true));
     	return archive;
+    }
+
+    public static JavaArchive createTestArchiveTestBeansXML() 
+    {
+    	final JavaArchive archive = createTestArchiveTestImpl()
+    		.addAsManifestResource(
+    			new File("src/test/resources/META-INF/beans.xml"), 
+    			ArchivePaths.create("beans.xml"));
+    	
+        log.debug(archive.toString(true));
+    	return archive;
+    }
+
+    private static JavaArchive createTestArchiveTestImpl() 
+    {
+    	return ShrinkWrap.create(JavaArchive.class, "test.jar")
+                .addPackage(ResourceLoader.class.getPackage()) // arquillian needs explicit knowledge of thirdy-party producers
+                .addPackage(SeamCronTestBase.class.getPackage())
+                .addPackage(SeamCronExtension.class.getPackage())
+                .addClasses(CronQueueInstaller.class)
+                .addClasses(CronSchedulingInstaller.class);
     }
 
 }
