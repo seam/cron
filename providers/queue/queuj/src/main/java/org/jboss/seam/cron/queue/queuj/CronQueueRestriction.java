@@ -19,6 +19,8 @@ package org.jboss.seam.cron.queue.queuj;
 import com.workplacesystems.queuj.Process;
 import com.workplacesystems.queuj.Queue;
 import com.workplacesystems.queuj.QueueRestriction;
+import com.workplacesystems.queuj.process.ProcessIndexes;
+import com.workplacesystems.queuj.process.ProcessIndexesCallback;
 import com.workplacesystems.queuj.utils.QueujException;
 import java.lang.annotation.Annotation;
 import javax.enterprise.inject.spi.BeanManager;
@@ -40,17 +42,20 @@ public class CronQueueRestriction extends QueueRestriction {
     }
 
     @Override
-    protected boolean canRun(Queue queue, Process process) {
-        try {
-            QueuJStatusIndexes statusIndexes = new QueuJStatusIndexes(queue, process);
+    protected boolean canRun(final Queue queue, final Process process) {
+        final Object instance = CdiUtils.getInstanceByType(beanManager, restrictDetail.getBeanClass(), restrictDetail.getBindings().toArray(new Annotation[] {}));
 
-            Object instance = CdiUtils.getInstanceByType(beanManager, restrictDetail.getBeanClass(), restrictDetail.getBindings().toArray(new Annotation[] {}));
-            Object result = restrictDetail.getMethod().invoke(instance, statusIndexes);
+        return process.getContainingServer().indexesWithReadLock(new ProcessIndexesCallback<Boolean>() {
 
-            return (Boolean)result;
-        } catch (Exception ex) {
-            throw new QueujException(ex);
-        }
+            public Boolean readIndexes(ProcessIndexes processIndexes) {
+                try {
+                    QueuJStatusIndexes statusIndexes = new QueuJStatusIndexes(queue, processIndexes);
+                    return (Boolean)restrictDetail.getMethod().invoke(instance, statusIndexes);
+                } catch (Exception ex) {
+                    throw new QueujException(ex);
+                }
+            }
+        });
     }
     
 }

@@ -16,8 +16,8 @@
  */
 package org.jboss.seam.cron.queue.queuj;
 
-import com.workplacesystems.queuj.Process;
 import com.workplacesystems.queuj.Queue;
+import com.workplacesystems.queuj.process.ProcessIndexes;
 import com.workplacesystems.utilsj.collections.IterativeCallback;
 import org.jboss.seam.cron.api.restriction.StatusIndexes;
 
@@ -29,42 +29,42 @@ import org.jboss.seam.cron.api.restriction.StatusIndexes;
 public class QueuJStatusIndexes implements StatusIndexes {
 
     private final Queue queue;
-    private final Process process;
+    private final ProcessIndexes processIndexes;
 
-    QueuJStatusIndexes(Queue queue, Process process) {
+    QueuJStatusIndexes(Queue queue, ProcessIndexes processIndexes) {
         this.queue = queue;
-        this.process = process;
+        this.processIndexes = processIndexes;
     }
 
     public int countOfNotRunProcesses() {
-        return process.getContainingServer().getProcessIndexes().countOfNotRunProcesses(queue);
+        return processIndexes.countOfNotRunProcesses(queue);
     }
 
     public int countOfRunningProcesses() {
-        return process.getContainingServer().getProcessIndexes().countOfRunningProcesses(queue);
+        return processIndexes.countOfRunningProcesses(queue);
     }
 
     public int countOfWaitingToRunProcesses() {
-        return process.getContainingServer().getProcessIndexes().countOfWaitingToRunProcesses(queue);
+        return processIndexes.countOfWaitingToRunProcesses(queue);
     }
 
     public int countOfFailedProcesses() {
-        return process.getContainingServer().getProcessIndexes().countOfFailedProcesses(queue);
+        return processIndexes.countOfFailedProcesses(queue);
     }
 
     public <R> R iterateNotRunProcesses(IterativeCallback<Object, R> ic) {
-        return process.getContainingServer().getProcessIndexes().iterateNotRunProcesses(queue, new CronIterativeCallback<R>(ic));
+        return processIndexes.iterateNotRunProcesses(queue, new CronIterativeCallback<R>(ic));
     }
 
     public <R> R iterateRunningProcesses(IterativeCallback<Object, R> ic) {
-        return process.getContainingServer().getProcessIndexes().iterateRunningProcesses(queue, new CronIterativeCallback<R>(ic));
+        return processIndexes.iterateRunningProcesses(queue, new CronIterativeCallback<R>(ic));
     }
 
     public <R> R iterateWaitingToRunProcesses(IterativeCallback<Object, R> ic) {
-        return process.getContainingServer().getProcessIndexes().iterateWaitingToRunProcesses(queue, new CronIterativeCallback<R>(ic));
+        return processIndexes.iterateWaitingToRunProcesses(queue, new CronIterativeCallback<R>(ic));
     }
 
     public <R> R iterateFailedProcesses(IterativeCallback<Object, R> ic) {
-        return process.getContainingServer().getProcessIndexes().iterateFailedProcesses(queue, new CronIterativeCallback<R>(ic));
+        return processIndexes.iterateFailedProcesses(queue, new CronIterativeCallback<R>(ic));
     }
 }
