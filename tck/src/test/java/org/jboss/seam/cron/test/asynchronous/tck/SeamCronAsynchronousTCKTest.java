@@ -17,7 +17,6 @@
 package org.jboss.seam.cron.test.asynchronous.tck;
 
 import org.jboss.seam.cron.test.asynchronous.SeamCronAsynchronousTestBase;
-import org.jboss.logging.Logger;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -29,6 +28,8 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.cron.test.asynchronous.beans.SomeAsynchMethods;
 import org.jboss.seam.cron.test.asynchronous.beans.Status;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.jboss.solder.logging.Logger;
+
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,6 +65,7 @@ public class SeamCronAsynchronousTCKTest {
         for (int i = 0; i < NUM_EXECUTIONS; i++) {
             asynchBean.increment();
         }
+        System.out.println("increment methods all called");
 
         // If executions were asynchronous then at least some of the increments
         // would have been executed by now, but not all (ie: none of those which

@@ -16,15 +16,16 @@
  */
 package org.jboss.seam.cron.spi.scheduling.trigger;
 
+import java.lang.annotation.Annotation;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.jboss.logging.Logger;
 import org.jboss.seam.cron.api.scheduling.Every;
 import org.jboss.seam.cron.api.scheduling.Scheduled;
 import org.jboss.seam.cron.api.scheduling.Trigger;
 import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 import org.jboss.seam.cron.util.CdiUtils;
+import org.jboss.solder.logging.Logger;
 
 /**
  * <p>
@@ -92,8 +93,8 @@ public abstract class TriggerSupport {
                 }
             }
         }
-        log.trace("Firing time event for " + eventPayload + " with qualifier " + supplies.getQualifier());
-        supplies.getBeanManager().fireEvent(eventPayload, supplies.getQualifier());
+        log.trace("Firing time event for " + eventPayload + " with qualifier " + supplies.getQualifiers());
+        supplies.getBeanManager().fireEvent(eventPayload, supplies.getQualifiers().toArray(new Annotation[] {}));
     }
 
     /**

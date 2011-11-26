@@ -17,6 +17,7 @@
 package org.jboss.seam.cron.spi.scheduling.trigger;
 
 import java.lang.annotation.Annotation;
+import java.util.Set;
 
 /**
  * Simple container for the qualifying annotation and payload type of
@@ -27,13 +28,19 @@ import java.lang.annotation.Annotation;
 public abstract class TriggerDetail {
 
     private final Annotation qualifier;
+    private final Set<Annotation> allQualifiers;
 
-    public TriggerDetail(final Annotation qualifier) {
+    public TriggerDetail(final Annotation qualifier, final Set<Annotation> allQualifiers) {
         this.qualifier = qualifier;
+        this.allQualifiers = allQualifiers;
     }
 
     public Annotation getQualifier() {
         return qualifier;
+    }
+
+    public Set<Annotation> getQualifiers() {
+        return allQualifiers;
     }
 
 }

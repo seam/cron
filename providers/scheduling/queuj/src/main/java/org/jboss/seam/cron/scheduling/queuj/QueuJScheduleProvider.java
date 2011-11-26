@@ -17,9 +17,12 @@
 package org.jboss.seam.cron.scheduling.queuj;
 
 import com.workplacesystems.queuj.Occurrence;
+import com.workplacesystems.queuj.Queue;
 import com.workplacesystems.queuj.QueueFactory;
 import com.workplacesystems.queuj.process.QueujFactory;
 import com.workplacesystems.queuj.process.java.JavaProcessBuilder;
+import org.jboss.seam.cron.spi.SeamCronExtension;
+import org.jboss.seam.cron.spi.queue.CronQueueProvider;
 import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 import java.text.ParseException;
 import java.util.Locale;
@@ -27,7 +30,6 @@ import java.util.Locale;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 
-import org.jboss.logging.Logger;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderDestructionException;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationException;
 import org.jboss.seam.cron.spi.CronProviderLifecycle;
@@ -35,6 +37,7 @@ import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.TriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.TriggerSupplies;
+import org.jboss.solder.logging.Logger;
 
 /**
  * Methods of this class are called at various stages of the JSR-299 initialization
@@ -48,6 +51,8 @@ public class QueuJScheduleProvider implements CronProviderLifecycle, CronSchedul
     private static final Logger log = Logger.getLogger(QueuJScheduleProvider.class);
     @Inject
     BeanManager beanManager;
+    @Inject
+    SeamCronExtension cronExtension;
 
     /**
      * Initialises the scheduler.
@@ -61,22 +66,27 @@ public class QueuJScheduleProvider implements CronProviderLifecycle, CronSchedul
         }
     }
 
-    public void processScheduledTrigger(final ScheduledTriggerDetail schedTriggerDetails) throws ParseException, InternalError {
+    public void processScheduledTrigger(final String queueId, final ScheduledTriggerDetail schedTriggerDetails) throws ParseException, InternalError {
         Occurrence runRelatively = new RunRelatively(schedTriggerDetails);
-        scheduleJob(schedTriggerDetails, runRelatively);
+        scheduleJob(queueId, schedTriggerDetails, runRelatively);
     }
 
-    public void processIntervalTrigger(final IntervalTriggerDetail intervalTriggerDetails) throws ParseException, InternalError {
+    public void processIntervalTrigger(final String queueId, final IntervalTriggerDetail intervalTriggerDetails) throws ParseException, InternalError {
         Occurrence runRelatively = new RunRelatively(intervalTriggerDetails);
-        scheduleJob(intervalTriggerDetails, runRelatively);
+        scheduleJob(queueId, intervalTriggerDetails, runRelatively);
     }
 
-    private void scheduleJob(TriggerDetail triggerDetails, Occurrence occurence) {
-        JavaProcessBuilder jpb = QueueFactory.DEFAULT_QUEUE.newProcessBuilder(Locale.getDefault());
+    private void scheduleJob(final String queueId, TriggerDetail triggerDetails, Occurrence occurence) {
+        Queue<JavaProcessBuilder> queue = QueueFactory.DEFAULT_QUEUE;
+        if (queueId != null) {
+            CronQueueProvider queueProvider = cronExtension.getQueueProvider();
+            queue = (Queue)queueProvider.getQueue(queueId);
+        }
+        JavaProcessBuilder jpb = queue.newProcessBuilder(Locale.getDefault());
         final String jobName = triggerDetails.toString() + "-trigger";
         jpb.setProcessName(jobName);
         jpb.setProcessOccurrence(occurence);
-        TriggerSupplies triggerSupplies = new TriggerSupplies(beanManager, triggerDetails.getQualifier());
+        TriggerSupplies triggerSupplies = new TriggerSupplies(beanManager, triggerDetails.getQualifier(), triggerDetails.getQualifiers());
         jpb.setProcessDetails(new TriggerRunner(), "execute", new Class[] { TriggerSupplies.class }, new Object[] { triggerSupplies });
         jpb.setProcessPersistence(false);
         jpb.newProcess();
