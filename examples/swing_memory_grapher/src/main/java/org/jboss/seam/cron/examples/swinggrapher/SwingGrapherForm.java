@@ -25,7 +25,8 @@ import java.awt.Dimension;
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import org.jboss.logging.Logger;
+
+import org.jboss.solder.logging.Logger;
 import org.jboss.weld.environment.se.ShutdownManager;
 import org.jboss.weld.environment.se.events.ContainerInitialized;
 import org.jfree.chart.ChartFactory;

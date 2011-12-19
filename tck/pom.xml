@@ -4,7 +4,7 @@
     <groupId>org.jboss.seam.cron</groupId>
     <artifactId>seam-cron-tck</artifactId>
     <packaging>jar</packaging>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.1.0-SNAPSHOT</version>
     <name>Seam Cron TCK</name>
     <description>The Technology Compatibility Kit for providers for Seam Cron.</description>
     <url>http://seamframework.org/Seam3/CronModule</url>
@@ -12,7 +12,7 @@
     <parent>
         <artifactId>seam-cron-parent</artifactId>
         <groupId>org.jboss.seam.cron</groupId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>3.1.0-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
 
@@ -52,6 +52,10 @@
             <artifactId>seam-cron-spi</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.workplacesystems.utilsj</groupId>
+            <artifactId>utilsj</artifactId>
+        </dependency>
 
         <!-- Would-be Test dependencies -->
         <dependency>
@@ -60,8 +64,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.jboss.arquillian</groupId>
-            <artifactId>arquillian-junit</artifactId>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>

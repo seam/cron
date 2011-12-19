@@ -29,8 +29,8 @@ import java.util.concurrent.Future;
  */
 public interface CronAsynchronousProvider {
 
-    Future executeAndReturnFuture(final Invoker ice);
+    Future executeAndReturnFuture(final String queueId, final Invoker ice);
 
-    void executeWithoutReturn(final Invoker ice);
+    void executeWithoutReturn(final String queueId, final Invoker ice);
 
 }
