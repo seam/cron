@@ -30,6 +30,7 @@
         <module>providers/asynchronous/threads</module>
         <module>providers/asynchronous/quartz</module>
         <module>providers/asynchronous/queuj</module>
+        <module>providers/queue/queuj</module>
     </modules>
 
     <properties>
@@ -199,6 +200,11 @@
             </dependency>
             <dependency>
                 <groupId>org.jboss.seam.cron</groupId>
+                <artifactId>seam-cron-queue-queuj</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.seam.cron</groupId>
                 <artifactId>seam-cron-reference-guide</artifactId>
                 <type>war</type>
                 <version>${project.version}</version>
@@ -216,6 +222,11 @@
                 <groupId>javax.time</groupId>
                 <artifactId>jsr-310-ri</artifactId>
                 <version>20100212</version>
+            </dependency>
+            <dependency>
+                <groupId>com.workplacesystems.utilsj</groupId>
+                <artifactId>utilsj</artifactId>
+                <version>1.1.0</version>
             </dependency>
 
             <!-- Dependencies for Implementation sub-project -->
@@ -263,7 +274,7 @@
             <dependency>
                 <groupId>com.workplacesystems.queuj</groupId>
                 <artifactId>queuj</artifactId>
-                <version>1.0.1</version>
+                <version>1.1.0</version>
             </dependency>
             <dependency>
                 <groupId>commons-pool</groupId>
@@ -519,6 +530,14 @@
             <name>Ove Ranheim </name>
             <url>http://community.jboss.org/people/oranheim</url>
             <timezone>GMT+1</timezone>
+            <roles>
+                <role>Contributor</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Dave Oxley</name>
+            <url>http://profiles.google.com/oxleydave</url>
+            <timezone>GMT+10</timezone>
             <roles>
                 <role>Contributor</role>
             </roles>

@@ -28,6 +28,8 @@ import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ObserverMethod;
 import javax.enterprise.inject.spi.ProcessObserverMethod;
 import org.jboss.seam.cron.spi.asynchronous.CronAsynchronousProvider;
+import org.jboss.seam.cron.spi.queue.CronQueueInstaller;
+import org.jboss.seam.cron.spi.queue.CronQueueProvider;
 import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 import org.jboss.seam.cron.util.CdiUtils;
 import org.jboss.solder.logging.Logger;
@@ -40,7 +42,8 @@ import org.jboss.solder.logging.Logger;
  */
 public class SeamCronExtension implements Extension {
 
-    private final Set<ObserverMethod> allObservers = new HashSet<ObserverMethod>();
+    private final Set<ProcessObserverMethod> allObservers = new HashSet<ProcessObserverMethod>();
+    private CronQueueProvider queueProvider = null;
     private CronAsynchronousProvider asynchronousProvider = null;
     private CronSchedulingProvider schedulingProvider = null;
     private final Set<CronProviderLifecycle> providersWithLifecycles = new HashSet<CronProviderLifecycle>();
@@ -54,13 +57,20 @@ public class SeamCronExtension implements Extension {
     }
 
     public void registerCronEventObserver(@Observes ProcessObserverMethod pom) {
-        allObservers.add(pom.getObserverMethod());
+        allObservers.add(pom);
     }
 
     public void initProviders(@Observes AfterDeploymentValidation afterValid, final BeanManager manager,
-            final CronSchedulingInstaller cronSchedInstaller) {
+            final CronQueueInstaller cronQueueInstaller, final CronSchedulingInstaller cronSchedInstaller) {
         // init all service providers
         log.debug("Initializing service providers");
+        // process queue observers if queue provider exists
+        final CronQueueProvider queueProvider = CdiUtils.getInstanceByType(manager, CronQueueProvider.class);
+        if (queueProvider != null) {
+            this.queueProvider = queueProvider;
+            handleLifecycleInit(queueProvider);
+            cronQueueInstaller.initProviderQueue(manager, queueProvider, allObservers);
+        }
         // process scheduling observers if scheduling provider exists
         final CronSchedulingProvider schedProvider = CdiUtils.getInstanceByType(manager, CronSchedulingProvider.class);
         if (schedProvider != null) {
@@ -105,6 +115,10 @@ public class SeamCronExtension implements Extension {
 
     public CronSchedulingProvider getSchedulingProvider() {
         return schedulingProvider;
+    }
+
+    public CronQueueProvider getQueueProvider() {
+        return queueProvider;
     }
     
 }

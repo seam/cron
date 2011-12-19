@@ -28,6 +28,10 @@
             <groupId>javax.time</groupId>
             <artifactId>jsr-310-ri</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.workplacesystems.utilsj</groupId>
+            <artifactId>utilsj</artifactId>
+        </dependency>
     </dependencies>
 
 

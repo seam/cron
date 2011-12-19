@@ -33,7 +33,7 @@ public interface CronSchedulingProvider {
      * @param schedTriggerDetails Details of the schedule and qualified trigger to fire.
      * @throws Exception Anything that the underlying provider might throw.
      */
-    public void processScheduledTrigger(final ScheduledTriggerDetail schedTriggerDetails) throws Exception;
+    public void processScheduledTrigger(final String queueId, final ScheduledTriggerDetail schedTriggerDetails) throws Exception;
 
     /**
      * Given the details of a repeating-interval trigger, set up the underlying scheduling
@@ -42,6 +42,6 @@ public interface CronSchedulingProvider {
      * @param schedTriggerDetails Details of the interval and qualified trigger to fire.
      * @throws Exception Anything that the underlying provider might throw.
      */
-    public void processIntervalTrigger(final IntervalTriggerDetail intervalTriggerDetails) throws Exception;
+    public void processIntervalTrigger(final String queueId, final IntervalTriggerDetail intervalTriggerDetails) throws Exception;
 
 }

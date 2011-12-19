@@ -14,33 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.spi.scheduling.trigger;
+package org.jboss.seam.cron.queue.queuj;
 
-import java.lang.annotation.Annotation;
-import java.util.Set;
+import com.workplacesystems.queuj.process.ProcessWrapper;
+import com.workplacesystems.utilsj.collections.FilterableCollection;
+import com.workplacesystems.utilsj.collections.IterativeCallback;
 
 /**
- * Simple container for the qualifying annotation and payload type of
- * a scheduled event to be fired.
+ * Used to delegate to a provided IterativeCallback<Object,R> so that the
+ * ProcessWrapper class isn't exposed in the Cron API's.
  * 
- * @author peteroyle
+ * @author Dave Oxley
  */
-public abstract class TriggerDetail {
+class CronIterativeCallback<R> extends IterativeCallback<ProcessWrapper, R> {
 
-    private final Annotation qualifier;
-    private final Set<Annotation> allQualifiers;
+    private final IterativeCallback<Object,R> ic;
 
-    public TriggerDetail(final Annotation qualifier, final Set<Annotation> allQualifiers) {
-        this.qualifier = qualifier;
-        this.allQualifiers = allQualifiers;
+    CronIterativeCallback(IterativeCallback<Object,R> ic) {
+        this.ic = ic;
+    }
+    
+    @Override
+    public R iterate(final FilterableCollection<? extends ProcessWrapper> c) {
+        return ic.iterate(c);
     }
 
-    public Annotation getQualifier() {
-        return qualifier;
+    @Override
+    protected void nextObject(ProcessWrapper t) {
+        // Never called
     }
-
-    public Set<Annotation> getQualifiers() {
-        return allQualifiers;
-    }
-
+    
 }

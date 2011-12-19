@@ -94,11 +94,11 @@ public class QuartzAsynchronousProvider implements CronProviderLifecycle, CronAs
         }
     }
 
-    public void executeWithoutReturn(final Invoker inkover) {
+    public void executeWithoutReturn(final String queueId, final Invoker inkover) {
         executeMethodAsScheduledJob(inkover);
     }
 
-    public Future executeAndReturnFuture(final Invoker invoker) {
+    public Future executeAndReturnFuture(final String queueId, final Invoker invoker) {
         FutureTask asyncResult = new FutureTask(executeMethodAsScheduledJob(invoker));
         new Thread(asyncResult).start();
         return asyncResult;

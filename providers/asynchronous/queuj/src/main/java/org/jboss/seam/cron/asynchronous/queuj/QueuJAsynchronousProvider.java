@@ -16,6 +16,7 @@
  */
 package org.jboss.seam.cron.asynchronous.queuj;
 
+import com.workplacesystems.queuj.Queue;
 import com.workplacesystems.queuj.QueueFactory;
 import com.workplacesystems.queuj.process.QueujFactory;
 import com.workplacesystems.queuj.process.java.JavaProcessBuilder;
@@ -31,9 +32,11 @@ import org.jboss.seam.cron.impl.asynchronous.exception.AsynchronousMethodInvocat
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderDestructionException;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationException;
 import org.jboss.seam.cron.spi.CronProviderLifecycle;
+import org.jboss.seam.cron.spi.SeamCronExtension;
 import org.jboss.seam.cron.spi.asynchronous.CronAsynchronousProvider;
 import org.jboss.seam.cron.spi.asynchronous.Invoker;
 import org.jboss.seam.cron.spi.asynchronous.support.FutureInvokerSupport;
+import org.jboss.seam.cron.spi.queue.CronQueueProvider;
 import org.jboss.solder.logging.Logger;
 
 /**
@@ -47,6 +50,8 @@ public class QueuJAsynchronousProvider implements CronProviderLifecycle, CronAsy
     private static final Logger log = Logger.getLogger(QueuJAsynchronousProvider.class);
     @Inject
     BeanManager beanManager;
+    @Inject
+    SeamCronExtension cronExtension;
 
     /**
      * Initialises the scheduler.
@@ -66,18 +71,23 @@ public class QueuJAsynchronousProvider implements CronProviderLifecycle, CronAsy
     public void destroyProvider() throws CronProviderDestructionException {
     }
 
-    public void executeWithoutReturn(final Invoker inkover) {
-        executeMethodAsScheduledJob(inkover);
+    public void executeWithoutReturn(final String queueId, final Invoker inkover) {
+        executeMethodAsScheduledJob(queueId, inkover);
     }
 
-    public Future executeAndReturnFuture(final Invoker invoker) {
-        FutureTask asyncResult = new FutureTask(executeMethodAsScheduledJob(invoker));
+    public Future executeAndReturnFuture(final String queueId, final Invoker invoker) {
+        FutureTask asyncResult = new FutureTask(executeMethodAsScheduledJob(queueId, invoker));
         new Thread(asyncResult).start();
         return asyncResult;
     }
 
-    private FutureInvokerSupport executeMethodAsScheduledJob(final Invoker invoker) throws AsynchronousMethodInvocationException {
-        JavaProcessBuilder jpb = QueueFactory.DEFAULT_QUEUE.newProcessBuilder(Locale.getDefault());
+    private FutureInvokerSupport executeMethodAsScheduledJob(final String queueId, final Invoker invoker) throws AsynchronousMethodInvocationException {
+        Queue<JavaProcessBuilder> queue = QueueFactory.DEFAULT_QUEUE;
+        if (queueId != null) {
+            CronQueueProvider queueProvider = cronExtension.getQueueProvider();
+            queue = (Queue)queueProvider.getQueue(queueId);
+        }
+        JavaProcessBuilder jpb = queue.newProcessBuilder(Locale.getDefault());
         final String jobName = UUID.randomUUID().toString();
         jpb.setProcessName(jobName);
         final FutureInvokerSupport drs = new FutureInvokerSupport(invoker);

@@ -14,33 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.spi.scheduling.trigger;
+package org.jboss.seam.cron.api.restriction;
 
-import java.lang.annotation.Annotation;
-import java.util.Set;
+import com.workplacesystems.utilsj.collections.IterativeCallback;
 
 /**
- * Simple container for the qualifying annotation and payload type of
- * a scheduled event to be fired.
+ * Provides various methods for interrogating the current state of the queue
+ * when deciding whether a job can run in a AsyncRestriction method.
  * 
- * @author peteroyle
+ * @author Dave Oxley
  */
-public abstract class TriggerDetail {
+public interface StatusIndexes {
+    
+    public int countOfNotRunProcesses();
 
-    private final Annotation qualifier;
-    private final Set<Annotation> allQualifiers;
+    public int countOfRunningProcesses();
 
-    public TriggerDetail(final Annotation qualifier, final Set<Annotation> allQualifiers) {
-        this.qualifier = qualifier;
-        this.allQualifiers = allQualifiers;
-    }
+    public int countOfWaitingToRunProcesses();
 
-    public Annotation getQualifier() {
-        return qualifier;
-    }
+    public int countOfFailedProcesses();
 
-    public Set<Annotation> getQualifiers() {
-        return allQualifiers;
-    }
+    public <R> R iterateNotRunProcesses(IterativeCallback<Object,R> ic);
 
+    public <R> R iterateRunningProcesses(IterativeCallback<Object,R> ic);
+
+    public <R> R iterateWaitingToRunProcesses(IterativeCallback<Object,R> ic);
+
+    public <R> R iterateFailedProcesses(IterativeCallback<Object,R> ic);
 }
