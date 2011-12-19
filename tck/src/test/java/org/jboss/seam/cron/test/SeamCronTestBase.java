@@ -18,14 +18,13 @@ package org.jboss.seam.cron.test;
 
 import java.io.File;
 import java.io.Serializable;
-import org.jboss.seam.cron.spi.queue.CronQueueInstaller;
+import org.jboss.logging.Logger;
 import org.jboss.seam.cron.spi.scheduling.CronSchedulingInstaller;
 import org.jboss.seam.cron.spi.SeamCronExtension;
+import org.jboss.seam.solder.resourceLoader.ResourceLoader;
 import org.jboss.shrinkwrap.api.ArchivePaths;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.jboss.solder.logging.Logger;
-import org.jboss.solder.resourceLoader.ResourceLoader;
 
 /**
  *
@@ -37,34 +36,17 @@ public abstract class SeamCronTestBase implements Serializable {
         
     public static JavaArchive createTestArchive() 
     {
-    	final JavaArchive archive = createTestArchiveTestImpl()
+    	final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
+                .addPackage(ResourceLoader.class.getPackage()) // arquillian needs explicit knowledge of thirdy-party producers
+    		.addPackage(SeamCronTestBase.class.getPackage())
+                .addPackage(SeamCronExtension.class.getPackage())
+                .addClasses(CronSchedulingInstaller.class)
     		.addAsManifestResource(
     			new File("src/main/resources/META-INF/beans.xml"), 
     			ArchivePaths.create("beans.xml"));
     	
         log.debug(archive.toString(true));
     	return archive;
-    }
-
-    public static JavaArchive createTestArchiveTestBeansXML() 
-    {
-    	final JavaArchive archive = createTestArchiveTestImpl()
-    		.addAsManifestResource(
-    			new File("src/test/resources/META-INF/beans.xml"), 
-    			ArchivePaths.create("beans.xml"));
-    	
-        log.debug(archive.toString(true));
-    	return archive;
-    }
-
-    private static JavaArchive createTestArchiveTestImpl() 
-    {
-    	return ShrinkWrap.create(JavaArchive.class, "test.jar")
-                .addPackage(ResourceLoader.class.getPackage()) // arquillian needs explicit knowledge of thirdy-party producers
-                .addPackage(SeamCronTestBase.class.getPackage())
-                .addPackage(SeamCronExtension.class.getPackage())
-                .addClasses(CronQueueInstaller.class)
-                .addClasses(CronSchedulingInstaller.class);
     }
 
 }

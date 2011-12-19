@@ -26,9 +26,8 @@ import java.util.Date;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import org.jboss.logging.Logger;
 import org.jboss.seam.cron.api.scheduling.Trigger;
-import org.jboss.solder.logging.Logger;
-
 import static org.jboss.seam.cron.api.scheduling.Interval.*;
 
 /**

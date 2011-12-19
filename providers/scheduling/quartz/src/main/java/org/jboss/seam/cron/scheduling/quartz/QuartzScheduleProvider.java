@@ -26,6 +26,7 @@ import java.util.UUID;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 
+import org.jboss.logging.Logger;
 import org.jboss.seam.cron.api.scheduling.Every;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderDestructionException;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationException;
@@ -33,7 +34,6 @@ import org.jboss.seam.cron.spi.CronProviderLifecycle;
 import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.TriggerDetail;
-import org.jboss.solder.logging.Logger;
 import org.quartz.CronTrigger;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -105,12 +105,12 @@ public class QuartzScheduleProvider implements CronProviderLifecycle, CronSchedu
         }
     }
 
-    public void processScheduledTrigger(final String queueId, final ScheduledTriggerDetail schedTriggerDetails) throws ParseException, SchedulerException, InternalError {
+    public void processScheduledTrigger(final ScheduledTriggerDetail schedTriggerDetails) throws ParseException, SchedulerException, InternalError {
         final Trigger schedTrigger = new CronTrigger(schedTriggerDetails.toString(), SCHEDULE_JOB_GROUP, schedTriggerDetails.getCronScheduleSpec());
         scheduleJob(schedTrigger, schedTriggerDetails);
     }
 
-    public void processIntervalTrigger(final String queueId, final IntervalTriggerDetail intervalTriggerDetails) throws ParseException, SchedulerException, InternalError {
+    public void processIntervalTrigger(final IntervalTriggerDetail intervalTriggerDetails) throws ParseException, SchedulerException, InternalError {
         Trigger schedTrigger = null;
         if (SECOND.equals(intervalTriggerDetails.getRepeatUnit())) {
             schedTrigger = TriggerUtils.makeSecondlyTrigger(intervalTriggerDetails.getRepeatInterval());
@@ -167,7 +167,7 @@ public class QuartzScheduleProvider implements CronProviderLifecycle, CronSchedu
 
         final JobDetail job = new JobDetail(jobName, schedTrigger.getGroup(), TriggerJob.class);
         job.setJobDataMap(new JobDataMap());
-        job.getJobDataMap().put(TRIGGER_SUPPLIES, new TriggerSupplies(beanManager, triggerDetails.getQualifier(), triggerDetails.getQualifiers()));
+        job.getJobDataMap().put(TRIGGER_SUPPLIES, new TriggerSupplies(beanManager, triggerDetails.getQualifier()));
         try {
             getScheduler().scheduleJob(job, schedTrigger);
         } catch (SchedulerException e) {

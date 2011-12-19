@@ -23,9 +23,9 @@ import javax.inject.Inject;
 
 import junit.framework.Assert;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.logging.Logger;
 import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.jboss.solder.logging.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

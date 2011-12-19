@@ -17,7 +17,6 @@
 package org.jboss.seam.cron.spi.scheduling.trigger;
 
 import java.lang.annotation.Annotation;
-import java.util.Set;
 
 import javax.enterprise.inject.spi.BeanManager;
 
@@ -32,12 +31,10 @@ public class TriggerSupplies {
 
     protected final BeanManager beanManager;
     protected final Annotation qualifier;
-    protected final Set<Annotation> allQualifiers;
 
-    public TriggerSupplies(final BeanManager beanManager, final Annotation qualifier, final Set<Annotation> allQualifiers) {
+    public TriggerSupplies(final BeanManager beanManager, final Annotation qualifier) {
         this.beanManager = beanManager;
         this.qualifier = qualifier;
-        this.allQualifiers = allQualifiers;
     }
 
     /**
@@ -52,13 +49,6 @@ public class TriggerSupplies {
      */
     public Annotation getQualifier() {
         return qualifier;
-    }
-
-    /**
-     * @return all the original qualifiers on the schedule definition.
-     */
-    public Set<Annotation> getQualifiers() {
-        return allQualifiers;
     }
 
     @Override

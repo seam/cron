@@ -22,8 +22,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import org.jboss.logging.Logger;
 import org.jboss.seam.cron.api.asynchronous.Asynchronous;
-import org.jboss.solder.logging.Logger;
 
 /**
  * @author Peter Royle

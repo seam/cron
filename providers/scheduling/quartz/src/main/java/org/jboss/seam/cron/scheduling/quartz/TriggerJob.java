@@ -45,9 +45,8 @@ public class TriggerJob extends ProviderContextTriggerSupport<JobExecutionContex
      * @param context
      * @throws JobExecutionException
      */
-    public void execute(JobExecutionContext context) throws JobExecutionException {
+    @Override
+    public void execute(final JobExecutionContext context) throws JobExecutionException {
         fireTrigger(context);
     }
-
-
 }

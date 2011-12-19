@@ -17,14 +17,14 @@
 package org.jboss.seam.cron.test.scheduling.tck;
 
 import javax.inject.Inject;
+import org.jboss.arquillian.api.Deployment;
 
-import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.logging.Logger;
 import org.jboss.seam.cron.test.scheduling.beans.IncrementalScheduledBean;
 import org.jboss.seam.cron.impl.scheduling.exception.InternalException;
 import org.jboss.seam.cron.test.SeamCronTestBase;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.jboss.solder.logging.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

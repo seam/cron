@@ -23,6 +23,7 @@ import java.util.concurrent.FutureTask;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 
+import org.jboss.logging.Logger;
 import org.jboss.seam.cron.impl.asynchronous.exception.AsynchronousMethodInvocationException;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderDestructionException;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationException;
@@ -30,7 +31,6 @@ import org.jboss.seam.cron.spi.CronProviderLifecycle;
 import org.jboss.seam.cron.spi.asynchronous.CronAsynchronousProvider;
 import org.jboss.seam.cron.spi.asynchronous.Invoker;
 import org.jboss.seam.cron.spi.asynchronous.support.FutureInvokerSupport;
-import org.jboss.solder.logging.Logger;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -94,11 +94,11 @@ public class QuartzAsynchronousProvider implements CronProviderLifecycle, CronAs
         }
     }
 
-    public void executeWithoutReturn(final String queueId, final Invoker inkover) {
+    public void executeWithoutReturn(final Invoker inkover) {
         executeMethodAsScheduledJob(inkover);
     }
 
-    public Future executeAndReturnFuture(final String queueId, final Invoker invoker) {
+    public Future executeAndReturnFuture(final Invoker invoker) {
         FutureTask asyncResult = new FutureTask(executeMethodAsScheduledJob(invoker));
         new Thread(asyncResult).start();
         return asyncResult;

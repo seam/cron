@@ -16,8 +16,6 @@
  */
 package org.jboss.seam.cron.spi.scheduling.trigger;
 
-import java.lang.annotation.Annotation;
-import java.util.Set;
 import org.jboss.seam.cron.api.scheduling.Every;
 import org.jboss.seam.cron.api.scheduling.Interval;
 
@@ -32,8 +30,8 @@ public class IntervalTriggerDetail extends TriggerDetail {
     private final Interval repeatUnit;
     private final Integer repeatInterval;
 
-    public IntervalTriggerDetail(final Every qualifier, final Set<Annotation> allQualifiers) {
-        super(qualifier, allQualifiers);
+    public IntervalTriggerDetail(final Every qualifier) {
+        super(qualifier);
         this.repeatUnit = qualifier.value();
         this.repeatInterval = qualifier.nth();
     }
@@ -64,9 +62,6 @@ public class IntervalTriggerDetail extends TriggerDetail {
         if (this.getQualifier() != other.getQualifier() && (this.getQualifier() == null || !this.getQualifier().equals(other.getQualifier()))) {
             return false;
         }
-        if (this.getQualifiers() != other.getQualifiers() && (this.getQualifiers() == null || !this.getQualifiers().equals(other.getQualifiers()))) {
-            return false;
-        }
         if (this.repeatUnit != other.repeatUnit) {
             return false;
         }
@@ -80,7 +75,6 @@ public class IntervalTriggerDetail extends TriggerDetail {
     public int hashCode() {
         int hash = 7;
         hash = 17 * hash + (this.getQualifier() != null ? this.getQualifier().hashCode() : 0);
-        hash = 17 * hash + (this.getQualifiers() != null ? this.getQualifiers().hashCode() : 0);
         hash = 17 * hash + (this.repeatUnit != null ? this.repeatUnit.hashCode() : 0);
         hash = 17 * hash + (this.repeatInterval != null ? this.repeatInterval.hashCode() : 0);
         return hash;
@@ -88,6 +82,6 @@ public class IntervalTriggerDetail extends TriggerDetail {
 
     @Override
     public String toString() {
-        return getClass().getName() + "{" + ", qualifier=" + getQualifier() + ", qualifiers=" + getQualifiers() + ", repeatUnit=" + repeatUnit + ", repeatInterval=" + repeatInterval + '}';
+        return getClass().getName() + "{" + ", qualifier=" + getQualifier() + ", repeatUnit=" + repeatUnit + ", repeatInterval=" + repeatInterval + '}';
     }
 }
