@@ -409,13 +409,11 @@
                 <dependency>
                     <groupId>org.jboss.arquillian.container</groupId>
                     <artifactId>arquillian-glassfish-embedded-3.1</artifactId>
-                    <version>1.0.0.Alpha5</version>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
                     <groupId>org.glassfish.extras</groupId>
                     <artifactId>glassfish-embedded-all</artifactId>
-                    <version>3.1</version>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
@@ -432,7 +430,6 @@
                 <dependency>
                     <groupId>org.jboss.arquillian.container</groupId>
                     <artifactId>arquillian-openwebbeans-embedded-1</artifactId>
-                    <version>1.0.0.Alpha5</version>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
