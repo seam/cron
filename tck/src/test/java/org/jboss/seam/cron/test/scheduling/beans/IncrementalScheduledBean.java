@@ -16,6 +16,8 @@
  */
 package org.jboss.seam.cron.test.scheduling.beans;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.time.Instant;
@@ -34,14 +36,15 @@ public class IncrementalScheduledBean {
     private Instant lastTriggerSecond = null;
     private final int tolleranceSeconds = 1; // tollerance of 1 second
     private Exception errorDetected = null;
-    private boolean wasEventObserved = false;
+    private boolean was40SecondEventObserved = false;
+    private boolean wasMinuteEventObserved = false;
 
     public void every40Seconds(@Observes @Every(nth = 40, value = Interval.SECOND) Trigger t) throws Exception {
-        wasEventObserved = true;
+        was40SecondEventObserved = true;
         final Instant newInstant = Instant.millis(t.getTimeFired());
         if (lastTriggerSecond != null) {
             if (Math.abs(lastTriggerSecond.getEpochSeconds() - (newInstant.getEpochSeconds() - 40)) > tolleranceSeconds) {
-                final String errorMessage = "Tick interval was not as per configuration. Previous tick was at " + lastTriggerSecond.getEpochSeconds() 
+                final String errorMessage = "Tick interval was not as per configuration. Previous tick was at " + lastTriggerSecond.getEpochSeconds()
                         + " and this one was at " + newInstant.getEpochSeconds();
                 System.out.println("ERROR: " + errorMessage);
                 errorDetected = new InternalException(errorMessage);
@@ -50,12 +53,28 @@ public class IncrementalScheduledBean {
         lastTriggerSecond = newInstant;
     }
 
+    public void everyMinute(@Observes @Every(Interval.MINUTE) Trigger t) throws Exception {
+        wasMinuteEventObserved = true;
+        GregorianCalendar gc = new GregorianCalendar();
+        int second = gc.get(Calendar.SECOND);
+        System.out.println("Every Minute fired on second: " + second);
+        if (second > tolleranceSeconds && second < (60 - tolleranceSeconds)) {
+            final String errorMessage = "Minute tick did not fire on the minute (ie: at zero seconds). Instead it was fired at " + second + " seconds past the minute.";
+            System.out.println("ERROR: " + errorMessage);
+            errorDetected = new InternalException(errorMessage);
+        }
+    }
+
     public Exception getErrorDetected() {
         return errorDetected;
     }
 
-    public boolean isWasEventObserved() {
-        return wasEventObserved;
+    public boolean isWas40SecondEventObserved() {
+        return was40SecondEventObserved;
     }
-   
+
+    public boolean isWasMinuteEventObserved() {
+        return wasMinuteEventObserved;
+    }
+    
 }

@@ -55,6 +55,16 @@ public class RelativeSchedule extends Schedule {
     protected GregorianCalendar getNextRunTime(GregorianCalendar schedule_start) {
         GregorianCalendar next_run = (GregorianCalendar)schedule_start.clone();
         next_run.add(repeatUnit, repeatInterval);
+        next_run.set(Calendar.MILLISECOND, 0);
+        switch (repeatUnit) {
+            case Calendar.MINUTE:
+                next_run.set(Calendar.SECOND, 0);
+                break;
+            case Calendar.HOUR:
+                next_run.set(Calendar.SECOND, 0);
+                next_run.set(Calendar.MINUTE, 0);
+                break;
+        }
         return next_run;
     }
 

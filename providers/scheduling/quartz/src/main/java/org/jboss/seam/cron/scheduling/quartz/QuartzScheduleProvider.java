@@ -107,21 +107,32 @@ public class QuartzScheduleProvider implements CronProviderLifecycle, CronSchedu
 
     public void processScheduledTrigger(final String queueId, final ScheduledTriggerDetail schedTriggerDetails) throws ParseException, SchedulerException, InternalError {
         final Trigger schedTrigger = new CronTrigger(schedTriggerDetails.toString(), SCHEDULE_JOB_GROUP, schedTriggerDetails.getCronScheduleSpec());
+        startInOneSecond(schedTrigger);
         scheduleJob(schedTrigger, schedTriggerDetails);
     }
 
     public void processIntervalTrigger(final String queueId, final IntervalTriggerDetail intervalTriggerDetails) throws ParseException, SchedulerException, InternalError {
         Trigger schedTrigger = null;
+        // start at the beginning of the next second at the earliest
+        GregorianCalendar gc = getOneSecondLater();
         if (SECOND.equals(intervalTriggerDetails.getRepeatUnit())) {
             schedTrigger = TriggerUtils.makeSecondlyTrigger(intervalTriggerDetails.getRepeatInterval());
         } else if (MINUTE.equals(intervalTriggerDetails.getRepeatUnit())) {
             schedTrigger = TriggerUtils.makeMinutelyTrigger(intervalTriggerDetails.getRepeatInterval());
+            // start at the beginning of the next minute
+            gc.add(GregorianCalendar.MINUTE, 1);
+            gc.set(GregorianCalendar.SECOND, 0);
         } else if (HOUR.equals(intervalTriggerDetails.getRepeatUnit())) {
             schedTrigger = TriggerUtils.makeHourlyTrigger(intervalTriggerDetails.getRepeatInterval());
+            // start at the beginning of the next hour
+            gc.add(GregorianCalendar.HOUR, 1);
+            gc.set(GregorianCalendar.MINUTE, 0);
+            gc.set(GregorianCalendar.SECOND, 0);
         } else {
             throw new InternalError("Could not work out which interval to use for the schedule of an @" + Every.class.getName() + " observer");
         }
         schedTrigger.setJobGroup(SCHEDULE_JOB_GROUP);
+        schedTrigger.setStartTime(gc.getTime());
         scheduleJob(schedTrigger, intervalTriggerDetails);
     }
 
@@ -143,6 +154,21 @@ public class QuartzScheduleProvider implements CronProviderLifecycle, CronSchedu
         return scheduler;
     }
 
+    private GregorianCalendar startInOneSecond(final Trigger schedTrigger) {
+        GregorianCalendar gc = getOneSecondLater();
+        final Date startTime = new Date(gc.getTimeInMillis());
+        schedTrigger.setStartTime(startTime);
+        return gc;
+    }
+
+    private GregorianCalendar getOneSecondLater() {
+        // common Second payload sample and start time
+        final GregorianCalendar gc = new GregorianCalendar();
+        gc.add(GregorianCalendar.SECOND, 1);
+        gc.set(GregorianCalendar.MILLISECOND, 0);
+        return gc;
+    }
+
     /**
      * Construct the job details using the given parameter map and schedule the job
      * to be executed by the given job class using the given trigger.
@@ -155,12 +181,6 @@ public class QuartzScheduleProvider implements CronProviderLifecycle, CronSchedu
      * @throws SchedulerException
      */
     private void scheduleJob(final Trigger schedTrigger, final TriggerDetail triggerDetails) throws CronProviderInitialisationException {
-
-        // common Second payload sample and start time
-        final GregorianCalendar gc = new GregorianCalendar();
-        gc.add(GregorianCalendar.SECOND, 1);
-        final Date startTime = new Date(gc.getTimeInMillis());
-        schedTrigger.setStartTime(startTime);
 
         final String jobName = triggerDetails.toString() + "-trigger";
         schedTrigger.setName(jobName);

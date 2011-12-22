@@ -16,45 +16,51 @@
  */
 package org.jboss.seam.cron.test.scheduling.tck;
 
+import org.jboss.seam.cron.test.scheduling.SeamCronSchedulingTestBase;
+
 import javax.inject.Inject;
 
-import org.jboss.arquillian.container.test.api.Deployment;
+import junit.framework.Assert;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.seam.cron.test.scheduling.beans.IncrementalScheduledBean;
 import org.jboss.seam.cron.impl.scheduling.exception.InternalException;
-import org.jboss.seam.cron.test.SeamCronTestBase;
+import org.jboss.seam.cron.test.scheduling.beans.IncrementalScheduledBean;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.solder.logging.Logger;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Test @Every schedules
+ * Providers must extend this test case and append their provider-specific 
+ * scheduling support classes to the #{@link JavaArchive} returned by 
+ * #{@literal createSchedulingTckTestArchive} so that these TCK tests
+ * will be run against their implementation during their test phase.
+ * 
+ * @author Peter Royle
  */
+@SuppressWarnings("serial")
 @RunWith(Arquillian.class)
-public class IntervalScheduleTCKLongTest extends SeamCronTestBase {
-    
-    public static final int SLEEP_TIME = 100000;
-    private static final Logger log = Logger.getLogger(IntervalScheduleTCKLongTest.class);
-    
+public class SeamCronSchedulingTCKTestLong {
+
+    public static final int LONG_SLEEP_TIME = 100000;
+    private static final Logger log = Logger.getLogger(SeamCronSchedulingTCKTestLong.class);
+
+    public static JavaArchive createSchedulingTckTestArchive() {
+        return SeamCronSchedulingTestBase.createSchedulingTestArchive()
+                .addPackage(SeamCronSchedulingTCKTestLong.class.getPackage());
+    }
     @Inject
     IncrementalScheduledBean everyTestBean;
 
-    @Deployment
-    public static JavaArchive createTestArchive() {
-        return SeamCronTestBase.createTestArchive();
-    }
-
-    @Test 
+    @Test
     public void testEvery40thSecond() throws Exception {
         try {
             // just fire up the bean and give it enough time to time itself and record any anomolies.
-            Thread.sleep(SLEEP_TIME);
+            Thread.sleep(LONG_SLEEP_TIME);
         } catch (InterruptedException ex) {
             throw new InternalException("Should not have been woken up here");
         }
-        Assert.assertTrue(everyTestBean.isWasEventObserved());
+        Assert.assertTrue(everyTestBean.isWas40SecondEventObserved());
+        Assert.assertTrue(everyTestBean.isWasMinuteEventObserved());
         if (everyTestBean.getErrorDetected() != null) {
             throw everyTestBean.getErrorDetected();
         }
