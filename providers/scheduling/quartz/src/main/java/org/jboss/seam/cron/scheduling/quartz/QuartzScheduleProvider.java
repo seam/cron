@@ -59,19 +59,14 @@ import static org.jboss.seam.cron.api.scheduling.Interval.*;
 public class QuartzScheduleProvider implements CronProviderLifecycle, CronSchedulingProvider {
 
     /**
-     * The name of the property containing the observer method bindings to be used
-     * when storing and retrieving it from the job details.
-     */
-    public static final String QUALIFIER = "qualifier";
-    /**
      * The name of the job group for all arbitrarily scheduled events.
      */
     public static final String SCHEDULE_JOB_GROUP = "schedule_job_group";
     /**
-     * The name of the JSR-299 BeanManager instance when a reference to it is
-     * stored and retrieved from the job details.
+     * Includes the name of the property containing the observer method bindings to be used
+     * when storing and retrieving it from the job details, the name of the JSR-299 
+     * BeanManager instance when a reference to it is stored and retrieved from the job details.
      */
-    public static final String MANAGER_NAME = "manager";
     public static final String TRIGGER_SUPPLIES = "trigger_helper";
     private static final String SCHEDULER_NAME_PREFIX = "SeamCronScheduler";
     private String schedulerName;
