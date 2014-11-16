@@ -25,7 +25,6 @@ import javax.enterprise.inject.spi.AfterDeploymentValidation;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeShutdown;
 import javax.enterprise.inject.spi.Extension;
-import javax.enterprise.inject.spi.ObserverMethod;
 import javax.enterprise.inject.spi.ProcessObserverMethod;
 import org.jboss.seam.cron.spi.asynchronous.CronAsynchronousProvider;
 import org.jboss.seam.cron.spi.queue.CronQueueInstaller;
@@ -78,7 +77,7 @@ public class SeamCronExtension implements Extension {
             handleLifecycleInit(schedProvider);
             cronSchedInstaller.initProviderScheduling(manager, schedProvider, allObservers);
         }
-        // process scheduling observers if scheduling provider exists
+        // process aynchronous observers if aynchronous provider exists
         final CronAsynchronousProvider asyncProvider = CdiUtils.getInstanceByType(manager, CronAsynchronousProvider.class);
         if (asyncProvider != null) {
             this.asynchronousProvider = asyncProvider;
@@ -95,9 +94,9 @@ public class SeamCronExtension implements Extension {
 
     private void handleLifecycleInit(final Object asyncProvider) throws CronProviderInitialisationException {
         if (asyncProvider instanceof CronProviderLifecycle) {
-            final CronProviderLifecycle schedProviderLifecycle = CronProviderLifecycle.class.cast(asyncProvider);
-            schedProviderLifecycle.initProvider();
-            providersWithLifecycles.add(schedProviderLifecycle);
+            final CronProviderLifecycle cronProviderLifecycle = CronProviderLifecycle.class.cast(asyncProvider);
+            cronProviderLifecycle.initProvider();
+            providersWithLifecycles.add(cronProviderLifecycle);
         }
     }
 

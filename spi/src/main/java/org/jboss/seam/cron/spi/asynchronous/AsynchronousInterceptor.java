@@ -40,7 +40,6 @@ import org.jboss.solder.logging.Logger;
  * </p>
  * 
  * @author Peter Royle
- * @Asnychronous or may exist on a type marked as @Asynchronous.
  */
 @Asynchronous
 @Interceptor
@@ -119,7 +118,8 @@ public class AsynchronousInterceptor {
             // will set the invokedFromInterceptorInThread ThreadLocal to true
             // (see Step 2 above) and then invoke ctx.proceed(); The interceptor
             // around that invocation will land here. This simply forwards 
-            // execution to the originating method.
+            // execution to the originating method in this new thread, which will 
+            // not cause any further interceptors to be triggered.
 
             if (log.isTraceEnabled()) {
                 log.trace("Bypassing interceptor in new thread for " + ctx.getMethod().getName());

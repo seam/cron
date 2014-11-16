@@ -19,7 +19,6 @@ package org.jboss.seam.cron.scheduling.quartz;
 import org.jboss.seam.cron.spi.scheduling.trigger.ProviderContextTriggerSupport;
 
 
-import org.jboss.seam.cron.scheduling.quartz.QuartzScheduleProvider;
 import org.jboss.seam.cron.spi.scheduling.trigger.TriggerSupplies;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
