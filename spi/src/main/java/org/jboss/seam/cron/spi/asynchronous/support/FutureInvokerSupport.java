@@ -53,7 +53,7 @@ public class FutureInvokerSupport implements Callable {
     private Invoker executor;
     private final BlockingQueue queue = new ArrayBlockingQueue(1);
     // can't add null to a BlockingQueue, so we might have to add a marker instead
-    private static final Boolean RESULT_AS_NULL = true;
+    private static final String RESULT_AS_NULL = "CRONRESULT_ASNULL";
 
     public FutureInvokerSupport(final Invoker executor) {
         this.executor = executor;
