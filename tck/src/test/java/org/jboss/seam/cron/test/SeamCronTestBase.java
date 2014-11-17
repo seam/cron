@@ -60,7 +60,7 @@ public abstract class SeamCronTestBase implements Serializable {
     private static JavaArchive createTestArchiveTestImpl() 
     {
     	return ShrinkWrap.create(JavaArchive.class, "test.jar")
-                .addPackage(ResourceLoader.class.getPackage()) // arquillian needs explicit knowledge of thirdy-party producers
+                .addPackage(ResourceLoader.class.getPackage()) // arquillian needs explicit knowledge of third-party producers
                 .addPackage(SeamCronTestBase.class.getPackage())
                 .addPackage(SeamCronExtension.class.getPackage())
                 .addClasses(CronQueueInstaller.class)

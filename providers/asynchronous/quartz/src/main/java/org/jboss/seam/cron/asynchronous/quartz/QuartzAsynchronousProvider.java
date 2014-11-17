@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.asynchronous.threads;
+package org.jboss.seam.cron.asynchronous.quartz;
 
 import java.util.UUID;
 import java.util.concurrent.Future;

@@ -17,7 +17,7 @@
 package org.jboss.seam.cron.asynchronous.test;
 
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.seam.cron.asynchronous.threads.QuartzAsynchronousProvider;
+import org.jboss.seam.cron.asynchronous.quartz.QuartzAsynchronousProvider;
 import org.jboss.seam.cron.test.asynchronous.tck.SeamCronAsynchronousTCKTest;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 

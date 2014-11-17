@@ -32,7 +32,7 @@ import org.jboss.solder.logging.Logger;
 import static org.jboss.seam.cron.api.scheduling.Interval.*;
 
 /**
- * Test all events, but minute and hour (to shorten test time).
+ * Test all events, except for minute and hour (to shorten test time).
  * <p/>
  * By the end of the test, all boolean properties should be true.
  */
