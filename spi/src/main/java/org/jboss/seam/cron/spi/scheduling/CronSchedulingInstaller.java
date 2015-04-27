@@ -130,7 +130,7 @@ public class CronSchedulingInstaller {
             throws SchedulerConfigurationException {
         final String cronScheduleSpec;
 
-        if (scheduleSpec.contains(" ")) {
+        if (scheduleSpec.contains(" ") || scheduleSpec.contains(":")) {
             cronScheduleSpec = scheduleSpec;
         } else {
             cronScheduleSpec = schedProperties.getProperty(scheduleSpec);
