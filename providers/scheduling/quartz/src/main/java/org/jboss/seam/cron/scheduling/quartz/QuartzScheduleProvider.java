@@ -112,6 +112,8 @@ public class QuartzScheduleProvider implements CronProviderLifecycle, CronSchedu
         GregorianCalendar gc = getOneSecondLater();
         if (SECOND.equals(intervalTriggerDetails.getRepeatUnit())) {
             schedTrigger = TriggerUtils.makeSecondlyTrigger(intervalTriggerDetails.getRepeatInterval());
+            // start in 1 second's time
+            gc.add(GregorianCalendar.SECOND, 1);
         } else if (MINUTE.equals(intervalTriggerDetails.getRepeatUnit())) {
             schedTrigger = TriggerUtils.makeMinutelyTrigger(intervalTriggerDetails.getRepeatInterval());
             // start at the beginning of the next minute
