@@ -19,7 +19,6 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.solder.logging.Logger;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -52,12 +51,6 @@ public class SeamCronSchedulingTCKTest {
     ScheduledBean bean;
     @Inject
     CronSchedulingProvider cronSchedProv;
-
-    @BeforeClass
-    public static void initTestSuite() {
-//        System.setProperty("test.system.property", "*/5 * * ? * *");
-        // Set a named schedule as a system property to run every 5 seconds
-    }
 
     @Test
     public void testEventsGetsFired() {
