@@ -65,7 +65,8 @@ public class SeamCronSchedulingTCKTest {
         while (!(bean.isScheduledEventObserved()
                 && bean.isNamedEventObserved()
                 && bean.isEverySecondEventObserved()
-                && bean.isTypesafeEventObserved())
+                && bean.isTypesafeEventObserved()
+                && bean.isSystemPropSchedFired())
                 && totalTimeWaited < MAX_TIME_TO_WAIT) {
             try {
                 log.info("Sleeping for a few seconds, waiting for all events to fire. Waited for " + totalTimeWaited + "ms so far ...");
