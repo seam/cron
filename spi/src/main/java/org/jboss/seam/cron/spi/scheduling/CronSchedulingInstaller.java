@@ -28,8 +28,8 @@ import org.jboss.seam.cron.util.CdiUtils;
 import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.TriggerDetail;
-import org.jboss.solder.logging.Logger;
 import org.jboss.solder.resourceLoader.Resource;
+import org.slf4j.Logger;
 
 /**
  * Scans all scheduling annotations and captures the configuration as a #{@link Set} of #{@link TriggerDetail}s, then forwards those
@@ -46,7 +46,8 @@ public class CronSchedulingInstaller {
     @Inject
     @Resource(SCHEDULE_PROPERTIES_PATH)
     private Properties schedProperties;
-    private final Logger log = Logger.getLogger(CronSchedulingInstaller.class);
+    @Inject
+    private Logger log;
 
     /**
      * Initializes schedulers for all of the observed scheduled events.

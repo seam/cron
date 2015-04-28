@@ -22,7 +22,8 @@ import org.jboss.seam.cron.test.restriction.SeamCronRestrictionTestBase;
 import org.jboss.seam.cron.test.restriction.beans.IntervalAndAsyncBean;
 import org.jboss.seam.cron.test.restriction.beans.SomeAsyncAndRestrictionMethods;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.jboss.solder.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +40,7 @@ import org.junit.runner.RunWith;
 public class SeamCronRestrictionTCKTest {
     
     private static final int NUM_EXECUTIONS = 20;
-    private static final Logger log = Logger.getLogger(SeamCronRestrictionTCKTest.class);
+    private static final Logger log = LoggerFactory.getLogger(SeamCronRestrictionTCKTest.class);
 
     public static JavaArchive createRestrictionTckTestArchive() {
         return SeamCronRestrictionTestBase.createRestrictionTestArchive()

@@ -25,7 +25,8 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.cron.impl.scheduling.exception.InternalException;
 import org.jboss.seam.cron.test.scheduling.beans.IncrementalScheduledBean;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.jboss.solder.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -42,7 +43,7 @@ import org.junit.runner.RunWith;
 public class SeamCronSchedulingTCKTestLong {
 
     public static final int LONG_SLEEP_TIME = 100000;
-    private static final Logger log = Logger.getLogger(SeamCronSchedulingTCKTestLong.class);
+    private static final Logger log = LoggerFactory.getLogger(SeamCronSchedulingTCKTestLong.class);
 
     public static JavaArchive createSchedulingTckTestArchive() {
         return SeamCronSchedulingTestBase.createSchedulingTestArchive()

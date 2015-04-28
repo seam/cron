@@ -37,7 +37,7 @@ import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.TriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.TriggerSupplies;
-import org.jboss.solder.logging.Logger;
+import org.slf4j.Logger;
 
 /**
  * Methods of this class are called at various stages of the JSR-299 initialization
@@ -48,7 +48,8 @@ import org.jboss.solder.logging.Logger;
  */
 public class QueuJScheduleProvider implements CronProviderLifecycle, CronSchedulingProvider {
 
-    private static final Logger log = Logger.getLogger(QueuJScheduleProvider.class);
+    @Inject
+    private Logger log;
     @Inject
     BeanManager beanManager;
     @Inject

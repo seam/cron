@@ -26,7 +26,8 @@ import org.jboss.seam.cron.api.restriction.StatusIndexes;
 import org.jboss.seam.cron.api.scheduling.Every;
 import org.jboss.seam.cron.api.scheduling.Interval;
 import org.jboss.seam.cron.api.scheduling.Trigger;
-import org.jboss.solder.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -40,7 +41,7 @@ public class IntervalAndAsyncBean {
     public static final String GROUP = "TEST_GROUP2";
     public static final int MAX_CONCURRENT = 2;
     private static final Object MUTEX = new Object();
-    private static final Logger log = Logger.getLogger(IntervalAndAsyncBean.class);
+    private static final Logger log = LoggerFactory.getLogger(IntervalAndAsyncBean.class);
 
     
     

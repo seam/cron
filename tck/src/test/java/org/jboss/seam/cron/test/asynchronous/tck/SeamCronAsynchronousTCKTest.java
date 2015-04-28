@@ -28,7 +28,8 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.cron.test.asynchronous.beans.SomeAsynchMethods;
 import org.jboss.seam.cron.test.asynchronous.beans.Status;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.jboss.solder.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -49,7 +50,7 @@ import static org.jboss.seam.cron.test.asynchronous.beans.SomeAsynchMethods.SLEE
 public class SeamCronAsynchronousTCKTest {
     
     private static final int NUM_EXECUTIONS = 3;
-    private static final Logger log = Logger.getLogger(SeamCronAsynchronousTCKTest.class);
+    private static final Logger log = LoggerFactory.getLogger(SeamCronAsynchronousTCKTest.class);
 
     public static JavaArchive createAsynchronousTckTestArchive() {
         return SeamCronAsynchronousTestBase.createAsynchronousTestArchive()

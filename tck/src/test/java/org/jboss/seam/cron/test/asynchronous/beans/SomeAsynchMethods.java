@@ -23,7 +23,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import org.jboss.seam.cron.api.asynchronous.Asynchronous;
-import org.jboss.solder.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Peter Royle
@@ -38,7 +39,7 @@ public class SomeAsynchMethods {
     private CountDownLatch heystackLatch;
     private Status statusEvent;
     private Integer haystackCount;
-    private static final Logger log = Logger.getLogger(SomeAsynchMethods.class);
+    private static final Logger log = LoggerFactory.getLogger(SomeAsynchMethods.class);
 
     public void reset() {
         statusEvent = null;

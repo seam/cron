@@ -20,7 +20,8 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.seam.cron.scheduling.queuj.QueuJScheduleProvider;
 import org.jboss.seam.cron.test.scheduling.tck.SeamCronSchedulingTCKTestLong;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.jboss.solder.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -28,7 +29,7 @@ import org.jboss.solder.logging.Logger;
  */
 public class QueuJSchedulingTCKTestLong extends SeamCronSchedulingTCKTestLong {
 
-    private static Logger log = Logger.getLogger(QueuJSchedulingTCKTestLong.class);
+    private static Logger log = LoggerFactory.getLogger(QueuJSchedulingTCKTestLong.class);
 
     @Deployment
     public static JavaArchive createDefaultArchive() {

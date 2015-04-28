@@ -26,8 +26,7 @@ import javax.interceptor.InvocationContext;
 import org.jboss.seam.cron.api.asynchronous.AsyncResult;
 import org.jboss.seam.cron.api.asynchronous.Asynchronous;
 import org.jboss.seam.cron.impl.scheduling.exception.InternalException;
-import org.jboss.solder.logging.Logger;
-
+import org.slf4j.Logger;
 import static org.jboss.seam.cron.spi.asynchronous.AsynchronousInterceptor.INVOKED_IN_THREAD;
 
 /**
@@ -44,7 +43,8 @@ public class Invoker {
     BeanManager beanMan;
     private InvocationContext ic;
     private boolean popResultsFromFuture = false;
-    private final Logger log = Logger.getLogger(Invoker.class);
+    @Inject
+    private Logger log;
 
     public Invoker() {
     }

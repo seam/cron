@@ -33,7 +33,7 @@ import org.jboss.seam.cron.spi.CronProviderLifecycle;
 import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.TriggerDetail;
-import org.jboss.solder.logging.Logger;
+import org.slf4j.Logger;
 import org.quartz.CronTrigger;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -72,7 +72,8 @@ public class QuartzScheduleProvider implements CronProviderLifecycle, CronSchedu
     private String schedulerName;
     private Scheduler scheduler;
     private UUID instanceId;
-    private static final Logger log = Logger.getLogger(QuartzScheduleProvider.class);
+    @Inject
+    private Logger log;
     @Inject
     BeanManager beanManager;
 

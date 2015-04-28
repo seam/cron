@@ -30,7 +30,6 @@ import org.jboss.seam.cron.spi.CronProviderLifecycle;
 import org.jboss.seam.cron.spi.asynchronous.CronAsynchronousProvider;
 import org.jboss.seam.cron.spi.asynchronous.Invoker;
 import org.jboss.seam.cron.spi.asynchronous.support.FutureInvokerSupport;
-import org.jboss.solder.logging.Logger;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -40,6 +39,7 @@ import org.quartz.simpl.RAMJobStore;
 import org.quartz.simpl.SimpleThreadPool;
 import org.quartz.spi.JobStore;
 import org.quartz.spi.ThreadPool;
+import org.slf4j.Logger;
 
 /**
  * Simple asynchronous method invocation which schedules @Asynchronous methods
@@ -59,7 +59,8 @@ public class QuartzAsynchronousProvider implements CronProviderLifecycle, CronAs
     private String schedulerName;
     private Scheduler scheduler;
     private UUID instanceId;
-    private static final Logger log = Logger.getLogger(QuartzAsynchronousProvider.class);
+    @Inject
+    private Logger log;
     @Inject
     BeanManager beanManager;
 

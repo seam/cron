@@ -31,7 +31,7 @@ import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationE
 import org.jboss.seam.cron.spi.CronProviderLifecycle;
 import org.jboss.seam.cron.spi.queue.CronQueueProvider;
 import org.jboss.seam.cron.spi.queue.RestrictDetail;
-import org.jboss.solder.logging.Logger;
+import org.slf4j.Logger;
 
 /**
  * Queue provider allows properties to be set against Asyncrhonous and Scheduled
@@ -41,7 +41,8 @@ import org.jboss.solder.logging.Logger;
  */
 public class QueuJQueueProvider implements CronProviderLifecycle, CronQueueProvider {
 
-    private static final Logger log = Logger.getLogger(QueuJQueueProvider.class);
+    @Inject
+    private Logger log;
     @Inject
     BeanManager beanManager;
     private final HashMap<String,QueueBuilder> queueBuilders = new HashMap<String, QueueBuilder> ();

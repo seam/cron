@@ -25,7 +25,8 @@ import org.jboss.seam.cron.api.scheduling.Scheduled;
 import org.jboss.seam.cron.api.scheduling.Trigger;
 import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 import org.jboss.seam.cron.util.CdiUtils;
-import org.jboss.solder.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -51,7 +52,7 @@ public abstract class TriggerSupport {
     protected int value = 0;
     protected final GregorianCalendar gc = new GregorianCalendar();
     protected TriggerSupplies supplies = null;
-    private final Logger log = Logger.getLogger(TriggerSupport.class);
+    private final Logger log = LoggerFactory.getLogger(TriggerSupport.class);
 
     protected TriggerSupport() {
     }

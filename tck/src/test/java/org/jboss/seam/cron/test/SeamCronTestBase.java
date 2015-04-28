@@ -21,11 +21,13 @@ import java.io.Serializable;
 import org.jboss.seam.cron.spi.queue.CronQueueInstaller;
 import org.jboss.seam.cron.spi.scheduling.CronSchedulingInstaller;
 import org.jboss.seam.cron.spi.SeamCronExtension;
+import org.jboss.seam.cron.util.LoggerProducer;
 import org.jboss.shrinkwrap.api.ArchivePaths;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.jboss.solder.logging.Logger;
 import org.jboss.solder.resourceLoader.ResourceLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -33,7 +35,7 @@ import org.jboss.solder.resourceLoader.ResourceLoader;
  */
 public abstract class SeamCronTestBase implements Serializable {
 
-    private static final Logger log = Logger.getLogger(SeamCronTestBase.class);
+    private static final Logger log = LoggerFactory.getLogger(SeamCronTestBase.class);
         
     public static JavaArchive createTestArchive() 
     {
@@ -61,6 +63,7 @@ public abstract class SeamCronTestBase implements Serializable {
     {
     	return ShrinkWrap.create(JavaArchive.class, "test.jar")
                 .addPackage(ResourceLoader.class.getPackage()) // arquillian needs explicit knowledge of third-party producers
+                .addPackage(LoggerProducer.class.getPackage()) // arquillian needs explicit knowledge of third-party producers
                 .addPackage(SeamCronTestBase.class.getPackage())
                 .addPackage(SeamCronExtension.class.getPackage())
                 .addClasses(CronQueueInstaller.class)

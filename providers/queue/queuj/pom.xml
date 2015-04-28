@@ -26,6 +26,10 @@
             <artifactId>cdi-api</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
         <!-- Compile-time dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -39,11 +43,6 @@
         </dependency>
         
         <!-- Runtime Dependencies -->
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <scope>runtime</scope>
-        </dependency>
         <dependency>
             <groupId>commons-pool</groupId>
             <artifactId>commons-pool</artifactId>

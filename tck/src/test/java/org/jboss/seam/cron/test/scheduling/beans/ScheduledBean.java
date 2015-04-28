@@ -18,9 +18,10 @@ import java.util.Date;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import org.jboss.seam.cron.api.scheduling.Trigger;
-import org.jboss.solder.logging.Logger;
 
 import static org.jboss.seam.cron.api.scheduling.Interval.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Test all events, except for minute and hour (to shorten test time).
@@ -30,7 +31,7 @@ import static org.jboss.seam.cron.api.scheduling.Interval.*;
 @ApplicationScoped
 public class ScheduledBean {
 
-    private final Logger log = Logger.getLogger(ScheduledBean.class);
+    private final Logger log = LoggerFactory.getLogger(ScheduledBean.class);
     private boolean scheduledEventObserved = false;
     private boolean namedEventObserved = false;
     private boolean typesafeEventObserved = false;

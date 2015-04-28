@@ -37,6 +37,7 @@
         <version.jboss.javaee6.bom>2.0.0.Final</version.jboss.javaee6.bom>
         <seam.version>3.1.0.Beta3</seam.version>
 <!--         <arquillian.version>1.0.0.Alpha5</arquillian.version> -->
+        <deltaspike.version>1.0.3</deltaspike.version>
     </properties>
     <!-- Dependency management, including extra repositories if needed -->
     <repositories>
@@ -228,9 +229,15 @@
 
             <!-- Dependencies for Implementation sub-project -->
             <dependency>
-                <groupId>org.jboss.solder</groupId>
-                <artifactId>solder-impl</artifactId>
-                <version>${seam.version}</version>
+                <groupId>org.apache.deltaspike.core</groupId>
+                <artifactId>deltaspike-core-api</artifactId>
+                <version>${deltaspike.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.deltaspike.core</groupId>
+                <artifactId>deltaspike-core-impl</artifactId>
+                <version>${deltaspike.version}</version>
+                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>commons-lang</groupId>
@@ -481,6 +488,11 @@
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-simple</artifactId>
                     <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                    <scope>provided</scope>
                 </dependency>
             </dependencies>
             <dependencyManagement>

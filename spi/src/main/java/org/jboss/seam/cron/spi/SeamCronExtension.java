@@ -31,7 +31,8 @@ import org.jboss.seam.cron.spi.queue.CronQueueInstaller;
 import org.jboss.seam.cron.spi.queue.CronQueueProvider;
 import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 import org.jboss.seam.cron.util.CdiUtils;
-import org.jboss.solder.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The CDI Extention implementation which bootstraps Seam Cron. Not directly 
@@ -46,7 +47,7 @@ public class SeamCronExtension implements Extension {
     private CronAsynchronousProvider asynchronousProvider = null;
     private CronSchedulingProvider schedulingProvider = null;
     private final Set<CronProviderLifecycle> providersWithLifecycles = new HashSet<CronProviderLifecycle>();
-    private final Logger log = Logger.getLogger(SeamCronExtension.class);
+    private final Logger log = LoggerFactory.getLogger(SeamCronExtension.class);
 
     /**
      * Because "Extension classes should be public and have a public constructor 

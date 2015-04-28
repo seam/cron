@@ -18,9 +18,10 @@ import junit.framework.Assert;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.jboss.solder.logging.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Providers must extend this test case and append their provider-specific scheduling support classes to the #{@link JavaArchive} returned
@@ -34,7 +35,7 @@ public class SeamCronSchedulingTCKTest {
 
     private static final int MAX_TIME_TO_WAIT = 20000;
     private static final int SLEEP_TIME = 2000;
-    private static final Logger log = Logger.getLogger(SeamCronSchedulingTCKTest.class);
+    private static final Logger log = LoggerFactory.getLogger(SeamCronSchedulingTCKTest.class);
 
     public static JavaArchive createSchedulingTckTestArchive() {
         return SeamCronSchedulingTestBase.createSchedulingTestArchive()

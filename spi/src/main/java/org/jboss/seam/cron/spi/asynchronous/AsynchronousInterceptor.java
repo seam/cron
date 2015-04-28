@@ -27,7 +27,7 @@ import org.jboss.seam.cron.api.asynchronous.Asynchronous;
 import org.jboss.seam.cron.api.queue.Queue;
 import org.jboss.seam.cron.impl.scheduling.exception.InternalException;
 import org.jboss.seam.cron.spi.SeamCronExtension;
-import org.jboss.solder.logging.Logger;
+import org.slf4j.Logger;
 
 /**
  * <p>
@@ -49,7 +49,8 @@ public class AsynchronousInterceptor {
     // handle it properly.
     protected static final String INVOKED_IN_THREAD = "INVOKED_IN_THREAD";
     public ThreadLocal<Boolean> invokedFromInterceptorInThread = new ThreadLocal<Boolean>();
-    Logger log = Logger.getLogger(AsynchronousInterceptor.class);
+    @Inject
+    private Logger log;
     @Inject
     BeanManager beanMan;
     @Inject

@@ -37,7 +37,7 @@ import org.jboss.seam.cron.spi.asynchronous.CronAsynchronousProvider;
 import org.jboss.seam.cron.spi.asynchronous.Invoker;
 import org.jboss.seam.cron.spi.asynchronous.support.FutureInvokerSupport;
 import org.jboss.seam.cron.spi.queue.CronQueueProvider;
-import org.jboss.solder.logging.Logger;
+import org.slf4j.Logger;
 
 /**
  * Simple asynchronous method invocation which schedules @Asynchronous methods
@@ -47,7 +47,8 @@ import org.jboss.solder.logging.Logger;
  */
 public class QueuJAsynchronousProvider implements CronProviderLifecycle, CronAsynchronousProvider {
 
-    private static final Logger log = Logger.getLogger(QueuJAsynchronousProvider.class);
+    @Inject
+    private Logger log;
     @Inject
     BeanManager beanManager;
     @Inject
