@@ -126,10 +126,10 @@ public class CronSchedulingInstaller {
         if (scheduleSpec.contains(" ") || scheduleSpec.contains(":")) {
             cronScheduleSpec = scheduleSpec;
         } else {
-            String possibleSpec = schedProperties.getProperty(scheduleSpec);
+            // check system properties
+            String possibleSpec = System.getProperty(scheduleSpec);
             if (StringUtils.isEmpty(possibleSpec)) {
-                // check system properties
-                possibleSpec = System.getProperty(scheduleSpec);
+                possibleSpec = schedProperties.getProperty(scheduleSpec);
                 if (StringUtils.isEmpty(possibleSpec)) {
                     throw new SchedulerConfigurationException(
                             "Found empty or missing cron definition for named schedule '"
