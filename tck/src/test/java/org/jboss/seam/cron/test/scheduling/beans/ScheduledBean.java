@@ -1,22 +1,13 @@
 /**
- * JBoss, Home of Professional Open Source
- * Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual
- * contributors by the @authors tag. See the copyright.txt in the
- * distribution for a full listing of individual contributors.
+ * JBoss, Home of Professional Open Source Copyright 2011, Red Hat, Inc. and/or its affiliates, and individual contributors by the @authors
+ * tag. See the copyright.txt in the distribution for a full listing of individual contributors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may
+ * obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under the License.
  */
 package org.jboss.seam.cron.test.scheduling.beans;
-
-
 
 import org.jboss.seam.cron.api.scheduling.Every;
 import org.jboss.seam.cron.api.scheduling.Scheduled;
@@ -38,16 +29,17 @@ import static org.jboss.seam.cron.api.scheduling.Interval.*;
  */
 @ApplicationScoped
 public class ScheduledBean {
-    private final Logger log = Logger.getLogger( ScheduledBean.class );
+
+    private final Logger log = Logger.getLogger(ScheduledBean.class);
     private boolean scheduledEventObserved = false;
     private boolean namedEventObserved = false;
     private boolean typesafeEventObserved = false;
     private boolean firedCorrectly = true;
     private boolean everySecondEventObserved = false;
+    private boolean systemPropSchedFired = false;
 
     public void onSchedule(@Observes
-                           @Scheduled("*/5 * * ? * *")
-                           Trigger event) {
+            @Scheduled("*/5 * * ? * *") Trigger event) {
         final Calendar c = Calendar.getInstance();
         c.setTimeInMillis(event.getTimeFired());
         firedCorrectly = firedCorrectly & ((c.get(Calendar.SECOND) % 5) == 0);
@@ -56,8 +48,7 @@ public class ScheduledBean {
     }
 
     public void onNamedSchedule(@Observes
-                                @Scheduled("test.one")
-                                Trigger event) {
+            @Scheduled("test.one") Trigger event) {
         final Calendar c = Calendar.getInstance();
         c.setTimeInMillis(event.getTimeFired());
         firedCorrectly = firedCorrectly & ((c.get(Calendar.SECOND) % 5) == 0);
@@ -66,8 +57,7 @@ public class ScheduledBean {
     }
 
     public void onTypesafeSchedule(@Observes
-                                   @Frequent
-                                   Trigger event) {
+            @Frequent Trigger event) {
         final Calendar c = Calendar.getInstance();
         c.setTimeInMillis(event.getTimeFired());
         firedCorrectly = firedCorrectly & ((c.get(Calendar.SECOND) % 5) == 0);
@@ -76,10 +66,15 @@ public class ScheduledBean {
     }
 
     public void onEverySecondSchedule(@Observes
-                                      @Every(SECOND)
-                                      Trigger event) {
+            @Every(SECOND) Trigger event) {
         log.info("Every second event fired at " + new Date(event.getTimeFired()));
         this.everySecondEventObserved = true;
+    }
+
+    public void onEverySystemPropertySchedule(@Observes
+            @Scheduled("test.system.property") Trigger event) {
+        log.info("System-property schedule event fired at " + new Date(event.getTimeFired()));
+        this.systemPropSchedFired = true;
     }
 
     public boolean isScheduledEventObserved() {
@@ -101,4 +96,9 @@ public class ScheduledBean {
     public boolean isEverySecondEventObserved() {
         return everySecondEventObserved;
     }
+
+    public boolean isSystemPropSchedFired() {
+        return systemPropSchedFired;
+    }
+
 }
