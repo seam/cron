@@ -7,29 +7,19 @@
  * software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under the License.
  */
-package org.jboss.seam.cron.util;
+package org.jboss.seam.cron.util.deltaspike;
 
-import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.InjectionPoint;
-import javax.inject.Singleton;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.deltaspike.core.api.config.PropertyFileConfig;
 
 /**
  *
  * @author peteroyle
  */
-@Singleton
-public class LoggerProducer {
+public class CronDeltaspikeCustomPropertyFileConfig implements PropertyFileConfig {
 
-    @Produces
-    Logger getSlf4jLogger(final InjectionPoint ip) {
-        return LoggerFactory.getLogger(ip.getMember().getDeclaringClass());
-    }
-
-    @Produces
-    java.util.logging.Logger getJavaLogger(final InjectionPoint ip) {
-        return java.util.logging.Logger.getLogger(ip.getMember().getDeclaringClass().getName());
+    @Override
+    public String getPropertyFileName() {
+        return "cron.properties";
     }
 
 }

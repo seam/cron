@@ -237,7 +237,7 @@
                 <groupId>org.apache.deltaspike.core</groupId>
                 <artifactId>deltaspike-core-impl</artifactId>
                 <version>${deltaspike.version}</version>
-                <scope>runtime</scope>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>commons-lang</groupId>
