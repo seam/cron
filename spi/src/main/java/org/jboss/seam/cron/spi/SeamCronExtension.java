@@ -54,9 +54,11 @@ public class SeamCronExtension implements Extension {
      * for maximum portability"
      */
     public SeamCronExtension() {
+        log.debug("Initiailised SeamCronExtension");
     }
 
     public void registerCronEventObserver(@Observes ProcessObserverMethod pom) {
+        log.debug("processing observer method");
         allObservers.add(pom);
     }
 

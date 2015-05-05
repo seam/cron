@@ -33,7 +33,7 @@ public class QuartzSchedulingTCKTestLong extends SeamCronSchedulingTCKTestLong {
 
     @Deployment
     public static JavaArchive createDefaultArchive() {
-        JavaArchive archive = SeamCronSchedulingTCKTestLong.createSchedulingTckTestArchive()
+        JavaArchive archive = SeamCronSchedulingTCKTestLong.createSchedulingTckTestArchive(false, true)
                 .addPackages(true, QuartzScheduleProvider.class.getPackage());
 
         log.debug(archive.toString(true));

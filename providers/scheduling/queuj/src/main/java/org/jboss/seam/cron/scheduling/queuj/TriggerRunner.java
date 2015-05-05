@@ -40,6 +40,6 @@ public class TriggerRunner extends JavaProcessRunner {
      * @throws JobExecutionException
      */
     public void execute(final TriggerSupplies triggerSupplies) {
-        (new TriggerSupport(triggerSupplies) {}).fireTrigger();
+        new TriggerSupport(triggerSupplies).fireTrigger();
     }
 }

@@ -16,7 +16,6 @@
  */
 package org.jboss.seam.cron.test.scheduling;
 
-import org.jboss.seam.cron.spi.scheduling.CronSchedulingInstaller;
 import org.jboss.seam.cron.test.SeamCronTestBase;
 import org.jboss.seam.cron.test.scheduling.beans.ScheduledBean;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -27,11 +26,10 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
  */
 public abstract class SeamCronSchedulingTestBase {
 
-    public static JavaArchive createSchedulingTestArchive() {
-        return SeamCronTestBase.createTestArchive()
+    public static JavaArchive createSchedulingTestArchive(boolean useTestBeansXml, boolean includeCron) {
+        return SeamCronTestBase.createTestArchive(useTestBeansXml, includeCron)
                 .addPackage(SeamCronSchedulingTestBase.class.getPackage())
-                .addPackage(ScheduledBean.class.getPackage())
-                .addPackages(true, CronSchedulingInstaller.class.getPackage());
+                .addPackage(ScheduledBean.class.getPackage());
     }
     
 }

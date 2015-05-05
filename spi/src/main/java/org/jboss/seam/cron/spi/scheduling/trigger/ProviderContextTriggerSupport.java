@@ -37,7 +37,7 @@ import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
  * 
  * @see TriggerSupport
  */
-public abstract class ProviderContextTriggerSupport<T> extends TriggerSupport {
+public abstract class ProviderContextTriggerSupport extends TriggerSupport {
 
     /**
      * Since scheduled jobs are typically outside the CDI context, the
@@ -45,19 +45,13 @@ public abstract class ProviderContextTriggerSupport<T> extends TriggerSupport {
      * by ${@link ProviderContextTriggerSupport} to fire the appropriate event, and looking
      * them up in this method's implementation using their own context.
      *
-     * @param providerContext Some context provided by the underlying scheduling engine.
      * @return a new #{@link TriggerSupplies} instance.
      */
-    public abstract TriggerSupplies fetchTriggerSupplies(final T providerContext);
+    public abstract TriggerSupplies fetchTriggerSupplies();
 
-    /**
-     * Fires the appropriate trigger payload with the appropriate qualifier
-     * (to in turn execute the application-specific code that observes those events).
-     *
-     * @param providerContext Some context provided by the underlying scheduling engine.
-     */
-    public void fireTrigger(final T providerContext) {
-        supplies = fetchTriggerSupplies(providerContext);
-        fireTrigger();
+    @Override
+    public void fireTrigger() {
+        setTriggerSupplies(fetchTriggerSupplies());
+        super.fireTrigger();
     }
 }

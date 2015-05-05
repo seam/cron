@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @see ProviderContextTriggerSupport
  */
-public abstract class TriggerSupport {
+public class TriggerSupport {
 
     protected int value = 0;
     protected final GregorianCalendar gc = new GregorianCalendar();
@@ -60,7 +60,7 @@ public abstract class TriggerSupport {
     public TriggerSupport(final TriggerSupplies supplies) {
         this.supplies = supplies;
     }
-
+    
     /**
      * Fires the appropriate trigger payload with the appropriate qualifier
      * (to in turn execute the application-specific code that observes those events).
@@ -96,6 +96,10 @@ public abstract class TriggerSupport {
         }
         log.trace("Firing time event for " + eventPayload + " with qualifier " + supplies.getQualifiers());
         supplies.getBeanManager().fireEvent(eventPayload, supplies.getQualifiers().toArray(new Annotation[] {}));
+    }
+
+    protected void setTriggerSupplies(TriggerSupplies supplies) {
+        this.supplies = supplies;
     }
 
     /**

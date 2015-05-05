@@ -29,8 +29,8 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
  */
 public abstract class SeamCronRestrictionTestBase {
 
-    public static JavaArchive createRestrictionTestArchive() {
-        return SeamCronTestBase.createTestArchiveTestBeansXML()
+    public static JavaArchive createRestrictionTestArchive(boolean useTestBeansXml, boolean includeCron) {
+        return SeamCronTestBase.createTestArchive(useTestBeansXml, includeCron)
                 .addPackage(SeamCronRestrictionTestBase.class.getPackage())
                 .addPackage(SomeAsyncAndRestrictionMethods.class.getPackage())
                 .addPackage(CronQueueProvider.class.getPackage())

@@ -27,8 +27,8 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
  */
 public abstract class SeamCronAsynchronousTestBase {
 
-    public static JavaArchive createAsynchronousTestArchive() {
-        return SeamCronTestBase.createTestArchive()
+    public static JavaArchive createAsynchronousTestArchive(boolean useTestBeansXml, boolean includeCron) {
+        return SeamCronTestBase.createTestArchive(useTestBeansXml, includeCron)
                 .addPackage(SeamCronAsynchronousTestBase.class.getPackage())
                 .addPackage(SomeAsynchMethods.class.getPackage())
                 .addPackage(CronAsynchronousProvider.class.getPackage());

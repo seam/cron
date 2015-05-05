@@ -52,8 +52,8 @@ public class SeamCronAsynchronousTCKTest {
     private static final int NUM_EXECUTIONS = 3;
     private static final Logger log = LoggerFactory.getLogger(SeamCronAsynchronousTCKTest.class);
 
-    public static JavaArchive createAsynchronousTckTestArchive() {
-        return SeamCronAsynchronousTestBase.createAsynchronousTestArchive()
+    public static JavaArchive createAsynchronousTckTestArchive(boolean useTestBeansXml, boolean includeCron) {
+        return SeamCronAsynchronousTestBase.createAsynchronousTestArchive(useTestBeansXml, includeCron)
                 .addPackage(SeamCronAsynchronousTCKTest.class.getPackage());
     }
     

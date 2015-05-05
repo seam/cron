@@ -24,8 +24,8 @@ import org.jboss.seam.cron.api.scheduling.Every;
 import org.jboss.seam.cron.api.scheduling.Scheduled;
 import org.jboss.seam.cron.api.scheduling.Interval;
 import org.jboss.seam.cron.api.scheduling.Trigger;
-import org.jboss.solder.logging.Logger;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.slf4j.Logger;
 
 /**
  * @author Peter Royle
@@ -57,6 +57,7 @@ public class SwingGrapher
      */
     public void updateChart(@Observes @Every(Interval.SECOND) Trigger second)
     {
+        System.out.println("Updating data");
         getCatDataSet().addValue(Runtime.getRuntime().freeMemory(), FREE_MEMORY_LABEL, new Long(System.
                 currentTimeMillis()).toString());
     }

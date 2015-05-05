@@ -16,6 +16,7 @@
  */
 package org.jboss.seam.cron.spi.scheduling.trigger;
 
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 
@@ -25,7 +26,7 @@ import java.util.Set;
  * 
  * @author peteroyle
  */
-public abstract class TriggerDetail {
+public abstract class TriggerDetail implements Serializable {
 
     private final Annotation qualifier;
     private final Set<Annotation> allQualifiers;

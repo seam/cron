@@ -9,9 +9,9 @@
     <url>http://seamframework.org/Seam3/CronModule</url>
 
     <scm>
-       <connection>scm:git:git://github.com/seam/cron.git</connection>
-       <developerConnection>scm:git:git@github.com:seam/cron.git</developerConnection>
-       <url>http://github.com/seam/cron</url>
+        <connection>scm:git:git://github.com/seam/cron.git</connection>
+        <developerConnection>scm:git:git@github.com:seam/cron.git</developerConnection>
+        <url>http://github.com/seam/cron</url>
     </scm>
 
     <parent>
@@ -31,12 +31,14 @@
         <module>providers/asynchronous/quartz</module>
         <module>providers/asynchronous/queuj</module>
         <module>providers/queue/queuj</module>
+        <!-- test require a full EE environment, so test them by activating the jboss_as_managed_7.0 profile and speficying their pom.xml using -f on the commandline-->
+        <!--<module>providers/scheduling/timerservice</module>-->
     </modules>
 
     <properties>
-        <version.jboss.javaee6.bom>2.0.0.Final</version.jboss.javaee6.bom>
+        <test.ee>nope</test.ee>
+        <version.jboss.javaee6.bom>3.0.2.Final</version.jboss.javaee6.bom>
         <seam.version>3.1.0.Beta3</seam.version>
-<!--         <arquillian.version>1.0.0.Alpha5</arquillian.version> -->
         <deltaspike.version>1.0.3</deltaspike.version>
     </properties>
     <!-- Dependency management, including extra repositories if needed -->
@@ -237,7 +239,7 @@
                 <groupId>org.apache.deltaspike.core</groupId>
                 <artifactId>deltaspike-core-impl</artifactId>
                 <version>${deltaspike.version}</version>
-                <scope>runtime</scope>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>commons-lang</groupId>
@@ -245,14 +247,14 @@
                 <version>2.4</version>
             </dependency>
 
-<!-- 
-            <dependency>
-                <groupId>org.jboss.arquillian.container</groupId>
-                <artifactId>arquillian-container</artifactId>
-                <version>${arquillian.version}</version>
-                <scope>test</scope>
-            </dependency>
--->
+            <!-- 
+                        <dependency>
+                            <groupId>org.jboss.arquillian.container</groupId>
+                            <artifactId>arquillian-container</artifactId>
+                            <version>${arquillian.version}</version>
+                            <scope>test</scope>
+                        </dependency>
+            -->
             <!-- Dependencies for providers/quartz sub-project -->
             <!-- Runtime Dependencies -->
             <dependency>
@@ -374,7 +376,7 @@
                 <activeByDefault>true</activeByDefault>
                 <property>
                     <name>release</name>
-                </property>                
+                </property>
             </activation>
             <dependencies>
                 <dependency>
@@ -409,7 +411,76 @@
                     </dependency>
                 </dependencies>
             </dependencyManagement>
-        </profile>        
+        </profile>
+        <profile>
+            <!-- This doesn't seem to deploy Cron tests very well, we're testing against Glassfish instead (still Weld) -->
+            <id>jboss_as_managed_7.0</id>
+            <activation>
+                <!--<activeByDefault>true</activeByDefault>-->
+            </activation>
+            <properties>
+                <jboss.dir.name.test>jboss-as-7.0.1.Final</jboss.dir.name.test>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.14.1</version>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <arquillian.launch>jboss</arquillian.launch>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack-jboss-as</id>
+                                <phase>process-test-resources</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.jboss.as</groupId>
+                                            <artifactId>jboss-as-dist</artifactId>
+                                            <version>7.0.1.Final</version>
+                                            <type>zip</type>
+                                            <overWrite>false</overWrite>
+                                            <outputDirectory>target</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.as</groupId>
+                    <artifactId>jboss-as-arquillian-container-managed</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.arquillian.protocol</groupId>
+                    <artifactId>arquillian-protocol-servlet</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jboss.arquillian</groupId>
+                        <artifactId>arquillian-bom</artifactId>
+                        <version>1.0.0.Final</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+        </profile>
         <profile>
             <id>glassfish-embedded-3.1</id>
             <dependencies>
@@ -500,7 +571,7 @@
                     <dependency>
                         <groupId>org.apache.openwebbeans</groupId>
                         <artifactId>openwebbeans</artifactId>
-                        <version>1.0.0</version>
+                        <version>1.2.2</version>
                         <type>pom</type>
                         <scope>import</scope>
                     </dependency>

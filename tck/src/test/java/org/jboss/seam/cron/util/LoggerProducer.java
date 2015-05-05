@@ -23,8 +23,13 @@ import org.slf4j.LoggerFactory;
 public class LoggerProducer {
 
     @Produces
-    Logger getLogger(final InjectionPoint ip) {
+    Logger getSlf4jLogger(final InjectionPoint ip) {
         return LoggerFactory.getLogger(ip.getMember().getDeclaringClass());
+    }
+
+    @Produces
+    java.util.logging.Logger getJavaLogger(final InjectionPoint ip) {
+        return java.util.logging.Logger.getLogger(ip.getMember().getDeclaringClass().getName());
     }
 
 }

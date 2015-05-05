@@ -29,7 +29,7 @@ public class ThreadsAsynchronousTCKTest extends SeamCronAsynchronousTCKTest {
 
     @Deployment
     public static JavaArchive deployment() {
-        return SeamCronAsynchronousTCKTest.createAsynchronousTckTestArchive()
+        return SeamCronAsynchronousTCKTest.createAsynchronousTckTestArchive(false, true)
                 .addPackages(true, ThreadsAsynchronousProvider.class.getPackage());
     }
 }

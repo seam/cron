@@ -48,6 +48,8 @@ import org.quartz.simpl.SimpleThreadPool;
 import org.quartz.spi.JobStore;
 import org.quartz.spi.ThreadPool;
 import static org.jboss.seam.cron.api.scheduling.Interval.*;
+import org.jboss.seam.cron.util.TimeUtils;
+import static org.jboss.seam.cron.util.TimeUtils.getOneSecondLater;
 
 /**
  * Methods of this class are called at various stages of the JSR-299 initialization
@@ -153,17 +155,9 @@ public class QuartzScheduleProvider implements CronProviderLifecycle, CronSchedu
     }
 
     private GregorianCalendar startInOneSecond(final Trigger schedTrigger) {
-        GregorianCalendar gc = getOneSecondLater();
+        GregorianCalendar gc = TimeUtils.getOneSecondLater();
         final Date startTime = new Date(gc.getTimeInMillis());
         schedTrigger.setStartTime(startTime);
-        return gc;
-    }
-
-    private GregorianCalendar getOneSecondLater() {
-        // common Second payload sample and start time
-        final GregorianCalendar gc = new GregorianCalendar();
-        gc.add(GregorianCalendar.SECOND, 1);
-        gc.set(GregorianCalendar.MILLISECOND, 0);
         return gc;
     }
 
