@@ -46,12 +46,6 @@
             <artifactId>cdi-api</artifactId>
             <scope>provided</scope>
         </dependency>
-        <!-- TODO: remove this when we remove solder -->
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <scope>test</scope>
-        </dependency>
         <!-- Compile-time dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>

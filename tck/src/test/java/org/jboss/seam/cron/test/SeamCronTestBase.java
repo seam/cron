@@ -28,7 +28,6 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.container.ClassContainer;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.solder.resourceLoader.ResourceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.impl.SimpleLogger;
@@ -62,7 +61,6 @@ public abstract class SeamCronTestBase implements Serializable {
 
     private static JavaArchive createTestArchiveTestImpl(boolean includeCron) {
         final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
-                .addPackage(ResourceLoader.class.getPackage()) // arquillian needs explicit knowledge of third-party producers
                 .addPackage(LoggerProducer.class.getPackage()) // arquillian needs explicit knowledge of third-party producers
                 .addPackage(SeamCronTestBase.class.getPackage());
         if (includeCron == true) {
@@ -78,13 +76,6 @@ public abstract class SeamCronTestBase implements Serializable {
         libs.addPackages(true, Logger.class.getPackage());
         libs.addPackages(true, org.jboss.logmanager.Logger.class.getPackage());
         libs.addPackages(true, SimpleLogger.class.getPackage());
-        libs.addPackages(true, org.jboss.solder.core.Client.class.getPackage());
-        libs.addPackages(true, org.jboss.solder.reflection.AnnotationInspector.class.getPackage());
-        libs.addPackages(true, org.jboss.solder.util.Sortable.class.getPackage());
-        libs.addPackages(true, org.jboss.solder.logging.Logger.class.getPackage());
-        libs.addPackages(true, org.jboss.solder.messages.MessageBundleInvocationHandler.class.getPackage());
-        libs.addPackages(true, org.jboss.solder.support.SolderMessages.class.getPackage());
-        libs.addPackages(true, org.apache.log4j.Priority.class.getPackage());
         libs.addPackages(true, javax.ejb.Singleton.class.getPackage());
         libs.addPackages(true, javax.time.Instant.class.getPackage());
         webArchive.addAsLibraries(libs);
