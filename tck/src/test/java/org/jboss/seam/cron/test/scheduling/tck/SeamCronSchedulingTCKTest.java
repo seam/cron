@@ -15,6 +15,7 @@ import org.jboss.seam.cron.test.scheduling.beans.ScheduledBean;
 import javax.inject.Inject;
 
 import junit.framework.Assert;
+import static junit.framework.Assert.fail;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -37,8 +38,8 @@ public class SeamCronSchedulingTCKTest {
     private static final int SLEEP_TIME = 2000;
     private static final Logger log = LoggerFactory.getLogger(SeamCronSchedulingTCKTest.class);
 
-    public static JavaArchive createSchedulingTckTestArchive() {
-        return SeamCronSchedulingTestBase.createSchedulingTestArchive()
+    public static JavaArchive createSchedulingTckTestArchive(boolean useTestBeansXml, boolean includeCron) {
+        return SeamCronSchedulingTestBase.createSchedulingTestArchive(useTestBeansXml, includeCron)
                 .addPackage(SeamCronSchedulingTCKTest.class.getPackage());
     }
 
@@ -56,11 +57,9 @@ public class SeamCronSchedulingTCKTest {
     @Test
     public void testEventsGetsFired() {
         log.info("Testing schedule observer receiving events");
-        assert bean.isScheduledEventObserved() == false;
-        assert bean.isNamedEventObserved() == false;
-        assert bean.isTypesafeEventObserved() == false;
-        assert bean.isEverySecondEventObserved() == false;
-        assert bean.isSystemPropSchedFired() == false;
+        if (bean.isScheduledEventObserved()) {
+            fail("Test data is not as expected prior to test");
+        }
 
         int totalTimeWaited = 0;
         while (!(bean.isScheduledEventObserved()
@@ -79,12 +78,18 @@ public class SeamCronSchedulingTCKTest {
                 Assert.fail("Thread was woken up while sleeping. Why?");
             }
         }
-        assert bean.isScheduledEventObserved() == true;
-        assert bean.isNamedEventObserved() == true;
-        assert bean.isEverySecondEventObserved() == true;
-        assert bean.isFiredCorrectly() == true;
-        assert bean.isTypesafeEventObserved() == true;
-        assert bean.isSystemPropSchedFired() == true;
 
+        if (!(bean.isScheduledEventObserved()
+                && bean.isNamedEventObserved()
+                && bean.isEverySecondEventObserved()
+                && bean.isTypesafeEventObserved()
+                && bean.isSystemPropSchedFired())) {
+            System.out.println(bean.isScheduledEventObserved());
+            System.out.println(bean.isNamedEventObserved());
+            System.out.println(bean.isEverySecondEventObserved());
+            System.out.println(bean.isTypesafeEventObserved());
+            System.out.println(bean.isSystemPropSchedFired());
+            fail("Expected all of the above properties to be set to true by the configured schedules, but that wasn't the case");
+        }
     }
 }

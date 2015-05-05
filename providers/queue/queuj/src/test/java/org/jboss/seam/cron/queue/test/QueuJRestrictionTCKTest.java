@@ -31,7 +31,7 @@ public class QueuJRestrictionTCKTest extends SeamCronRestrictionTCKTest {
 
     @Deployment
     public static JavaArchive deployment() {
-        return SeamCronRestrictionTCKTest.createRestrictionTckTestArchive()
+        return SeamCronRestrictionTCKTest.createRestrictionTckTestArchive(true, true)
                 .addPackages(true, QueuJQueueProvider.class.getPackage())
                 .addPackages(true, QueuJAsynchronousProvider.class.getPackage())
                 .addPackages(true, QueuJScheduleProvider.class.getPackage());

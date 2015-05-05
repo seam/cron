@@ -42,8 +42,8 @@ public class SeamCronRestrictionTCKTest {
     private static final int NUM_EXECUTIONS = 20;
     private static final Logger log = LoggerFactory.getLogger(SeamCronRestrictionTCKTest.class);
 
-    public static JavaArchive createRestrictionTckTestArchive() {
-        return SeamCronRestrictionTestBase.createRestrictionTestArchive()
+    public static JavaArchive createRestrictionTckTestArchive(boolean useTestBeansXml, boolean includeCron) {
+        return SeamCronRestrictionTestBase.createRestrictionTestArchive(useTestBeansXml, includeCron)
                 .addPackage(SeamCronRestrictionTCKTest.class.getPackage());
     }
     

@@ -16,28 +16,24 @@
  */
 package org.jboss.seam.cron.spi.scheduling.trigger;
 
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 
 import javax.enterprise.inject.spi.BeanManager;
 
-
 /**
- * Represents the objects required in order for a #{@link DefaultTriggerHelper}
- * to be able to fire the appropriate event when required to.
+ * Represents the objects required in order for a #{@link TriggerSupport} to be able to fire the appropriate event when required to.
  *
  * @author Peter Royle
  */
-public class TriggerSupplies {
+public class TriggerSupplies extends TriggerDetail implements Serializable {
 
     protected final BeanManager beanManager;
-    protected final Annotation qualifier;
-    protected final Set<Annotation> allQualifiers;
 
     public TriggerSupplies(final BeanManager beanManager, final Annotation qualifier, final Set<Annotation> allQualifiers) {
+        super(qualifier, allQualifiers);
         this.beanManager = beanManager;
-        this.qualifier = qualifier;
-        this.allQualifiers = allQualifiers;
     }
 
     /**
@@ -47,23 +43,9 @@ public class TriggerSupplies {
         return beanManager;
     }
 
-    /**
-     * @return the original qualifier on the schedule definition.
-     */
-    public Annotation getQualifier() {
-        return qualifier;
-    }
-
-    /**
-     * @return all the original qualifiers on the schedule definition.
-     */
-    public Set<Annotation> getQualifiers() {
-        return allQualifiers;
-    }
-
     @Override
     public String toString() {
-        return getClass().getName() + "{" + "beanManager=" + beanManager + ", qualifier=" + qualifier + '}';
+        return getClass().getName() + "{" + "beanManager=" + beanManager + ", qualifier=" + getQualifier() + '}';
     }
-    
+
 }

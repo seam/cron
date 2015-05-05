@@ -29,12 +29,13 @@ import org.quartz.JobExecutionException;
  *
  * @author Peter Royle
  */
-public class TriggerJob extends ProviderContextTriggerSupport<JobExecutionContext>
-        implements Job {
+public class TriggerJob extends ProviderContextTriggerSupport implements Job {
 
+    private JobExecutionContext jobExecutionContext;
+    
     @Override
-    public TriggerSupplies fetchTriggerSupplies(final JobExecutionContext context) {
-        return (TriggerSupplies) context.getJobDetail().getJobDataMap().get(QuartzScheduleProvider.TRIGGER_SUPPLIES);
+    public TriggerSupplies fetchTriggerSupplies() {
+        return (TriggerSupplies) jobExecutionContext.getJobDetail().getJobDataMap().get(QuartzScheduleProvider.TRIGGER_SUPPLIES);
     }
 
     /**
@@ -45,8 +46,8 @@ public class TriggerJob extends ProviderContextTriggerSupport<JobExecutionContex
      * @throws JobExecutionException
      */
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        fireTrigger(context);
+        this.jobExecutionContext = context;
+        fireTrigger();
     }
-
 
 }

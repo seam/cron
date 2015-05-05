@@ -45,8 +45,8 @@ public class SeamCronSchedulingTCKTestLong {
     public static final int LONG_SLEEP_TIME = 100000;
     private static final Logger log = LoggerFactory.getLogger(SeamCronSchedulingTCKTestLong.class);
 
-    public static JavaArchive createSchedulingTckTestArchive() {
-        return SeamCronSchedulingTestBase.createSchedulingTestArchive()
+    public static JavaArchive createSchedulingTckTestArchive(boolean useTestBeansXml, boolean includeCron) {
+        return SeamCronSchedulingTestBase.createSchedulingTestArchive(useTestBeansXml, includeCron)
                 .addPackage(SeamCronSchedulingTCKTestLong.class.getPackage());
     }
     @Inject
