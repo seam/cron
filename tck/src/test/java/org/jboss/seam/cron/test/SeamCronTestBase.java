@@ -76,6 +76,7 @@ public abstract class SeamCronTestBase implements Serializable {
         // TODO: when we upgrade shrinkwrap, resolve jars via maven?
         final JavaArchive libs = ShrinkWrap.create(JavaArchive.class, "libs.jar");
         libs.addPackages(true, Logger.class.getPackage());
+        libs.addPackages(true, org.jboss.logmanager.Logger.class.getPackage());
         libs.addPackages(true, SimpleLogger.class.getPackage());
         libs.addPackages(true, org.jboss.solder.core.Client.class.getPackage());
         libs.addPackages(true, org.jboss.solder.reflection.AnnotationInspector.class.getPackage());

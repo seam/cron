@@ -11,26 +11,23 @@ package org.jboss.seam.cron.scheduling.timerservice;
 
 import java.io.Serializable;
 import java.util.GregorianCalendar;
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.ejb.LocalBean;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.ScheduleExpression;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import org.jboss.seam.cron.api.scheduling.Every;
 import static org.jboss.seam.cron.api.scheduling.Interval.HOUR;
 import static org.jboss.seam.cron.api.scheduling.Interval.MINUTE;
 import static org.jboss.seam.cron.api.scheduling.Interval.SECOND;
-import org.jboss.seam.cron.impl.scheduling.exception.CronProviderDestructionException;
-import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationException;
-import org.jboss.seam.cron.spi.CronProviderLifecycle;
-import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.ProviderContextTriggerSupport;
 import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
@@ -42,21 +39,26 @@ import org.slf4j.Logger;
  *
  * @author peteroyle
  */
-@Singleton // Can't use javax.ejb.@Singleton yet as it causes JBoss AS to hang on deployment.
-@LocalBean
+@Startup
+@Singleton
+//@Stateless
+//@Singleton // Can't use javax.ejb.@Singleton yet as it causes JBoss AS to hang on deployment.
+//@LocalBean
 @Lock(LockType.READ) // serialise backed-up jobs. Use @AccessTimeout(value = 1, unit = TimeUnit.MINUTES) on @Observes methods to specify a finite wait time when jobs back up.
-public class TimerScheduleProviderEjb implements CronProviderLifecycle, CronSchedulingProvider {
+public class TimerScheduleProviderEjb {
 
+    @Inject
+    private TimerScheduleConfig scheduleConfigs;
     @Inject
     private BeanManager beanManager;
     @Resource
     private TimerService timerService;
-    @Inject
-    private Logger log;
+//    @Inject
+//    private Logger log;
 
     @Timeout
     public void fireScheduledEvent(Timer timer) {
-        log.debug("Cron EJB Timer timeout firing");
+//        log.debug("Cron EJB Timer timeout firing");
         final Serializable info = timer.getInfo();
         new ProviderContextTriggerSupport() {
             @Override
@@ -67,16 +69,19 @@ public class TimerScheduleProviderEjb implements CronProviderLifecycle, CronSche
         }.fireTrigger();
     }
 
-    public void initProvider() throws CronProviderInitialisationException {
-        log.debug("Initialising Cron EJB Timer Scheduling Provider");
+    @PostConstruct
+    public void initScheduledTriggers() {
+//        log.debug("Initiailising schedule configs found during extension initialisation");
+        for (ScheduledTriggerDetail schedTrigger : scheduleConfigs.getScheduleTriggers()) {
+            processScheduledTrigger(schedTrigger);
+        }
+        for (IntervalTriggerDetail intervalTrigger : scheduleConfigs.getIntervalTriggers()) {
+            processIntervalTrigger(intervalTrigger);
+        }
     }
 
-    public void destroyProvider() throws CronProviderDestructionException {
-        log.debug("Destroying Cron EJB Timer Scheduling Provider");
-    }
-
-    public void processScheduledTrigger(String queueId, ScheduledTriggerDetail schedTriggerDetails) throws Exception {
-        log.debug("TimerScheduleProviderEjb.processScheduledTrigger");
+    public void processScheduledTrigger(ScheduledTriggerDetail schedTriggerDetails) {
+//        log.debug("TimerScheduleProviderEjb.processScheduledTrigger: " + schedTriggerDetails);
         // TODO: shouldn't be passing beanMnager here because it's not Serializable. Might be OK since we're not using persistant schedules, but who knows.
         // TODO: .. Ultimately we want to refactor TriggerSupplies to remove beanManager but not sure we can because beanManager is needed in TriggerSupport,
         // TODO: .. and in non-CDI environments there's no other way to get a reference to it.
@@ -104,7 +109,8 @@ public class TimerScheduleProviderEjb implements CronProviderLifecycle, CronSche
         Timer timer = timerService.createCalendarTimer(scheduleExpression, timerConfig);
     }
 
-    public void processIntervalTrigger(String queueId, IntervalTriggerDetail intervalTriggerDetails) throws Exception {
+    public void processIntervalTrigger(IntervalTriggerDetail intervalTriggerDetails) {
+//        log.debug("TimerScheduleProviderEjb.processIntervalTrigger: " + intervalTriggerDetails);
         GregorianCalendar gc = getOneSecondLater();
         TriggerSupplies observerDetails = new TriggerSupplies(beanManager, intervalTriggerDetails.getQualifier(), intervalTriggerDetails.
                 getQualifiers());

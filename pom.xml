@@ -429,6 +429,8 @@
                         <configuration>
                             <systemPropertyVariables>
                                 <arquillian.launch>jboss</arquillian.launch>
+                                <!-- This is for the LogManager bug on OS X, but it seems to have no effect. Try adding -logmodule org.jboss.logmanager to the startup script after it's downloaded instead. -->
+                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
