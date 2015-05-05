@@ -10,8 +10,11 @@
 package org.jboss.seam.cron.util;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
+import org.apache.commons.lang.StringUtils;
 import org.apache.deltaspike.core.api.config.ConfigResolver;
+import org.jboss.seam.cron.impl.scheduling.exception.SchedulerConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,14 +30,24 @@ public class PropertyResolver {
 
     static {
         try {
-            cronProperties.load(PropertyResolver.class.getResourceAsStream(SCHEDULE_PROPERTIES_PATH));
+            final InputStream propertyResource = PropertyResolver.class.getResourceAsStream(SCHEDULE_PROPERTIES_PATH);
+            if (propertyResource != null) {
+                cronProperties.load(propertyResource);
+            } else {
+                LoggerFactory.getLogger(PropertyResolver.class).warn("Cron could not find " + SCHEDULE_PROPERTIES_PATH
+                        + " on the classpath and therefore will not be using it a source of named schedules.");
+            }
         } catch (IOException ex) {
-            LoggerFactory.getLogger(PropertyResolver.class).warn("Cron could not find " + SCHEDULE_PROPERTIES_PATH
+            LoggerFactory.getLogger(PropertyResolver.class).warn("Cron could not read from " + SCHEDULE_PROPERTIES_PATH
                     + " on the classpath and therefore will not be using it a source of named schedules.", ex);
         }
     }
 
     public static String resolve(String key) {
+        return resolve(key, false);
+    }
+
+    public static String resolve(String key, boolean mandatory) {
         String value;
         try {
             // try all the power of DeltaSpike first
@@ -49,6 +62,12 @@ public class PropertyResolver {
                 // failing that, try cron.properties
                 value = cronProperties.getProperty(key);
             }
+        }
+        if (mandatory && StringUtils.isEmpty(key)) {
+            throw new SchedulerConfigurationException(
+                    "Found empty or missing cron definition for named schedule '"
+                    + key + "'. It should be specified in the file "
+                    + SCHEDULE_PROPERTIES_PATH + " on the classpath, or as a system property.");
         }
         return value;
     }

@@ -24,7 +24,8 @@ import org.jboss.seam.cron.api.asynchronous.Asynchronous;
 import org.jboss.seam.cron.api.queue.Queue;
 import org.jboss.seam.cron.api.restriction.AsyncRestriction;
 import org.jboss.seam.cron.api.restriction.StatusIndexes;
-import org.jboss.solder.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -39,7 +40,7 @@ public class SomeAsyncAndRestrictionMethods {
     public static final int SLEEP = 1000;
     public static final int MAX_CONCURRENT = 3;
     private static final Object MUTEX = new Object();
-    private static final Logger log = Logger.getLogger(SomeAsyncAndRestrictionMethods.class);
+    private static final Logger log = LoggerFactory.getLogger(SomeAsyncAndRestrictionMethods.class);
 
     
     
