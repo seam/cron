@@ -16,13 +16,6 @@ import javax.enterprise.inject.spi.ProcessObserverMethod;
  */
 public class DummyExtension implements Extension {
 
-    /**
-     * Because "Extension classes should be public and have a public constructor for maximum portability"
-     */
-    public DummyExtension() {
-        System.out.println("Initiailised DummyService");
-    }
-
     public void registerDummyServiceObserver(@Observes ProcessObserverMethod pom, DummyService dummyService) {
         System.out.println("processing observer method");
         dummyService.init();

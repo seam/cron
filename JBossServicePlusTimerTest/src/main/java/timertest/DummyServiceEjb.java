@@ -1,7 +1,9 @@
 package timertest;
 
 import javax.ejb.LocalBean;
-import javax.ejb.Singleton;
+//import javax.ejb.Singleton; // <!-- this causes the hang!
+import javax.inject.Singleton;
+
 
 /**
  *
