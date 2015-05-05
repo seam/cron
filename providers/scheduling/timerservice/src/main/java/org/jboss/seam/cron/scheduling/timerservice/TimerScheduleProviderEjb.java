@@ -16,13 +16,13 @@ import javax.ejb.LocalBean;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.ScheduleExpression;
-import javax.ejb.Singleton;
 import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import org.jboss.seam.cron.api.scheduling.Every;
 import static org.jboss.seam.cron.api.scheduling.Interval.HOUR;
 import static org.jboss.seam.cron.api.scheduling.Interval.MINUTE;
@@ -42,7 +42,7 @@ import org.slf4j.Logger;
  *
  * @author peteroyle
  */
-@Singleton
+@Singleton // Can't use javax.ejb.@Singleton yet as it causes JBoss AS to hang on deployment.
 @LocalBean
 @Lock(LockType.READ) // serialise backed-up jobs. Use @AccessTimeout(value = 1, unit = TimeUnit.MINUTES) on @Observes methods to specify a finite wait time when jobs back up.
 public class TimerScheduleProviderEjb implements CronProviderLifecycle, CronSchedulingProvider {
