@@ -97,7 +97,7 @@ Check it out:
         return receipt;
     }
 
-The asynchronous method 'generateReceipt()' returns an instance of `Receipt`. Once the method returns, the result will be fired as a CDI 
+The asynchronous method 'generateReceiptForUser(...)' returns an instance of `Receipt`. Once the method returns, the result will be fired as a CDI 
 event. That way you can perform further processing on the result by observing events according to the method return type, like so:
 
     public void notifyUserOfNewReceipt(@Observes Receipt receipt, @LoggedIn User user) {
