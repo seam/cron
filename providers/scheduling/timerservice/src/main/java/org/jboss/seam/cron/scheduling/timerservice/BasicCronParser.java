@@ -45,7 +45,6 @@ public class BasicCronParser {
     }
 
     private final void parseCronExpression() {
-        System.out.println("Splitting cron expression: " + this.cronExpression);
         final String[] parts = StringUtils.split(this.cronExpression, " \t");
         secondsExpr = parts[0];
         minutesExpr = parts[1];

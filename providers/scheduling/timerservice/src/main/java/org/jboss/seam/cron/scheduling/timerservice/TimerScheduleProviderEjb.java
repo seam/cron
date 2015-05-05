@@ -13,6 +13,8 @@ import java.io.Serializable;
 import java.util.GregorianCalendar;
 import javax.annotation.Resource;
 import javax.ejb.LocalBean;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.ScheduleExpression;
 import javax.ejb.Singleton;
 import javax.ejb.Timeout;
@@ -42,6 +44,7 @@ import org.slf4j.Logger;
  */
 @Singleton
 @LocalBean
+@Lock(LockType.READ) // serialise backed-up jobs. Use @AccessTimeout(value = 1, unit = TimeUnit.MINUTES) on @Observes methods to specify a finite wait time when jobs back up.
 public class TimerScheduleProviderEjb implements CronProviderLifecycle, CronSchedulingProvider {
 
     @Inject
