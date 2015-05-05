@@ -97,7 +97,7 @@ Check it out:
         return receipt;
     }
 
-The asynchronous method 'generateReceipt()' returns an instance of `Receipt`. Once the method returns, the result will be fires as a CDI 
+The asynchronous method 'generateReceipt()' returns an instance of `Receipt`. Once the method returns, the result will be fired as a CDI 
 event. That way you can perform further processing on the result by observing events according to the method return type, like so:
 
     public void notifyUserOfNewReceipt(@Observes Receipt receipt, @LoggedIn User user) {
@@ -138,7 +138,7 @@ additional CDI-style qualifiers into the mix, to achieve something like this:
      * Track spending habits by listening only to debits.
      */
     public void trackSpending(@Observes @Debit Balance balance) {
-        db.saveSomething();
+        db.saveDebit(balance);
     }
 
 Finally, if you prefer a more traditional, EJB-esque approach then you can specify
@@ -162,9 +162,9 @@ And the calling code:
         Box result = future.get(10, SECONDS);
     }
 
-## This is awesome but not awesome enough yet.
+## Seam Cron is good, but not great.
 
-I know, it's true. But you can help. If you know exactly what you need and have 
+It's true. But you can help. If you know exactly what you need and have 
 the skillpower to get it done, then please fork this project and submit a pull 
 request. Alternatively submit a feature request or bug report over at JIRA:
 https://issues.jboss.org/browse/SEAMCRON
