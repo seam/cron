@@ -373,7 +373,8 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
                 <property>
-                    <name>release</name>
+                    <name>provider.type</name>
+                    <value>java-se</value>
                 </property>
             </activation>
             <build>
@@ -615,6 +616,10 @@
             <id>java-se-providers</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>provider.type</name>
+                    <value>java-se</value>
+                </property>
             </activation>
             <modules>
                 <module>api</module>
