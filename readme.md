@@ -21,7 +21,7 @@ be resolved into a schedule using a simple `cron.properties` file at the root of
     offpeak=4:00
 
 Externalising the schedule is a good idea, but with CDI we can take it a step further by associating the named schedule with a typesafe
-CDI qualifier. In this case, we could introduce a custom CDI qualifier `@Offpeak` like so:
+CDI qualifier. In this case, we could introduce a custom qualifier `@Offpeak` like so:
 
     @Scheduled("offpeak")
     @Qualifier
@@ -41,8 +41,8 @@ Now we can refer the the schedule in a typesafe way throughout our codebase:
         // do it
     }
 
-If your requirements are fairly simple, for example running a task repeatedly at 
-a specific interval, then you can use the special `@Every` qualifier like so:
+If your requirements are fairly simple, for example running a task every hour, 
+then you can use the special `@Every` qualifier like so:
 
     public void clockChimes(@Observes @Every(HOUR) Trigger t) { 
         int chimes = t.getValue() % 12;
@@ -52,7 +52,7 @@ a specific interval, then you can use the special `@Every` qualifier like so:
         }
     }
 
-Note that the Trigger instance provides details of the interval for which it was fired - in this case the hour.
+Note that the Trigger instance provides details of the interval for which it was fired - in this case the specific hour.
 
 ## Slick Asynchronous Method Invocation
 
@@ -72,7 +72,7 @@ Check it out:
         return receipt;
     }
 
-The asynchronous method 'generateReceiptForUser(...)' returns an instance of `Receipt`. Once the method returns, the result will be fired as a CDI 
+Note that the asynchronous method 'generateReceiptForUser(...)' returns an instance of `Receipt`. Once the method returns, the result will be fired as a CDI 
 event. That way you can perform further processing on the result by observing events according to the method return type, like so:
 
     public void notifyUserOfNewReceipt(@Observes Receipt receipt, @LoggedIn User user) {
@@ -81,14 +81,14 @@ event. That way you can perform further processing on the result by observing ev
 
 The rules concerning return types of @Asynchronous methods are as follows:
 
-* If method return type is void, no event will be fired
+* If the method return type is void, no event will be fired
 * If the method invocation returns a value of null, no event will be fired. Be careful of this!
 
 You would typically want one dedicated return type per asynchronous method invocation
 for a one-to-one mapping between methods and their observers, but there may be use
 cases for having multiple asynchronous methods all reporting their results to a single
 observer, and Cron would be totally fine with that. You could also introduce some 
-additional CDI-style qualifiers into the mix, to achieve something like this:
+additional CDI qualifiers into the mix, to achieve something like this:
 
     @Asynchronous @Credit
     public Balance addCredit(int dollars) {
@@ -116,10 +116,10 @@ additional CDI-style qualifiers into the mix, to achieve something like this:
         db.saveDebit(balance);
     }
 
-Finally, if you prefer a more traditional, EJB-esque approach then you can specify
+Finally, if you prefer a more futuristic approach then you can specify
 a return type of Future<T> and use the `AsyncResult` helper to return the result
-of your method call. Seam Cron will automatically wrap this in a legit Future<T>
-which the calling code can use as expected immediately.
+of your method call. Seam Cron will automatically wrap this in a useful Future<T> implementation
+which the calling code can use as expected, immediately.
 
     @Asynchronous
     public Future<Box> doSomeHeavyLiftingInTheBackground() {
@@ -133,16 +133,9 @@ And the calling code:
 
     public void someMethod() {
         Future<Box> future = liftingBean.doSomeHeavyLiftingInTheBackground();
-        // blocks until asynch method returns or gives up
+        // blocks until async method returns or gives up
         Box result = future.get(10, SECONDS);
     }
-
-## Seam Cron is good, but not great.
-
-It's true. But you can help. If you know exactly what you need and have 
-the skillpower to get it done, then please fork this project and submit a pull 
-request. Alternatively submit a feature request or bug report over at JIRA:
-https://issues.jboss.org/browse/SEAMCRON
 
 ## Quick Start
 
@@ -168,6 +161,13 @@ To use Seam Cron in your Maven project, include the following dependencies in yo
             <version>3.1.0-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
+
+## Seam Cron is good, but not great.
+
+It's true. But you can help. If you know exactly what you need and have 
+the skillpower to get it done, then please fork this project and submit a pull 
+request. Alternatively submit a feature request or bug report over at JIRA:
+https://issues.jboss.org/browse/SEAMCRON
 
 ## Building From Source:
 

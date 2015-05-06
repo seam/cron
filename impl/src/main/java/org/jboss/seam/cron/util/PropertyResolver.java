@@ -51,23 +51,32 @@ public class PropertyResolver {
         String value;
         try {
             // try all the power of DeltaSpike first
+            // TODO: this is not working or not reliable yet, and will usually fall through to the resolveUsingBuiltInMethods method.
             Class.forName("org.apache.deltaspike.core.api.config.ConfigResolver");
             log.debug("Using DeltaSpike config resolver to resolve {0}", key);
             value = ConfigResolver.getProjectStageAwarePropertyValue(key);
-        } catch (ClassNotFoundException ex) {
-            log.debug("Falling back to built-in property resolution resolving property {0}", key);
-            // fall back to System properties 
-            value = System.getProperty(key);
-            if (value == null) {
-                // failing that, try cron.properties
-                value = cronProperties.getProperty(key);
+            if (StringUtils.isEmpty(value)) {
+                value = resolveUsingBuiltInMethods(key);
             }
+        } catch (ClassNotFoundException ex) {
+            value = resolveUsingBuiltInMethods(key);
         }
         if (mandatory && StringUtils.isEmpty(value)) {
             throw new SchedulerConfigurationException(
                     "Found empty or missing cron definition for named schedule '"
                     + key + "'. It should be specified in the file "
                     + SCHEDULE_PROPERTIES_PATH + " on the classpath, or as a system property.");
+        }
+        return value;
+    }
+
+    protected static String resolveUsingBuiltInMethods(String key) {
+        log.debug("Falling back to built-in property resolution resolving property {0}", key);
+        // fall back to System properties
+        String value = System.getProperty(key);
+        if (value == null) {
+            // failing that, try cron.properties
+            value = cronProperties.getProperty(key);
         }
         return value;
     }
