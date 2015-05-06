@@ -378,6 +378,20 @@
                     <name>release</name>
                 </property>
             </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.14.1</version>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <arquillian.launch>weld-se-1.1</arquillian.launch>
+                                <test.system.property>*/5 * * ? * *</test.system.property>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
             <dependencies>
                 <dependency>
                     <groupId>org.jboss.arquillian.container</groupId>
@@ -428,7 +442,7 @@
                         <version>2.14.1</version>
                         <configuration>
                             <systemPropertyVariables>
-                                <arquillian.launch>jboss</arquillian.launch>
+                                <arquillian.launch>jboss-as-7.0</arquillian.launch>
                                 <!-- This is for the LogManager bug on OS X, but it seems to have no effect. Try adding -logmodule org.jboss.logmanager to the startup script after it's downloaded instead. -->
                                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                             </systemPropertyVariables>

@@ -28,8 +28,8 @@ import org.slf4j.LoggerFactory;
 public class TimerServiceSchedulingTCKTest extends SeamCronSchedulingTCKTest {
 
     private static Logger log = LoggerFactory.getLogger(TimerServiceSchedulingTCKTest.class);
-
-    @Deployment
+    
+    @Deployment()
     public static WebArchive createDefaultArchive() {
         JavaArchive baseArchive = SeamCronSchedulingTCKTest.createSchedulingTckTestArchive(false, false)
                 .addPackages(true, TimerScheduleProviderEjb.class.getPackage());
@@ -39,7 +39,7 @@ public class TimerServiceSchedulingTCKTest extends SeamCronSchedulingTCKTest {
 
         addNonCDILibraries(archive);
         addCronAsJar(archive);
-        
+
         log.debug(archive.toString(true));
         return archive;
     }

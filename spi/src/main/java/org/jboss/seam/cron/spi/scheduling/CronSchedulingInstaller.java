@@ -40,8 +40,6 @@ import org.slf4j.Logger;
 public class CronSchedulingInstaller {
 
     @Inject
-    private PropertyResolver schedProperties;
-    @Inject
     private Logger log;
 
     /**
@@ -123,7 +121,7 @@ public class CronSchedulingInstaller {
             cronScheduleSpec = scheduleSpec;
         } else {
             // check system properties
-            cronScheduleSpec = schedProperties.resolve(scheduleSpec, true);
+            cronScheduleSpec = PropertyResolver.resolve(scheduleSpec, true);
         }
 
         return cronScheduleSpec;

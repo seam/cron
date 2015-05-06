@@ -41,9 +41,6 @@ import org.slf4j.Logger;
  */
 @Startup
 @Singleton
-//@Stateless
-//@Singleton // Can't use javax.ejb.@Singleton yet as it causes JBoss AS to hang on deployment.
-//@LocalBean
 @Lock(LockType.READ) // serialise backed-up jobs. Use @AccessTimeout(value = 1, unit = TimeUnit.MINUTES) on @Observes methods to specify a finite wait time when jobs back up.
 public class TimerScheduleProviderEjb {
 
@@ -53,12 +50,12 @@ public class TimerScheduleProviderEjb {
     private BeanManager beanManager;
     @Resource
     private TimerService timerService;
-//    @Inject
-//    private Logger log;
+    @Inject
+    private Logger log;
 
     @Timeout
     public void fireScheduledEvent(Timer timer) {
-//        log.debug("Cron EJB Timer timeout firing");
+        log.debug("Cron EJB Timer timeout firing");
         final Serializable info = timer.getInfo();
         new ProviderContextTriggerSupport() {
             @Override
@@ -71,7 +68,7 @@ public class TimerScheduleProviderEjb {
 
     @PostConstruct
     public void initScheduledTriggers() {
-//        log.debug("Initiailising schedule configs found during extension initialisation");
+        log.debug("Initiailising schedule configs found during extension initialisation");
         for (ScheduledTriggerDetail schedTrigger : scheduleConfigs.getScheduleTriggers()) {
             processScheduledTrigger(schedTrigger);
         }
@@ -81,7 +78,7 @@ public class TimerScheduleProviderEjb {
     }
 
     public void processScheduledTrigger(ScheduledTriggerDetail schedTriggerDetails) {
-//        log.debug("TimerScheduleProviderEjb.processScheduledTrigger: " + schedTriggerDetails);
+        log.debug("TimerScheduleProviderEjb.processScheduledTrigger: " + schedTriggerDetails);
         // TODO: shouldn't be passing beanMnager here because it's not Serializable. Might be OK since we're not using persistant schedules, but who knows.
         // TODO: .. Ultimately we want to refactor TriggerSupplies to remove beanManager but not sure we can because beanManager is needed in TriggerSupport,
         // TODO: .. and in non-CDI environments there's no other way to get a reference to it.
@@ -110,7 +107,7 @@ public class TimerScheduleProviderEjb {
     }
 
     public void processIntervalTrigger(IntervalTriggerDetail intervalTriggerDetails) {
-//        log.debug("TimerScheduleProviderEjb.processIntervalTrigger: " + intervalTriggerDetails);
+        log.debug("TimerScheduleProviderEjb.processIntervalTrigger: " + intervalTriggerDetails);
         GregorianCalendar gc = getOneSecondLater();
         TriggerSupplies observerDetails = new TriggerSupplies(beanManager, intervalTriggerDetails.getQualifier(), intervalTriggerDetails.
                 getQualifiers());

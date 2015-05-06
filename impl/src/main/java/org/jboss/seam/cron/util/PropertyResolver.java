@@ -35,11 +35,11 @@ public class PropertyResolver {
                 cronProperties.load(propertyResource);
             } else {
                 LoggerFactory.getLogger(PropertyResolver.class).warn("Cron could not find " + SCHEDULE_PROPERTIES_PATH
-                        + " on the classpath and therefore will not be using it a source of named schedules.");
+                        + " on the classpath and therefore will not be using it as a source of named schedules.");
             }
         } catch (IOException ex) {
             LoggerFactory.getLogger(PropertyResolver.class).warn("Cron could not read from " + SCHEDULE_PROPERTIES_PATH
-                    + " on the classpath and therefore will not be using it a source of named schedules.", ex);
+                    + " on the classpath and therefore will not be using it as a source of named schedules.", ex);
         }
     }
 
@@ -63,7 +63,7 @@ public class PropertyResolver {
                 value = cronProperties.getProperty(key);
             }
         }
-        if (mandatory && StringUtils.isEmpty(key)) {
+        if (mandatory && StringUtils.isEmpty(value)) {
             throw new SchedulerConfigurationException(
                     "Found empty or missing cron definition for named schedule '"
                     + key + "'. It should be specified in the file "

@@ -21,4 +21,6 @@
     <engine>
         <property name="deploymentExportPath">target/deployment</property>
     </engine>
+    <container qualifier="weld-se-1.1" default="true">
+    </container>
 </arquillian>

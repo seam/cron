@@ -12,14 +12,12 @@ package org.jboss.seam.cron.scheduling.timerservice;
 import java.util.ArrayList;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderDestructionException;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationException;
 import org.jboss.seam.cron.spi.CronProviderLifecycle;
 import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
-import org.slf4j.Logger;
 
 /**
  *
