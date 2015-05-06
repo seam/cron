@@ -375,7 +375,8 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
                 <property>
-                    <name>release</name>
+                    <name>provider.type</name>
+                    <value>java-se</value>
                 </property>
             </activation>
             <build>
@@ -608,6 +609,42 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <!-- EE vs non-EE provider modules -->
+        <profile>
+            <id>java-se-providers</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>provider.type</name>
+                    <value>java-se</value>
+                </property>
+            </activation>
+            <modules>
+                <module>api</module>
+                <module>impl</module>
+                <module>spi</module>
+                <module>tck</module>
+                <module>providers/scheduling/quartz</module>
+                <module>providers/scheduling/queuj</module>
+                <module>providers/asynchronous/threads</module>
+                <module>providers/asynchronous/quartz</module>
+                <module>providers/asynchronous/queuj</module>
+                <module>providers/queue/queuj</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>java-ee-providers</id>
+            <activation>
+                <property>
+                    <name>provider.type</name>
+                    <value>java-ee</value>
+                </property>
+            </activation>
+            <modules>
+                <!-- Providers which require a full EE environment for testing (tested against JBoss AS 7) -->
+                <module>providers/scheduling/timerservice</module>
+            </modules>
         </profile>
     </profiles>
     
