@@ -2,31 +2,6 @@
 
 Simplify all of your background code execution using CDI.
 
-## Quick Start
-
-To use Seam Cron in your Maven project, include the following dependencies in your pom:
-
-        <dependency>
-            <groupId>org.jboss.seam.cron</groupId>
-            <artifactId>seam-cron-api</artifactId>
-            <version>3.1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <!-- For scheduled jobs. Choose between Quartz, Queuej and TimerService providers. The timerservice provider is recommended for EE environments. -->
-        <dependency>
-            <groupId>org.jboss.seam.cron</groupId>
-            <artifactId>seam-cron-scheduling-{quartz/queuej/timerservice}</artifactId>
-            <version>3.1.0-SNAPSHOT</version>
-            <scope>runtime</scope>
-        </dependency>
-        <!-- For asynchronous method execution. Choose between Quartz, Queuej and Java threads providers. -->
-        <dependency>
-            <groupId>org.jboss.seam.cron</groupId>
-            <artifactId>seam-cron-asynchronous-{quartz/queuej/threads}</artifactId>
-            <version>3.1.0-SNAPSHOT</version>
-            <scope>runtime</scope>
-        </dependency>
-
 ## Elegant Scheduling.
 
 Seam Cron is a CDI portable extension which allows you to 
@@ -168,6 +143,31 @@ It's true. But you can help. If you know exactly what you need and have
 the skillpower to get it done, then please fork this project and submit a pull 
 request. Alternatively submit a feature request or bug report over at JIRA:
 https://issues.jboss.org/browse/SEAMCRON
+
+## Quick Start
+
+To use Seam Cron in your Maven project, include the following dependencies in your pom:
+
+        <dependency>
+            <groupId>org.jboss.seam.cron</groupId>
+            <artifactId>seam-cron-api</artifactId>
+            <version>3.1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- For scheduled jobs. Choose between Quartz, Queuej and TimerService providers. The timerservice provider is recommended for EE environments. -->
+        <dependency>
+            <groupId>org.jboss.seam.cron</groupId>
+            <artifactId>seam-cron-scheduling-{quartz/queuej/timerservice}</artifactId>
+            <version>3.1.0-SNAPSHOT</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- For asynchronous method execution. Choose between Quartz, Queuej and Java threads providers. -->
+        <dependency>
+            <groupId>org.jboss.seam.cron</groupId>
+            <artifactId>seam-cron-asynchronous-{quartz/queuej/threads}</artifactId>
+            <version>3.1.0-SNAPSHOT</version>
+            <scope>runtime</scope>
+        </dependency>
 
 ## Building From Source:
 
