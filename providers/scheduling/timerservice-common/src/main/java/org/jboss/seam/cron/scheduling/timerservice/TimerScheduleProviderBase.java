@@ -125,4 +125,8 @@ public abstract class TimerScheduleProviderBase {
         }
     }
 
+    public TimerService getTimerService() {
+        return timerService;
+    }
+
 }
