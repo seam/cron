@@ -14,29 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.scheduling.timerservice;
-
-import javax.ejb.EJB;
-import javax.enterprise.inject.Produces;
-import org.jboss.seam.cron.spi.CronProviderLifecycle;
-import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
+package org.jboss.as.quickstarts.cluster.hasingleton.service.ejb;
 
 /**
- * This is required while we have to use @Stateless
- * @author pete
+ * @author <a href="mailto:wfink@redhat.com">Wolf-Dieter Fink</a>
  */
-public class TimerScheduleProviderFactory {
-    
-    @EJB
-    private TimerScheduleProviderEjb timerScheduleProviderEjb;
-    
-//    @Produces
-//    public CronProviderLifecycle getCronProviderLifecycle() {
-//        return this.timerScheduleProviderEjb;
-//    }
-//    
-//    @Produces
-//    public CronSchedulingProvider getCronSchedulingProvider() {
-//        return this.timerScheduleProviderEjb;
-//    }
+public interface Scheduler {
+
+    void initialize(String info);
+
+    void stop();
+
 }
