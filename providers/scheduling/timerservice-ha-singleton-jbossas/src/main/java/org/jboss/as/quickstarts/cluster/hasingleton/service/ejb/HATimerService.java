@@ -40,8 +40,9 @@ import org.jboss.seam.cron.util.PropertyResolver;
 public class HATimerService implements Service<String> {
 
     private static final Logger LOGGER = Logger.getLogger(HATimerService.class);
-    public static final ServiceName SINGLETON_SERVICE_NAME = ServiceName.JBOSS.append("quickstart", "ha", "singleton", "timer");
-
+    private static final String deployModuleName = PropertyResolver.resolve("ha.singleton.module.name", true);
+    public static final ServiceName SINGLETON_SERVICE_NAME = ServiceName.of(deployModuleName, "ha", "singleton", "timer");
+    
     /**
      * A flag whether the service is started.
      */
@@ -63,7 +64,6 @@ public class HATimerService implements Service<String> {
 
         final String node = System.getProperty("jboss.node.name");
         try {
-            final String deployModuleName = PropertyResolver.resolve("ha.singleton.module.name", true);
             InitialContext ic = new InitialContext();
             ((Scheduler) ic.lookup("global/" + deployModuleName + "/SchedulerBean!org.jboss.as.quickstarts.cluster.hasingleton.service.ejb.Scheduler")).initialize("HASingleton timer @" + node + " " + new Date());
         } catch (NamingException e) {
@@ -78,7 +78,6 @@ public class HATimerService implements Service<String> {
             LOGGER.info("Stop HASingleton timer service '" + this.getClass().getName() + "'");
             try {
                 InitialContext ic = new InitialContext();
-                final String deployModuleName = PropertyResolver.resolve("ha.singleton.module.name", true);
                 ((Scheduler) ic.lookup("global/" + deployModuleName + "/SchedulerBean!org.jboss.as.quickstarts.cluster.hasingleton.service.ejb.Scheduler")).stop();
             } catch (NamingException e) {
                 LOGGER.error("Could not stop timer", e);
