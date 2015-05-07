@@ -36,9 +36,6 @@
     </modules>
 
     <properties>
-        <test.ee>nope</test.ee>
-        <version.jboss.javaee6.bom>3.0.2.Final</version.jboss.javaee6.bom>
-        <seam.version>3.1.0.Beta3</seam.version>
         <deltaspike.version>1.0.3</deltaspike.version>
     </properties>
     <!-- Dependency management, including extra repositories if needed -->
@@ -109,14 +106,14 @@
             <dependency>
                 <groupId>org.jboss.spec</groupId>
                 <artifactId>jboss-javaee-6.0</artifactId>
-                <version>${version.jboss.javaee6.bom}</version>
+                <version>3.0.2.Final</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>            
             <dependency>
                 <groupId>org.jboss.seam</groupId>
                 <artifactId>seam-bom</artifactId>
-                <version>${seam.version}</version>
+                <version>3.1.0.Beta3</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>           
@@ -247,14 +244,6 @@
                 <version>2.4</version>
             </dependency>
 
-            <!-- 
-                        <dependency>
-                            <groupId>org.jboss.arquillian.container</groupId>
-                            <artifactId>arquillian-container</artifactId>
-                            <version>${arquillian.version}</version>
-                            <scope>test</scope>
-                        </dependency>
-            -->
             <!-- Dependencies for providers/quartz sub-project -->
             <!-- Runtime Dependencies -->
             <dependency>
@@ -289,6 +278,24 @@
                 <scope>runtime</scope>
             </dependency>
 
+            <!-- Dependencies for JBoss-specific HA Singleton Scheduling TimerService Provider -->
+            <dependency>
+                <groupId>org.jboss.msc</groupId>
+                <artifactId>jboss-msc</artifactId>
+                <version>1.2.4.Final</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.as</groupId>
+                <artifactId>jboss-as-clustering-singleton</artifactId>
+                <version>7.2.0.Final</version>
+            </dependency>
+            <!-- Import JBoss logging, to allow us to use logging -->
+            <dependency>
+                <groupId>org.jboss.as</groupId>
+                <artifactId>jboss-as-logging</artifactId>
+                <version>7.2.0.Final</version>
+            </dependency>
+            
             <!-- Dependencies for examples -->
             <dependency>
                 <groupId>jfree</groupId>
@@ -428,7 +435,15 @@
             </dependencyManagement>
         </profile>
         <profile>
-            <!-- This doesn't seem to deploy Cron tests very well, we're testing against Glassfish instead (still Weld) -->
+            <id>jboss_as_managed_7.2</id>
+            <activation>
+                <property>
+                    <name>provider.type</name>
+                    <value>java-ee</value>
+                </property>
+            </activation>
+        </profile>
+        <profile>
             <id>jboss_as_managed_7.0</id>
             <activation>
                 <!--<activeByDefault>true</activeByDefault>-->
@@ -444,8 +459,6 @@
                         <configuration>
                             <systemPropertyVariables>
                                 <arquillian.launch>jboss-as-7.0</arquillian.launch>
-                                <!-- This is for the LogManager bug on OS X, but it seems to have no effect. Try adding -logmodule org.jboss.logmanager to the startup script after it's downloaded instead. -->
-                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
@@ -644,6 +657,8 @@
             <modules>
                 <!-- Providers which require a full EE environment for testing (tested against JBoss AS 7) -->
                 <module>providers/scheduling/timerservice</module>
+                <module>providers/scheduling/timerservice-common</module>
+                <module>providers/scheduling/timerservice-ha-singleton-jbossas</module>
             </modules>
         </profile>
     </profiles>

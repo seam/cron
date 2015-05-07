@@ -20,6 +20,7 @@ import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
 
 /**
+ * Listens to schedule config callbacks from Cron and stores them in an @ApplicationScoped bean for use by the timer bean on startup.
  *
  * @author peteroyle
  */

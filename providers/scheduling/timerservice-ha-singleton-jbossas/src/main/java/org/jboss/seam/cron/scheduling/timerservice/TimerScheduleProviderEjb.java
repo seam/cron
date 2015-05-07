@@ -22,5 +22,4 @@ import javax.ejb.Startup;
 @Singleton
 @Lock(LockType.READ) // serialise backed-up jobs. Use @AccessTimeout(value = 1, unit = TimeUnit.MINUTES) on @Observes methods to specify a finite wait time when jobs back up.
 public class TimerScheduleProviderEjb extends TimerScheduleProviderBase {
-
 }
