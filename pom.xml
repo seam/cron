@@ -659,7 +659,6 @@
                 <!-- Providers which require a full EE environment for testing (tested against JBoss AS 7) -->
                 <module>providers/scheduling/timerservice</module>
                 <module>providers/scheduling/timerservice-common</module>
-                <module>providers/scheduling/timerservice-ha-singleton-jbossas</module>
             </modules>
         </profile>
     </profiles>

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.as.quickstarts.cluster.hasingleton.service.ejb;
+package org.jboss.seam.cron.scheduling.timerservice.singleton.jboss;
 
 import javax.ejb.Singleton;
 import javax.ejb.Timer;

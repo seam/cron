@@ -142,15 +142,16 @@ And the calling code:
 Since Java EE has its own scheduling API in the form of TimerService, Seam Cron provides a simple implementation
 which utilises TimerService, while still providing elegant observer based configuration.
 
-## Scheduling in a Java EE Cluster
+## Scheduling in a Java EE HA Cluster
 
-If you are deploying to a cluster, you will find that your timers will fire on all instances of the cluster at once.
-If you want each scheduled event to only occur on a single server in the cluster you can use the JBoss AS HA Singleton TimerService provider
-(this is obviously limited to deployment on a JBoss AS or EAP server at this point in time).
-For this to work there are two extra steps:
+If you deploy an application containing the Seam Cron TimerService provider to a HA cluster, it will detect the availability of HA services
+and deploy as a HA Singleton automatically. That way each scheduled observer method will only fire on a single server in the cluster, 
+as opposed to firing on all server instances at once. For this to work there are two extra configuration steps, depending on your 
+application server vendor:
 
-* Specify your deployment's name in `cron.properties` (at the root of your classpath) as `ha.singleton.module.name`. For example if your war is called business-app.war, your entry would look like `ha.singleton.module.name=business-app`. 
-* Add the following JBoss modules to your deployment's dependencies by adding them to `jboss-deployment-structure.xml` in your WEB-INF directory. For example:
+* JBoss AS/EAP:
+** Specify your deployment's name in `cron.properties` (at the root of your classpath) as `ha.singleton.module.name`. For example if your war is called business-app.war, your entry would look like `ha.singleton.module.name=business-app`. 
+** Add the following JBoss modules to your deployment's dependencies by adding them to `jboss-deployment-structure.xml` in your WEB-INF directory. For example:
 
     <jboss-deployment-structure>
         <deployment>
@@ -161,8 +162,11 @@ For this to work there are two extra steps:
             </dependencies>
         </deployment>
     </jboss-deployment-structure>
+** Note that HA Singleton mode will only be activated when using the standalone-ha.xml or standalone-full-ha.xml server configurations.
 
-Note that this provider will only work when using the standalone-ha.xml or standalone-full-ha.xml server configurations.
+Note: This is only supported in JBoss AS/EAP at the moment.
+On other application servers each scheduled observer method will be executed on all server instances at the same time.
+If you are interested in support for HA cluster deployment on other application servers please get in touch and/or submit a pull request.
 
 ## Quick Start
 
