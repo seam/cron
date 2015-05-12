@@ -149,9 +149,9 @@ and deploy as a HA Singleton automatically. That way each scheduled observer met
 as opposed to firing on all server instances at once. For this to work there are two extra configuration steps, depending on your 
 application server vendor:
 
-* JBoss AS/EAP:
-** Specify your deployment's name in `cron.properties` (at the root of your classpath) as `ha.singleton.module.name`. For example if your war is called business-app.war, your entry would look like `ha.singleton.module.name=business-app`. 
-** Add the following JBoss modules to your deployment's dependencies by adding them to `jboss-deployment-structure.xml` in your WEB-INF directory. For example:
+JBoss AS/EAP:
+* Specify your deployment's name in `cron.properties` (at the root of your classpath) as `ha.singleton.module.name`. For example if your war is called business-app.war, your entry would look like `ha.singleton.module.name=business-app`. 
+* Add the following JBoss modules to your deployment's dependencies by adding them to `jboss-deployment-structure.xml` in your WEB-INF directory. For example:
 
     <jboss-deployment-structure>
         <deployment>
@@ -162,7 +162,7 @@ application server vendor:
             </dependencies>
         </deployment>
     </jboss-deployment-structure>
-** Note that HA Singleton mode will only be activated when using the standalone-ha.xml or standalone-full-ha.xml server configurations.
+* Note that HA Singleton mode will only be activated when using the standalone-ha.xml or standalone-full-ha.xml server configurations.
 
 Note: This is only supported in JBoss AS/EAP at the moment.
 On other application servers each scheduled observer method will be executed on all server instances at the same time.
