@@ -2,11 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.jboss.seam.cron</groupId>
-    <artifactId>seam-cron-scheduling-timerservice-jboss-ha-singleton</artifactId>
+    <artifactId>seam-cron-scheduling-timerservice-ha-singleton</artifactId>
     <packaging>jar</packaging>
     <version>3.1.1-SNAPSHOT</version>
-    <name>Seam Cron Scheduling Provider: Java EE Timer Service - JBoss HA Singleton</name>
-    <description>The Java EE Timer Service provider of scheduling for Seam Cron.</description>
+    <name>Seam Cron Scheduling Provider: Java EE Timer Service - HA Singleton</name>
+    <description>The Java EE Timer Service scheduling provider for Seam Cron, HA Singleton version.</description>
     <url>http://seamframework.org/Seam3/CronModule</url>
 
     <parent>
