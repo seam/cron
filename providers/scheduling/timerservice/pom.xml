@@ -88,6 +88,29 @@
             <scope>test</scope>
             <type>jar</type>
         </dependency>
+        
+        <!-- Dependencies for JBoss HA Singleton -->
+        <!-- Import MSC, to allow us to write JBoss EAP services -->
+        <dependency>
+            <groupId>org.jboss.msc</groupId>
+            <artifactId>jboss-msc</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Import the JSR-250 API, we use provided scope because we aren't 
+        to use the version in JBoss EAP -->
+        <dependency>
+            <groupId>org.jboss.spec.javax.annotation</groupId>
+            <artifactId>jboss-annotations-api_1.1_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Import JBoss EAP Clustering Singleton, to allow us to create 
+        a singleton service -->
+        <dependency>
+            <groupId>org.jboss.as</groupId>
+            <artifactId>jboss-as-clustering-singleton</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
     </dependencies>
 
     <repositories>
