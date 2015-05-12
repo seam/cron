@@ -20,21 +20,6 @@
         <version>15</version>
     </parent>
 
-    <modules>
-        <module>api</module>
-        <module>impl</module>
-        <module>spi</module>
-        <module>tck</module>
-        <module>providers/scheduling/quartz</module>
-        <module>providers/scheduling/queuj</module>
-        <module>providers/asynchronous/threads</module>
-        <module>providers/asynchronous/quartz</module>
-        <module>providers/asynchronous/queuj</module>
-        <module>providers/queue/queuj</module>
-        <!-- test require a full EE environment, so test them by activating the jboss_as_managed_7.0 profile and speficying their pom.xml using -f on the commandline-->
-        <!--<module>providers/scheduling/timerservice</module>-->
-    </modules>
-
     <properties>
         <deltaspike.version>1.0.3</deltaspike.version>
     </properties>
@@ -446,7 +431,10 @@
         <profile>
             <id>jboss_as_managed_7.0</id>
             <activation>
-                <!--<activeByDefault>true</activeByDefault>-->
+                <property>
+                    <name>provider.type</name>
+                    <value>java-ee</value>
+                </property>
             </activation>
             <properties>
                 <jboss.dir.name.test>jboss-as-7.0.1.Final</jboss.dir.name.test>
@@ -459,6 +447,8 @@
                         <configuration>
                             <systemPropertyVariables>
                                 <arquillian.launch>jboss-as-7.0</arquillian.launch>
+                                <!-- This is for the LogManager bug on OS X, but it seems to have no effect. Try adding -logmodule org.jboss.logmanager to the startup script after it's downloaded instead. -->
+                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
@@ -657,8 +647,11 @@
             <modules>
                 <!-- Providers which require a full EE environment for testing (tested against JBoss AS 7) -->
                 <module>providers/scheduling/timerservice</module>
+<<<<<<< HEAD
                 <module>providers/scheduling/timerservice-common</module>
                 <module>providers/scheduling/timerservice-ha-singleton-jbossas</module>
+=======
+>>>>>>> ea430aa... Merge branch 'develop' into feature/schedule-java-ee-timer
             </modules>
         </profile>
     </profiles>

@@ -12,15 +12,8 @@ Without this configuration present, some functionality in the IDE may be limited
                 <property name="longtests">true</property>
                 <property name="provider.type">java-ee</property>
             </configuration>
-            <configuration id="longtests-provider-type-java-se" profiles="">
-                <property name="longtests">true</property>
-                <property name="provider.type">java-se</property>
-            </configuration>
             <configuration id="provider-type-java-ee" profiles="">
                 <property name="provider.type">java-ee</property>
-            </configuration>
-            <configuration id="provider-type-java-se" profiles="">
-                <property name="provider.type">java-se</property>
             </configuration>
         </configurations>
     </config-data>
