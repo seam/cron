@@ -171,6 +171,7 @@ If you are interested in support for HA cluster deployment on other application 
 ## Quick Start
 
 To use Seam Cron in your Maven project, include the following dependencies in your pom:
+```xml
 
         <dependency>
             <groupId>org.jboss.seam.cron</groupId>
@@ -192,7 +193,7 @@ To use Seam Cron in your Maven project, include the following dependencies in yo
             <version>3.1.0-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
-
+```
 ## Seam Cron is good, but not great.
 
 It's true. But you can help. If you know exactly what you need and have 
