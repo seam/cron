@@ -26,7 +26,7 @@ import org.jboss.seam.cron.spi.asynchronous.Invoker;
  * Creates a #{@link Callable} whose #{@literal call} method will block until 
  * the #{@literal executeInvocationContext()} method is called. This comes in
  * handy when returning Futures (eg: #{@literal new FutureTask(
- * new FutureInvokerSupport(invoker))}).
+ new CallableInvoker(invoker))}).
  * </p><p>
  * In the simplest case #{@literal executeInvocationContext()} could be called 
  * in the same thread prior to calling #{@literal call()}. This is useful when 
@@ -48,19 +48,24 @@ import org.jboss.seam.cron.spi.asynchronous.Invoker;
  *
  * @author peteroyle
  */
-public class FutureInvokerSupport implements Callable {
+public class CallableInvoker implements Callable {
 
     private Invoker executor;
     private final BlockingQueue queue = new ArrayBlockingQueue(1);
     // can't add null to a BlockingQueue, so we might have to add a marker instead
     private static final String RESULT_AS_NULL = "CRONRESULT_ASNULL";
 
-    public FutureInvokerSupport(final Invoker executor) {
+    public CallableInvoker(final Invoker executor) {
         this.executor = executor;
     }
 
     public void executeInvocationContext() throws Exception {
-        Object result = executor.executeInvocationContext();
+        Object result = null;
+        try {
+            result = executor.executeInvocationContext();
+        } catch (Exception e) {
+            // the executeInvocationContext method call will have saved the exception for later use during Future.get()
+        }
         if (result == null) {
             result = RESULT_AS_NULL;
         }
@@ -72,6 +77,11 @@ public class FutureInvokerSupport implements Callable {
         if (result == RESULT_AS_NULL) {
             result = null;
         }
+        // This is where we need to re-throw any exception which may ave occurred during executeInvocationContext()
+        if (executor.getException() != null) {
+            throw executor.getException();
+        }
         return result;
     }
+        
 }

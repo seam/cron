@@ -29,7 +29,7 @@ import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationE
 import org.jboss.seam.cron.spi.CronProviderLifecycle;
 import org.jboss.seam.cron.spi.asynchronous.CronAsynchronousProvider;
 import org.jboss.seam.cron.spi.asynchronous.Invoker;
-import org.jboss.seam.cron.spi.asynchronous.support.FutureInvokerSupport;
+import org.jboss.seam.cron.spi.asynchronous.support.CallableInvoker;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -105,8 +105,8 @@ public class QuartzAsynchronousProvider implements CronProviderLifecycle, CronAs
         return asyncResult;
     }
 
-    private FutureInvokerSupport executeMethodAsScheduledJob(final Invoker invoker) throws AsynchronousMethodInvocationException {
-        final FutureInvokerSupport drs = new FutureInvokerSupport(invoker);
+    private CallableInvoker executeMethodAsScheduledJob(final Invoker invoker) throws AsynchronousMethodInvocationException {
+        final CallableInvoker drs = new CallableInvoker(invoker);
         try {
             final String name = UUID.randomUUID().toString();
             JobDetail jobDetail = new JobDetail(name, ASYNC_JOB_GROUP, AsyncMethodInvocationJob.class);

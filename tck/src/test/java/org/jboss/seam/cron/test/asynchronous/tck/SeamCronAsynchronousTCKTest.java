@@ -133,7 +133,7 @@ public class SeamCronAsynchronousTCKTest {
     }
     
     @Test
-    public void testErrorThrownReturnsAsPerEJBSpec() {
+    public void testErrorThrownReturnsAsPerEJBSpec() throws Exception {
         log.info("Testing that an error thrown during an @Asynchronous invocation which returns a Future will be delivered to the caller as per the EJB spec");
         assertNotNull(asynchBean);
         asynchBean.reset();
@@ -142,12 +142,14 @@ public class SeamCronAsynchronousTCKTest {
             result.get(2, TimeUnit.SECONDS);
             fail("If you got here, the asynch method didn't throw an exception properly");
         } catch (ExecutionException ee) {
-            log.info("The correct kind of exception was found");
+            log.info("Checking that the correct kind of exception was found");
             assertEquals(NullPointerException.class, ee.getCause().getClass());
         } catch (TimeoutException toe) {
             log.error("Should not have timed out here!", toe);
+            throw toe;
         } catch (InterruptedException ie) {
             log.error("Should not have been interrupted here!", ie);
+            throw ie;
         }
         
     }

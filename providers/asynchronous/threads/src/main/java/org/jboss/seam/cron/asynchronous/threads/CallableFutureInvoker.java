@@ -17,7 +17,7 @@
 package org.jboss.seam.cron.asynchronous.threads;
 
 import java.util.concurrent.Callable;
-import org.jboss.seam.cron.spi.asynchronous.support.FutureInvokerSupport;
+import org.jboss.seam.cron.spi.asynchronous.support.CallableInvoker;
 
 /**
  *
@@ -25,9 +25,9 @@ import org.jboss.seam.cron.spi.asynchronous.support.FutureInvokerSupport;
  */
 public class CallableFutureInvoker implements Callable {
 
-    private FutureInvokerSupport invoker;
+    private CallableInvoker invoker;
 
-    public CallableFutureInvoker(final FutureInvokerSupport invokerSupport) {
+    public CallableFutureInvoker(final CallableInvoker invokerSupport) {
         this.invoker = invokerSupport;
     }
 

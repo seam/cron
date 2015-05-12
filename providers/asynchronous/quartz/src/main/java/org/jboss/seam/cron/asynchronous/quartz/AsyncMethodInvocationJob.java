@@ -16,7 +16,7 @@
  */
 package org.jboss.seam.cron.asynchronous.quartz;
 
-import org.jboss.seam.cron.spi.asynchronous.support.FutureInvokerSupport;
+import org.jboss.seam.cron.spi.asynchronous.support.CallableInvoker;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -29,7 +29,7 @@ public class AsyncMethodInvocationJob implements Job {
 
     public void execute(final JobExecutionContext context) throws JobExecutionException {
         try {
-            final FutureInvokerSupport resultCallable = (FutureInvokerSupport) context.getJobDetail().getJobDataMap().get(QuartzAsynchronousProvider.DELAYED_RESULT_SUPPORT);
+            CallableInvoker resultCallable = (CallableInvoker) context.getJobDetail().getJobDataMap().get(QuartzAsynchronousProvider.DELAYED_RESULT_SUPPORT);
             resultCallable.executeInvocationContext();
         } catch (Exception ex) {
             throw new JobExecutionException("Error invoking method inside a Quartz Job", ex);

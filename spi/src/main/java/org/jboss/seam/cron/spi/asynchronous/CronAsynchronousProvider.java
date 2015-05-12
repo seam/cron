@@ -21,7 +21,7 @@ import java.util.concurrent.Future;
 /**
  * Interface to be implemented by providers of asynchronous method invocation.
  * The provider must call the #{@literal executeInvocationContext()} method on 
- * it to cause the original method to be executed. This will also cause the
+ * the #{@link Invoker} to cause the original method to be executed. This will also cause the
  * appropriate callback event to be fired on completion of the method invocation
  * so that the developer can respond to the result.
  * 
