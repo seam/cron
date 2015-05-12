@@ -156,12 +156,12 @@ JBoss AS/EAP:
     <jboss-deployment-structure>
         <deployment>
             <dependencies>
-                <!-- Dependencies for Seam Cron JBoss AS HA Singleton TimerService Provider -->
                 <module name="org.jboss.msc" />
                 <module name="org.jboss.as.clustering.singleton" />
             </dependencies>
         </deployment>
     </jboss-deployment-structure>
+
 * Note that HA Singleton mode will only be activated when using the standalone-ha.xml or standalone-full-ha.xml server configurations.
 
 Note: This is only supported in JBoss AS/EAP at the moment.
