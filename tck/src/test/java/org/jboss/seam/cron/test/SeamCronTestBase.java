@@ -92,7 +92,7 @@ public abstract class SeamCronTestBase implements Serializable {
         archive.addPackages(true, CronProviderInitialisationException.class.getPackage());
     }
 
-    public static void addCronAsJar(WebArchive webArchive) throws IllegalArgumentException {
+    public static JavaArchive addCronAsJar(WebArchive webArchive) throws IllegalArgumentException {
         // add library dependencies
         // TODO: when we upgrade shrinkwrap, resolve jars via maven?
         final JavaArchive libs = ShrinkWrap.create(JavaArchive.class, "cdilibs.jar");
@@ -101,5 +101,6 @@ public abstract class SeamCronTestBase implements Serializable {
                 "services/javax.enterprise.inject.spi.Extension");
         addCronAsClasses(libs);
         webArchive.addAsLibraries(libs);
+        return libs;
     }
 }

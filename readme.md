@@ -137,6 +137,33 @@ And the calling code:
         Box result = future.get(10, SECONDS);
     }
 
+## Scheduling in Java EE
+
+Since Java EE has its own scheduling API in the form of TimerService, Seam Cron provides a simple implementation
+which utilises TimerService, while still providing elegant observer based configuration.
+
+## Scheduling in a Java EE Cluster
+
+If you are deploying to a cluster, you will find that your timers will fire on all instances of the cluster at once.
+If you want each scheduled event to only occur on a single server in the cluster you can use the JBoss AS HA Singleton TimerService provider
+(this is obviously limited to deployment on a JBoss AS or EAP server at this point in time).
+For this to work there are two extra steps:
+
+* Specify your deployment's name in `cron.properties` (at the root of your classpath) as `ha.singleton.module.name`. For example if your war is called business-app.war, your entry would look like `ha.singleton.module.name=business-app`. 
+* Add the following JBoss modules to your deployment's dependencies by adding them to `jboss-deployment-structure.xml` in your WEB-INF directory. For example:
+
+    <jboss-deployment-structure>
+        <deployment>
+            <dependencies>
+                <!-- Dependencies for Seam Cron JBoss AS HA Singleton TimerService Provider -->
+                <module name="org.jboss.msc" />
+                <module name="org.jboss.as.clustering.singleton" />
+            </dependencies>
+        </deployment>
+    </jboss-deployment-structure>
+
+Note that this provider will only work when using the standalone-ha.xml or standalone-full-ha.xml server configurations.
+
 ## Quick Start
 
 To use Seam Cron in your Maven project, include the following dependencies in your pom:
@@ -147,10 +174,10 @@ To use Seam Cron in your Maven project, include the following dependencies in yo
             <version>3.1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-        <!-- For scheduled jobs. Choose between Quartz, Queuej and TimerService providers. The timerservice provider is recommended for EE environments. -->
+        <!-- For scheduled jobs. Choose between Quartz, Queuej and TimerService providers. The TimerService providers are recommended for EE environments. -->
         <dependency>
             <groupId>org.jboss.seam.cron</groupId>
-            <artifactId>seam-cron-scheduling-{quartz/queuej/timerservice}</artifactId>
+            <artifactId>seam-cron-scheduling-{quartz/queuej/timerservice/timerservice-jboss-ha-singleton}</artifactId>
             <version>3.1.0-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>

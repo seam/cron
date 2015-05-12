@@ -1,0 +1,60 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.jboss.seam.cron</groupId>
+    <artifactId>seam-cron-scheduling-timerservice-common</artifactId>
+    <packaging>jar</packaging>
+    <version>3.1.1-SNAPSHOT</version>
+    <name>Seam Cron Scheduling Provider: Java EE Timer Service Shared Code</name>
+    <description>Shared code for the various Java EE Timer Service providers of scheduling for Seam Cron.</description>
+    <url>http://seamframework.org/Seam3/CronModule</url>
+
+    <parent>
+        <artifactId>seam-cron-parent</artifactId>
+        <groupId>org.jboss.seam.cron</groupId>
+        <version>3.1.1-SNAPSHOT</version>
+        <relativePath>../../../</relativePath>
+    </parent>
+
+
+    <dependencies>
+        <!-- Provided dependencies -->
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <!-- Compile-time dependencies -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>seam-cron-spi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Dependencies for Java EE Timer Service -->
+        <dependency>
+            <groupId>org.jboss.spec.javax.ejb</groupId>
+            <artifactId>jboss-ejb-api_3.1_spec</artifactId>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>jboss-public</id>
+            <name>JBoss Public Repo</name>
+            <url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+        </repository>
+    </repositories>
+    
+</project>
