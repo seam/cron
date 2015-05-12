@@ -35,7 +35,7 @@ import org.jboss.seam.cron.spi.CronProviderLifecycle;
 import org.jboss.seam.cron.spi.SeamCronExtension;
 import org.jboss.seam.cron.spi.asynchronous.CronAsynchronousProvider;
 import org.jboss.seam.cron.spi.asynchronous.Invoker;
-import org.jboss.seam.cron.spi.asynchronous.support.FutureInvokerSupport;
+import org.jboss.seam.cron.spi.asynchronous.support.CallableInvoker;
 import org.jboss.seam.cron.spi.queue.CronQueueProvider;
 import org.slf4j.Logger;
 
@@ -82,7 +82,7 @@ public class QueuJAsynchronousProvider implements CronProviderLifecycle, CronAsy
         return asyncResult;
     }
 
-    private FutureInvokerSupport executeMethodAsScheduledJob(final String queueId, final Invoker invoker) throws AsynchronousMethodInvocationException {
+    private CallableInvoker executeMethodAsScheduledJob(final String queueId, final Invoker invoker) throws AsynchronousMethodInvocationException {
         Queue<JavaProcessBuilder> queue = QueueFactory.DEFAULT_QUEUE;
         if (queueId != null) {
             CronQueueProvider queueProvider = cronExtension.getQueueProvider();
@@ -91,8 +91,8 @@ public class QueuJAsynchronousProvider implements CronProviderLifecycle, CronAsy
         JavaProcessBuilder jpb = queue.newProcessBuilder(Locale.getDefault());
         final String jobName = UUID.randomUUID().toString();
         jpb.setProcessName(jobName);
-        final FutureInvokerSupport drs = new FutureInvokerSupport(invoker);
-        jpb.setProcessDetails(new AsyncMethodInvocationJob(), "execute", new Class[] { FutureInvokerSupport.class }, new Object[] { drs });
+        final CallableInvoker drs = new CallableInvoker(invoker);
+        jpb.setProcessDetails(new AsyncMethodInvocationJob(), "execute", new Class[] { CallableInvoker.class }, new Object[] { drs });
         jpb.setProcessPersistence(false);
         jpb.newProcess();
         return drs;

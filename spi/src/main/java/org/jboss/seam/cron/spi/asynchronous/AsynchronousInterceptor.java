@@ -86,7 +86,7 @@ public class AsynchronousInterceptor {
 
                 if (Future.class.isAssignableFrom(ctx.getMethod().getReturnType())) {
                     // swap the "dummy" Future for a truly asynchronous future to return to the caller immediately
-                    ice.setPopResultsFromFuture(true);
+                    ice.setMethodReturnsFuture(true);
                     result = asyncStrategy.executeAndReturnFuture(queueId, ice);
                 } else {
                     asyncStrategy.executeWithoutReturn(queueId, ice);

@@ -21,7 +21,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import org.jboss.seam.cron.spi.asynchronous.support.FutureInvokerSupport;
+import org.jboss.seam.cron.spi.asynchronous.support.CallableInvoker;
 import org.jboss.seam.cron.spi.asynchronous.Invoker;
 
 /**
@@ -34,7 +34,7 @@ public class FutureInvoker implements RunnableFuture {
     private final RunnableFuture delegate;
 
     public FutureInvoker(final Invoker invoker) {
-        delegate = new FutureTask(new CallableFutureInvoker(new FutureInvokerSupport(invoker)));
+        delegate = new FutureTask(new CallableFutureInvoker(new CallableInvoker(invoker)));
     }
 
     public boolean isDone() {

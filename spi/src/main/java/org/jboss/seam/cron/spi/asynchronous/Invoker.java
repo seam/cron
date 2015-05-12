@@ -42,7 +42,10 @@ public class Invoker {
     @Inject
     BeanManager beanMan;
     private InvocationContext ic;
-    private boolean popResultsFromFuture = false;
+    private boolean methodReturnsFuture = false;
+    // If an exception was thrown during asynchronous execution, it will be placed here. Then later it can be put into the real AsynchResult
+    // as the exception to throw when .get() is called (as per EJB @Asynchronous spec).
+    private Exception exception = null;
     @Inject
     private Logger log;
 
@@ -60,17 +63,17 @@ public class Invoker {
      * Set to true if the #{@link InvocationContext} returns a "dummy" #{@link Future}.
      * In that case we need to explicitly pop the return value out of it as it will have
      * already been wrapped in an #{@link AsyncResult} by the #{@link AsynchronousInterceptor}.
-     * @param popResultsFromFuture 
+     * @param methodReturnsFuture 
      */
-    protected void setPopResultsFromFuture(final boolean popResultsFromFuture) {
-        this.popResultsFromFuture = popResultsFromFuture;
+    protected void setMethodReturnsFuture(final boolean methodReturnsFuture) {
+        this.methodReturnsFuture = methodReturnsFuture;
     }
 
     /**
      * Execute the #{@link InvocationContext}, unwrap the results from their #{@link AsyncResult}
      * if necessary and fire a post-execution event.
      * 
-     * @return The result of the method invocation, unwrapped if #{@literal popResultsFromFuture} is true 
+     * @return The result of the method invocation, unwrapped if #{@literal methodReturnsFuture} is true 
      * (ie: the return type of the method is a #{@link Future}).
      * @throws Exception Includes any exception thrown by the invoked method.
      */
@@ -83,7 +86,7 @@ public class Invoker {
         if (ic == null || ic.getMethod() == null) {
             throw new InternalException("Failed to provide an InvocationContext/method to this " + this.getClass().getName());
         }
-        
+
         final Method method = ic.getMethod();
         if (log.isTraceEnabled()) {
             log.trace("Running Invocation Context for " + method.getName());
@@ -98,11 +101,16 @@ public class Invoker {
         }
 
         ic.getContextData().put(INVOKED_IN_THREAD, Boolean.TRUE);
-        result = ic.proceed();
-        if (popResultsFromFuture) {
-            // pop the value out of the "dummy" AsynchResult as it will be wrapped
-            // in proper AsynchResult by the AsynchronousInterceptor
-            result = ((Future) result).get();
+        try {
+            result = ic.proceed();
+            if (methodReturnsFuture) {
+                // pop the value out of the "dummy" AsynchResult as it will be wrapped
+                // in proper AsynchResult by the AsynchronousInterceptor
+                result = ((Future) result).get();
+            }
+        } catch (Exception e) {
+            result = null;
+            this.exception = e;
         }
         // fire the post execution event if a result was returned.
         if (result != null) {
@@ -113,14 +121,20 @@ public class Invoker {
         } else {
             if (log.isTraceEnabled()) {
                 if (method.getReturnType().equals(Void.TYPE)) {
-                    log.trace("Method invocation on " + method.getName() + ":" + method.getClass().getName() + " returns void, so not firing a post-execution event");
+                    log.trace("Method invocation on " + method.getName() + ":" + method.getClass().getName()
+                            + " returns void, so not firing a post-execution event");
                 } else {
-                    log.trace("Method invocation on " + method.getName() + ":" + method.getClass().getName() + " returned null, so not firing an event");
+                    log.trace("Method invocation on " + method.getName() + ":" + method.getClass().getName()
+                            + " returned null, so not firing an event");
                 }
             }
         }
 
         return result;
-
     }
+
+    public Exception getException() {
+        return exception;
+    }
+    
 }

@@ -18,7 +18,7 @@ package org.jboss.seam.cron.asynchronous.queuj;
 
 import com.workplacesystems.queuj.process.java.JavaProcessRunner;
 import org.jboss.seam.cron.impl.asynchronous.exception.AsynchronousMethodInvocationException;
-import org.jboss.seam.cron.spi.asynchronous.support.FutureInvokerSupport;
+import org.jboss.seam.cron.spi.asynchronous.support.CallableInvoker;
 
 /**
  *
@@ -26,7 +26,7 @@ import org.jboss.seam.cron.spi.asynchronous.support.FutureInvokerSupport;
  */
 public class AsyncMethodInvocationJob extends JavaProcessRunner {
 
-    public void execute(final FutureInvokerSupport resultCallable) {
+    public void execute(final CallableInvoker resultCallable) {
         try {
             resultCallable.executeInvocationContext();
         } catch (Exception ex) {
