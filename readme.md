@@ -174,17 +174,10 @@ To use Seam Cron in your Maven project, include the following dependencies in yo
             <version>3.1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-<<<<<<< HEAD
         <!-- For scheduled jobs. Choose between Quartz, Queuej and TimerService providers. The TimerService providers are recommended for EE environments. -->
         <dependency>
             <groupId>org.jboss.seam.cron</groupId>
             <artifactId>seam-cron-scheduling-{quartz/queuej/timerservice/timerservice-jboss-ha-singleton}</artifactId>
-=======
-        <!-- For scheduled jobs. Choose between Quartz, Queuej and TimerService providers. The timerservice provider is recommended for EE environments. -->
-        <dependency>
-            <groupId>org.jboss.seam.cron</groupId>
-            <artifactId>seam-cron-scheduling-{quartz/queuej/timerservice}</artifactId>
->>>>>>> ea430aa... Merge branch 'develop' into feature/schedule-java-ee-timer
             <version>3.1.0-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>

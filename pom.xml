@@ -447,8 +447,6 @@
                         <configuration>
                             <systemPropertyVariables>
                                 <arquillian.launch>jboss-as-7.0</arquillian.launch>
-                                <!-- This is for the LogManager bug on OS X, but it seems to have no effect. Try adding -logmodule org.jboss.logmanager to the startup script after it's downloaded instead. -->
-                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
@@ -647,11 +645,8 @@
             <modules>
                 <!-- Providers which require a full EE environment for testing (tested against JBoss AS 7) -->
                 <module>providers/scheduling/timerservice</module>
-<<<<<<< HEAD
                 <module>providers/scheduling/timerservice-common</module>
                 <module>providers/scheduling/timerservice-ha-singleton-jbossas</module>
-=======
->>>>>>> ea430aa... Merge branch 'develop' into feature/schedule-java-ee-timer
             </modules>
         </profile>
     </profiles>
