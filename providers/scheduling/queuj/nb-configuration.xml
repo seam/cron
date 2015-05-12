@@ -8,8 +8,14 @@ Without this configuration present, some functionality in the IDE may be limited
 -->
     <config-data xmlns="http://www.netbeans.org/ns/maven-config-data/1">
         <configurations>
-            <configuration id="longtests-glassfish" profiles="glassfish-embedded-3.1 longtests"/>
-            <configuration id="longtests-jboss" profiles="jboss_as_managed_7.0 longtests"/>
+            <configuration id="longtests-java-se" profiles="">
+                <property name="longtests">true</property>
+                <property name="provider.type">java-se</property>
+            </configuration>
+            <configuration id="longtests-java-ee" profiles="">
+                <property name="longtests">true</property>
+                <property name="provider.type">java-ee</property>
+            </configuration>
         </configurations>
     </config-data>
 </project-shared-configuration>

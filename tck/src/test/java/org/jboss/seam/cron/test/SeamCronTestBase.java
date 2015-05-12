@@ -18,7 +18,9 @@ package org.jboss.seam.cron.test;
 
 import java.io.File;
 import java.io.Serializable;
+import org.apache.commons.lang.StringUtils;
 import org.jboss.seam.cron.api.asynchronous.Asynchronous;
+import org.jboss.seam.cron.api.queue.Queue;
 import org.jboss.seam.cron.api.scheduling.Every;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationException;
 import org.jboss.seam.cron.spi.SeamCronExtension;
@@ -28,7 +30,6 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.container.ClassContainer;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.solder.resourceLoader.ResourceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.impl.SimpleLogger;
@@ -62,7 +63,6 @@ public abstract class SeamCronTestBase implements Serializable {
 
     private static JavaArchive createTestArchiveTestImpl(boolean includeCron) {
         final JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
-                .addPackage(ResourceLoader.class.getPackage()) // arquillian needs explicit knowledge of third-party producers
                 .addPackage(LoggerProducer.class.getPackage()) // arquillian needs explicit knowledge of third-party producers
                 .addPackage(SeamCronTestBase.class.getPackage());
         if (includeCron == true) {
@@ -76,14 +76,9 @@ public abstract class SeamCronTestBase implements Serializable {
         // TODO: when we upgrade shrinkwrap, resolve jars via maven?
         final JavaArchive libs = ShrinkWrap.create(JavaArchive.class, "libs.jar");
         libs.addPackages(true, Logger.class.getPackage());
+        libs.addPackages(true, org.jboss.logmanager.Logger.class.getPackage());
         libs.addPackages(true, SimpleLogger.class.getPackage());
-        libs.addPackages(true, org.jboss.solder.core.Client.class.getPackage());
-        libs.addPackages(true, org.jboss.solder.reflection.AnnotationInspector.class.getPackage());
-        libs.addPackages(true, org.jboss.solder.util.Sortable.class.getPackage());
-        libs.addPackages(true, org.jboss.solder.logging.Logger.class.getPackage());
-        libs.addPackages(true, org.jboss.solder.messages.MessageBundleInvocationHandler.class.getPackage());
-        libs.addPackages(true, org.jboss.solder.support.SolderMessages.class.getPackage());
-        libs.addPackages(true, org.apache.log4j.Priority.class.getPackage());
+        libs.addPackages(true, StringUtils.class.getPackage());
         libs.addPackages(true, javax.ejb.Singleton.class.getPackage());
         libs.addPackages(true, javax.time.Instant.class.getPackage());
         webArchive.addAsLibraries(libs);
@@ -93,6 +88,7 @@ public abstract class SeamCronTestBase implements Serializable {
         archive.addPackages(true, Asynchronous.class.getPackage());
         archive.addPackages(true, SeamCronExtension.class.getPackage());
         archive.addPackages(true, Every.class.getPackage());
+        archive.addPackages(true, Queue.class.getPackage());
         archive.addPackages(true, CronProviderInitialisationException.class.getPackage());
     }
 

@@ -33,7 +33,7 @@ public class QueuJSchedulingTCKTestLong extends SeamCronSchedulingTCKTestLong {
 
     @Deployment
     public static JavaArchive createDefaultArchive() {
-        JavaArchive archive = SeamCronSchedulingTCKTestLong.createSchedulingTckTestArchive(false, false)
+        JavaArchive archive = SeamCronSchedulingTCKTestLong.createSchedulingTckTestArchive(false, true)
                 .addPackages(true, QueuJScheduleProvider.class.getPackage());
 
         log.debug(archive.toString(true));

@@ -40,13 +40,8 @@ public class SeamCronSchedulingTCKTest {
 
     public static JavaArchive createSchedulingTckTestArchive(boolean useTestBeansXml, boolean includeCron) {
         return SeamCronSchedulingTestBase.createSchedulingTestArchive(useTestBeansXml, includeCron)
+                .addAsResource("cron.properties")
                 .addPackage(SeamCronSchedulingTCKTest.class.getPackage());
-    }
-
-    static {
-        // Set the system property test schedule before the class loads and any injection is attempted
-        // (that way it will be available when Cron initialises)
-        System.setProperty("test.system.property", "*/5 * * ? * *");
     }
 
     @Inject

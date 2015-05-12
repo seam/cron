@@ -13,27 +13,25 @@
         <developerConnection>scm:git:git@github.com:seam/cron.git</developerConnection>
         <url>http://github.com/seam/cron</url>
     </scm>
+    <distributionManagement>
+        <repository>
+            <id>haze-releases</id>
+            <name>Internal Haze Releases</name>
+            <url>https://repo.hazesoftware.com/nexus/content/repositories/haze-releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>haze-snapshots</id>
+            <name>Internal Haze Snapshots</name>
+            <url>https://repo.hazesoftware.com/nexus/content/repositories/haze-snapshots</url>
+            <layout>default</layout>
+        </snapshotRepository>
+    </distributionManagement>
 
     <parent>
         <groupId>org.jboss.seam</groupId>
         <artifactId>seam-parent</artifactId>
         <version>15</version>
     </parent>
-
-    <modules>
-        <module>api</module>
-        <module>impl</module>
-        <module>spi</module>
-        <module>tck</module>
-        <module>providers/scheduling/quartz</module>
-        <module>providers/scheduling/queuj</module>
-        <module>providers/asynchronous/threads</module>
-        <module>providers/asynchronous/quartz</module>
-        <module>providers/asynchronous/queuj</module>
-        <module>providers/queue/queuj</module>
-        <!-- test require a full EE environment, so test them by activating the jboss_as_managed_7.0 profile and speficying their pom.xml using -f on the commandline-->
-        <!--<module>providers/scheduling/timerservice</module>-->
-    </modules>
 
     <properties>
         <test.ee>nope</test.ee>
@@ -375,9 +373,24 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
                 <property>
-                    <name>release</name>
+                    <name>provider.type</name>
+                    <value>java-se</value>
                 </property>
             </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.14.1</version>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <arquillian.launch>weld-se-1.1</arquillian.launch>
+                                <test.system.property>*/5 * * ? * *</test.system.property>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
             <dependencies>
                 <dependency>
                     <groupId>org.jboss.arquillian.container</groupId>
@@ -416,7 +429,10 @@
             <!-- This doesn't seem to deploy Cron tests very well, we're testing against Glassfish instead (still Weld) -->
             <id>jboss_as_managed_7.0</id>
             <activation>
-                <!--<activeByDefault>true</activeByDefault>-->
+                <property>
+                    <name>provider.type</name>
+                    <value>java-ee</value>
+                </property>
             </activation>
             <properties>
                 <jboss.dir.name.test>jboss-as-7.0.1.Final</jboss.dir.name.test>
@@ -428,7 +444,9 @@
                         <version>2.14.1</version>
                         <configuration>
                             <systemPropertyVariables>
-                                <arquillian.launch>jboss</arquillian.launch>
+                                <arquillian.launch>jboss-as-7.0</arquillian.launch>
+                                <!-- This is for the LogManager bug on OS X, but it seems to have no effect. Try adding -logmodule org.jboss.logmanager to the startup script after it's downloaded instead. -->
+                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
@@ -592,6 +610,42 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <!-- EE vs non-EE provider modules -->
+        <profile>
+            <id>java-se-providers</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>provider.type</name>
+                    <value>java-se</value>
+                </property>
+            </activation>
+            <modules>
+                <module>api</module>
+                <module>impl</module>
+                <module>spi</module>
+                <module>tck</module>
+                <module>providers/scheduling/quartz</module>
+                <module>providers/scheduling/queuj</module>
+                <module>providers/asynchronous/threads</module>
+                <module>providers/asynchronous/quartz</module>
+                <module>providers/asynchronous/queuj</module>
+                <module>providers/queue/queuj</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>java-ee-providers</id>
+            <activation>
+                <property>
+                    <name>provider.type</name>
+                    <value>java-ee</value>
+                </property>
+            </activation>
+            <modules>
+                <!-- Providers which require a full EE environment for testing (tested against JBoss AS 7) -->
+                <module>providers/scheduling/timerservice</module>
+            </modules>
         </profile>
     </profiles>
     

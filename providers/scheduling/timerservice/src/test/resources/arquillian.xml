@@ -22,9 +22,13 @@
         <property name="deploymentExportPath">target/deployment</property>
     </engine>
     <defaultProtocol type="Servlet 3.0"/>
-    <container qualifier="jboss" default="true">
+    <container qualifier="weld-se-1.1">
+    </container>
+    <container qualifier="jboss-as-7.0" default="true">
         <configuration>
             <property name="jbossHome">${project.build.directory}/${jboss.dir.name.test}/</property>
+            <property name="serverConfig">standalone-preview.xml</property>
+            <!--<property name="javaVmArguments">-Dtest.system.property="*/5 * * ? * *" org.jboss.as.standalone</property>-->
         </configuration>
     </container>
 </arquillian>

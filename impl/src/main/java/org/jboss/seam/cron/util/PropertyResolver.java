@@ -10,8 +10,11 @@
 package org.jboss.seam.cron.util;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
+import org.apache.commons.lang.StringUtils;
 import org.apache.deltaspike.core.api.config.ConfigResolver;
+import org.jboss.seam.cron.impl.scheduling.exception.SchedulerConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,28 +30,53 @@ public class PropertyResolver {
 
     static {
         try {
-            cronProperties.load(PropertyResolver.class.getResourceAsStream(SCHEDULE_PROPERTIES_PATH));
+            final InputStream propertyResource = PropertyResolver.class.getResourceAsStream(SCHEDULE_PROPERTIES_PATH);
+            if (propertyResource != null) {
+                cronProperties.load(propertyResource);
+            } else {
+                LoggerFactory.getLogger(PropertyResolver.class).warn("Cron could not find " + SCHEDULE_PROPERTIES_PATH
+                        + " on the classpath and therefore will not be using it as a source of named schedules.");
+            }
         } catch (IOException ex) {
-            LoggerFactory.getLogger(PropertyResolver.class).warn("Cron could not find " + SCHEDULE_PROPERTIES_PATH
-                    + " on the classpath and therefore will not be using it a source of named schedules.", ex);
+            LoggerFactory.getLogger(PropertyResolver.class).warn("Cron could not read from " + SCHEDULE_PROPERTIES_PATH
+                    + " on the classpath and therefore will not be using it as a source of named schedules.", ex);
         }
     }
 
     public static String resolve(String key) {
+        return resolve(key, false);
+    }
+
+    public static String resolve(String key, boolean mandatory) {
         String value;
         try {
             // try all the power of DeltaSpike first
+            // TODO: this is not working or not reliable yet, and will usually fall through to the resolveUsingBuiltInMethods method.
             Class.forName("org.apache.deltaspike.core.api.config.ConfigResolver");
             log.debug("Using DeltaSpike config resolver to resolve {0}", key);
             value = ConfigResolver.getProjectStageAwarePropertyValue(key);
-        } catch (ClassNotFoundException ex) {
-            log.debug("Falling back to built-in property resolution resolving property {0}", key);
-            // fall back to System properties 
-            value = System.getProperty(key);
-            if (value == null) {
-                // failing that, try cron.properties
-                value = cronProperties.getProperty(key);
+            if (StringUtils.isEmpty(value)) {
+                value = resolveUsingBuiltInMethods(key);
             }
+        } catch (ClassNotFoundException ex) {
+            value = resolveUsingBuiltInMethods(key);
+        }
+        if (mandatory && StringUtils.isEmpty(value)) {
+            throw new SchedulerConfigurationException(
+                    "Found empty or missing cron definition for named schedule '"
+                    + key + "'. It should be specified in the file "
+                    + SCHEDULE_PROPERTIES_PATH + " on the classpath, or as a system property.");
+        }
+        return value;
+    }
+
+    protected static String resolveUsingBuiltInMethods(String key) {
+        log.debug("Falling back to built-in property resolution resolving property {0}", key);
+        // fall back to System properties
+        String value = System.getProperty(key);
+        if (value == null) {
+            // failing that, try cron.properties
+            value = cronProperties.getProperty(key);
         }
         return value;
     }

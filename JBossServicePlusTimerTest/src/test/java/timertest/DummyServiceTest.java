@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package timertest;
 
 import javax.inject.Inject;
@@ -22,14 +17,14 @@ import org.junit.runner.RunWith;
 public class DummyServiceTest {
 
     @Inject
-    private DummyService dummyService;
+    private DummyServiceEjb dummyService;
 
     @Deployment
     public static WebArchive createDefaultArchive() {
         WebArchive archive = ShrinkWrap.create(WebArchive.class, "test.war");
         archive.addAsWebInfResource("META-INF/beans.xml", "beans.xml");
-        archive.addClass(DummyService.class);
         archive.addClass(DummyServiceEjb.class);
+        archive.addClass(AppConfig.class);
 
         archive.addAsResource("META-INF/services/javax.enterprise.inject.spi.Extension", "META-INF/services/javax.enterprise.inject.spi.Extension");
         archive.addClass(DummyExtension.class);

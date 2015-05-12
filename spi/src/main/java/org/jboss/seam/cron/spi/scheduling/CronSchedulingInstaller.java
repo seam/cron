@@ -11,14 +11,12 @@ package org.jboss.seam.cron.spi.scheduling;
 
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
-import java.util.Properties;
 import java.util.Set;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.ObserverMethod;
 import javax.enterprise.inject.spi.ProcessObserverMethod;
 import javax.inject.Inject;
-import org.apache.commons.lang.StringUtils;
 import org.jboss.seam.cron.api.queue.Queue;
 import org.jboss.seam.cron.api.scheduling.Every;
 import org.jboss.seam.cron.api.scheduling.Scheduled;
@@ -28,7 +26,7 @@ import org.jboss.seam.cron.util.CdiUtils;
 import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.TriggerDetail;
-import org.jboss.solder.resourceLoader.Resource;
+import org.jboss.seam.cron.util.PropertyResolver;
 import org.slf4j.Logger;
 
 /**
@@ -41,11 +39,6 @@ import org.slf4j.Logger;
 @ApplicationScoped
 public class CronSchedulingInstaller {
 
-    public static final String SCHEDULE_PROPERTIES_PATH = "/cron.properties";
-
-    @Inject
-    @Resource(SCHEDULE_PROPERTIES_PATH)
-    private Properties schedProperties;
     @Inject
     private Logger log;
 
@@ -128,17 +121,7 @@ public class CronSchedulingInstaller {
             cronScheduleSpec = scheduleSpec;
         } else {
             // check system properties
-            String possibleSpec = System.getProperty(scheduleSpec);
-            if (StringUtils.isEmpty(possibleSpec)) {
-                possibleSpec = schedProperties.getProperty(scheduleSpec);
-                if (StringUtils.isEmpty(possibleSpec)) {
-                    throw new SchedulerConfigurationException(
-                            "Found empty or missing cron definition for named schedule '"
-                            + scheduleSpec + "'. It should be specified in the file "
-                            + SCHEDULE_PROPERTIES_PATH + " on the classpath, or as a system property.");
-                }
-            }
-            cronScheduleSpec = possibleSpec;
+            cronScheduleSpec = PropertyResolver.resolve(scheduleSpec, true);
         }
 
         return cronScheduleSpec;

@@ -60,7 +60,7 @@
                         <version>2.14.1</version>
                         <configuration>
                             <systemPropertyVariables>
-                                <arquillian.launch>jboss</arquillian.launch>
+                                <arquillian.launch>jboss-as-7.0</arquillian.launch>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>

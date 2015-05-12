@@ -37,11 +37,11 @@ public class TimerServiceSchedulingTCKTestLong extends SeamCronSchedulingTCKTest
 
     private static Logger log = LoggerFactory.getLogger(TimerServiceSchedulingTCKTestLong.class);
 
-    @Deployment
+    @Deployment()
     public static WebArchive createDefaultArchive() {
         JavaArchive baseArchive = SeamCronSchedulingTCKTest.createSchedulingTckTestArchive(false, false)
                 .addPackages(true, TimerScheduleProviderEjb.class.getPackage());
-        WebArchive archive = ShrinkWrap.create(WebArchive.class, "test.war");
+        WebArchive archive = ShrinkWrap.create(WebArchive.class, "test-long.war");
         archive.addAsLibrary(baseArchive)
                 .addAsWebInfResource(new File("src/main/resources/META-INF/beans.xml"), "beans.xml");
 
