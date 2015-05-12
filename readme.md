@@ -198,8 +198,8 @@ To use Seam Cron in your Maven project, include the following dependencies in yo
 
 It's true. But you can help. If you know exactly what you need and have 
 the skillpower to get it done, then please fork this project and submit a pull 
-request. Alternatively submit a feature request or bug report over at JIRA:
-https://issues.jboss.org/browse/SEAMCRON
+request. Alternatively submit a feature request or bug report on the GitHub
+issues page.
 
 ## Building From Source:
 
