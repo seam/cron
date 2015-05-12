@@ -152,7 +152,7 @@ application server vendor:
 JBoss AS/EAP:
 * Specify your deployment's name in `cron.properties` (at the root of your classpath) as `ha.singleton.module.name`. For example if your war is called business-app.war, your entry would look like `ha.singleton.module.name=business-app`. 
 * Add the following JBoss modules to your deployment's dependencies by adding them to `jboss-deployment-structure.xml` in your WEB-INF directory. For example:
-
+```xml
     <jboss-deployment-structure>
         <deployment>
             <dependencies>
@@ -161,7 +161,7 @@ JBoss AS/EAP:
             </dependencies>
         </deployment>
     </jboss-deployment-structure>
-
+```
 * Note that HA Singleton mode will only be activated when using the standalone-ha.xml or standalone-full-ha.xml server configurations.
 
 Note: This is only supported in JBoss AS/EAP at the moment.
