@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.as.quickstarts.cluster.hasingleton.service.ejb;
+package org.jboss.seam.cron.scheduling.timerservice.singleton.jboss;
 
 import org.jboss.as.clustering.singleton.SingletonService;
 import org.jboss.logging.Logger;
@@ -65,7 +65,7 @@ public class HATimerServiceActivator implements ServiceActivator {
                     .install();
         } else {
             log.warn("JBoss ServiceActivator was activated, but the JBoss HA Singleton Service could not be located. "
-                    + "Cron TimerService will be deployed in NON-HA-SINGLETON mode.");
+                    + "Cron TimerService will be deployed in NON-HA-Singleton mode.");
         }
 
     }
