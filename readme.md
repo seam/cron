@@ -31,7 +31,7 @@ CDI qualifier. In this case, we could introduce a custom qualifier `@Offpeak` li
     {
     }
 
-Now we can refer the the schedule in a typesafe way throughout our codebase:
+Now we can refer to the schedule in a typesafe way throughout our codebase:
 
     public void generateReports(@Observes @Offpeak Trigger trigger) {
         // do it
@@ -87,8 +87,8 @@ The rules concerning return types of @Asynchronous methods are as follows:
 You would typically want one dedicated return type per asynchronous method invocation
 for a one-to-one mapping between methods and their observers, but there may be use
 cases for having multiple asynchronous methods all reporting their results to a single
-observer, and Cron would be totally fine with that. You could also introduce some 
-additional CDI qualifiers into the mix, to achieve something like this:
+observer, and Cron supports that use-case as well. You could also introduce some 
+additional CDI qualifiers into the mix for some really convenient, event-driven processing:
 
     @Asynchronous @Credit
     public Balance addCredit(int dollars) {
@@ -116,8 +116,7 @@ additional CDI qualifiers into the mix, to achieve something like this:
         db.saveDebit(balance);
     }
 
-Finally, if you prefer a more futuristic approach then you can specify
-a return type of Future<T> and use the `AsyncResult` helper to return the result
+You also have the option of specifying a return type of Future<T> and using the `AsyncResult` helper to return the result
 of your method call. Seam Cron will automatically wrap this in a useful Future<T> implementation
 which the calling code can use as expected, immediately.
 
@@ -162,7 +161,8 @@ JBoss AS/EAP:
         </deployment>
     </jboss-deployment-structure>
 ```
-* Note that HA Singleton mode will only be activated when using the standalone-ha.xml or standalone-full-ha.xml server configurations.
+* Note that HA Singleton mode will only be activated when using the standalone-ha.xml or standalone-full-ha.xml server configurations. 
+Otherwise it will default to the non-HA behavior of executing each job on all available nodes at once.
 
 Note: This is only supported in JBoss AS/EAP at the moment.
 On other application servers each scheduled observer method will be executed on all server instances at the same time.
@@ -176,21 +176,21 @@ To use Seam Cron in your Maven project, include the following dependencies in yo
         <dependency>
             <groupId>org.jboss.seam.cron</groupId>
             <artifactId>seam-cron-api</artifactId>
-            <version>3.1.0-SNAPSHOT</version>
+            <version>3.1.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <!-- For scheduled jobs. Choose between Quartz, Queuej and TimerService providers. The TimerService providers are recommended for EE environments. -->
         <dependency>
             <groupId>org.jboss.seam.cron</groupId>
             <artifactId>seam-cron-scheduling-{quartz/queuej/timerservice/timerservice-jboss-ha-singleton}</artifactId>
-            <version>3.1.0-SNAPSHOT</version>
+            <version>3.1.1-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
         <!-- For asynchronous method execution. Choose between Quartz, Queuej and Java threads providers. -->
         <dependency>
             <groupId>org.jboss.seam.cron</groupId>
             <artifactId>seam-cron-asynchronous-{quartz/queuej/threads}</artifactId>
-            <version>3.1.0-SNAPSHOT</version>
+            <version>3.1.1-SNAPSHOT</version>
             <scope>runtime</scope>
         </dependency>
 ```
