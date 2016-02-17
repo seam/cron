@@ -9,12 +9,18 @@
  */
 package org.jboss.seam.cron.scheduling.timerservice;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.inject.Inject;
+import org.slf4j.Logger;
 
 /**
+ * If the HA singleton version is successfully started (eg: via the HATimeServiceActivator) then it will set the
+ * TimerScheduleConfig.haServiceStarted flag to true which will cause this default, non-ha @Startup version to skip its initialization when
+ * it starts up.
  *
  * @author peteroyle
  */
@@ -23,4 +29,15 @@ import javax.ejb.Startup;
 @Lock(LockType.READ) // serialise backed-up jobs. Use @AccessTimeout(value = 1, unit = TimeUnit.MINUTES) on @Observes methods to specify a finite wait time when jobs back up.
 public class TimerScheduleProviderEjb extends TimerScheduleProviderBase {
 
+    @Inject
+    private Logger log;
+
+    @PostConstruct
+    public void initUnlessHAIsPresent() {
+        if (scheduleConfigs.isHaServiceStarted()) {
+            log.info("HA SchedulerBean already started, skipping initialization of " + TimerScheduleProviderEjb.class.getSimpleName());
+        } else {
+            super.initScheduledTriggers();
+        }
+    }
 }

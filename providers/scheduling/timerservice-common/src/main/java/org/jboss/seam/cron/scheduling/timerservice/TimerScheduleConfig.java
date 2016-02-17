@@ -12,12 +12,14 @@ package org.jboss.seam.cron.scheduling.timerservice;
 import java.util.ArrayList;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderDestructionException;
 import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationException;
 import org.jboss.seam.cron.spi.CronProviderLifecycle;
 import org.jboss.seam.cron.spi.scheduling.CronSchedulingProvider;
 import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
+import org.slf4j.Logger;
 
 /**
  * Listens to schedule config callbacks from Cron and stores them in an @ApplicationScoped bean for use by the timer bean on startup.
@@ -29,15 +31,18 @@ public class TimerScheduleConfig implements CronProviderLifecycle, CronSchedulin
 
     private List<ScheduledTriggerDetail> scheduleTriggers = new ArrayList<ScheduledTriggerDetail>();
     private List<IntervalTriggerDetail> intervalTriggers = new ArrayList<IntervalTriggerDetail>();
-//    @Inject
-//    private Logger log;
+    @Inject
+    private Logger log;
+    // If the HA singleton version is successfully started (eg: via the HATimeServiceActivator) then it will set this flag to true
+    // which will cause the default, non-ha @Startup version to skip its initialization when it starts up.
+    private boolean haServiceStarted = false;
 
     public void initProvider() throws CronProviderInitialisationException {
-//        log.debug("Initialising Cron EJB Timer Scheduling Config");
+        log.info("Initialising Cron EJB Timer Scheduling Config");
     }
 
     public void destroyProvider() throws CronProviderDestructionException {
-//        log.debug("Destroying Cron EJB Timer Scheduling Config");
+        log.info("Destroying Cron EJB Timer Scheduling Config");
     }
 
     public void processScheduledTrigger(String queueId, ScheduledTriggerDetail schedTriggerDetails) throws Exception {
@@ -56,6 +61,14 @@ public class TimerScheduleConfig implements CronProviderLifecycle, CronSchedulin
 
     public List<IntervalTriggerDetail> getIntervalTriggers() {
         return intervalTriggers;
+    }
+
+    public boolean isHaServiceStarted() {
+        return haServiceStarted;
+    }
+
+    public void setHaServiceStarted(boolean haServiceStarted) {
+        this.haServiceStarted = haServiceStarted;
     }
 
 }

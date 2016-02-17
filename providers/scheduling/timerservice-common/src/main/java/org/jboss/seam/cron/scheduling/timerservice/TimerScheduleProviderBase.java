@@ -11,7 +11,6 @@ package org.jboss.seam.cron.scheduling.timerservice;
 
 import java.io.Serializable;
 import java.util.GregorianCalendar;
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.ScheduleExpression;
 import javax.ejb.Timeout;
@@ -38,7 +37,7 @@ import org.slf4j.Logger;
 public abstract class TimerScheduleProviderBase {
 
     @Inject
-    private TimerScheduleConfig scheduleConfigs;
+    protected TimerScheduleConfig scheduleConfigs;
     @Inject
     private BeanManager beanManager;
     @Resource
@@ -59,9 +58,8 @@ public abstract class TimerScheduleProviderBase {
         }.fireTrigger();
     }
 
-    @PostConstruct
     public void initScheduledTriggers() {
-        log.debug("Initiailising schedule configs found during extension initialisation");
+        log.info("Initiailising schedule configs found during extension initialisation");
         for (ScheduledTriggerDetail schedTrigger : scheduleConfigs.getScheduleTriggers()) {
             processScheduledTrigger(schedTrigger);
         }
@@ -71,7 +69,7 @@ public abstract class TimerScheduleProviderBase {
     }
 
     public void processScheduledTrigger(ScheduledTriggerDetail schedTriggerDetails) {
-        log.debug("TimerScheduleProviderEjb.processScheduledTrigger: " + schedTriggerDetails);
+        log.info("TimerScheduleProviderBase.processScheduledTrigger: " + schedTriggerDetails);
         // TODO: shouldn't be passing beanMnager here because it's not Serializable. Might be OK since we're not using persistant schedules, but who knows.
         // TODO: .. Ultimately we want to refactor TriggerSupplies to remove beanManager but not sure we can because beanManager is needed in TriggerSupport,
         // TODO: .. and in non-CDI environments there's no other way to get a reference to it.
@@ -100,7 +98,7 @@ public abstract class TimerScheduleProviderBase {
     }
 
     public void processIntervalTrigger(IntervalTriggerDetail intervalTriggerDetails) {
-        log.debug("TimerScheduleProviderEjb.processIntervalTrigger: " + intervalTriggerDetails);
+        log.info("TimerScheduleProviderBase.processIntervalTrigger: " + intervalTriggerDetails);
         GregorianCalendar gc = getOneSecondLater();
         TriggerSupplies observerDetails = new TriggerSupplies(beanManager, intervalTriggerDetails.getQualifier(), intervalTriggerDetails.
                 getQualifiers());
