@@ -9,15 +9,12 @@
  */
 package org.jboss.seam.cron.scheduling.timerservice.singleton.jboss;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.ejb.Timer;
-import javax.inject.Inject;
 
 import org.jboss.logging.Logger;
-import org.jboss.seam.cron.scheduling.timerservice.TimerScheduleConfig;
 import org.jboss.seam.cron.scheduling.timerservice.TimerScheduleProviderBase;
 
 /**
@@ -30,21 +27,18 @@ import org.jboss.seam.cron.scheduling.timerservice.TimerScheduleProviderBase;
 public class SchedulerBean extends TimerScheduleProviderBase implements Scheduler {
 
     private static Logger LOGGER = Logger.getLogger(SchedulerBean.class);
-    @Inject
-    private TimerScheduleConfig config;
 
     @Override
     public void initialize(String info) {
-        LOGGER.info("Setting HA service started to true");
-        config.setHaServiceStarted(true);
+        LOGGER.info("Initializing HA service");
         super.initScheduledTriggers();
     }
 
     @Override
     public void stop() {
-        LOGGER.info("Stop all existing HASingleton timers");
+        LOGGER.info("Stopping all existing HASingleton timers");
         for (Timer timer : getTimerService().getTimers()) {
-            LOGGER.trace("Stop HASingleton timer: " + timer.getInfo());
+            LOGGER.info("Stop HASingleton timer: " + timer.getInfo());
             timer.cancel();
         }
     }

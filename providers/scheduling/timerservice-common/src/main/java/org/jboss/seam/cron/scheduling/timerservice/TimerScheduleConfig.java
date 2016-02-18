@@ -33,9 +33,6 @@ public class TimerScheduleConfig implements CronProviderLifecycle, CronSchedulin
     private List<IntervalTriggerDetail> intervalTriggers = new ArrayList<IntervalTriggerDetail>();
     @Inject
     private Logger log;
-    // If the HA singleton version is successfully started (eg: via the HATimeServiceActivator) then it will set this flag to true
-    // which will cause the default, non-ha @Startup version to skip its initialization when it starts up.
-    private boolean haServiceStarted = false;
 
     public void initProvider() throws CronProviderInitialisationException {
         log.info("Initialising Cron EJB Timer Scheduling Config");
@@ -61,14 +58,6 @@ public class TimerScheduleConfig implements CronProviderLifecycle, CronSchedulin
 
     public List<IntervalTriggerDetail> getIntervalTriggers() {
         return intervalTriggers;
-    }
-
-    public boolean isHaServiceStarted() {
-        return haServiceStarted;
-    }
-
-    public void setHaServiceStarted(boolean haServiceStarted) {
-        this.haServiceStarted = haServiceStarted;
     }
 
 }
