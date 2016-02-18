@@ -143,14 +143,13 @@ which utilises TimerService, while still providing elegant observer based config
 
 ## Scheduling in a Java EE HA Cluster
 
-If you deploy an application containing the Seam Cron TimerService provider to a HA cluster, it will detect the availability of HA services
-and deploy as a HA Singleton automatically. That way each scheduled observer method will only fire on a single server in the cluster, 
-as opposed to firing on all server instances at once. For this to work there are two extra configuration steps, depending on your 
-application server vendor:
+If you deploy an application containing the Seam Cron TimerService provider to a HA cluster you configure it so that each scheduled observer 
+method will only fire on a single server in the cluster, as opposed to firing on all server instances at once (the default). 
+For this to work there are two extra configuration steps, depending on your application server vendor:
 
 JBoss AS/EAP:
-* specify `org.jboss.seam.cron.timerservice.mode=ha` in `cron.properties` (at the root of your classpath). This instructs Cron to deploy
-  the timer service as a cluster-wide HA singleton in a Jboss-specific way.
+* specify `org.jboss.seam.cron.timerservice.mode=ha` in `cron.properties` (at the root of your classpath), or as a system property. 
+  This instructs Cron to deploy the timer service as a cluster-wide HA singleton in a Jboss-specific way.
 * Specify your deployment's name in `cron.properties` (at the root of your classpath) as `ha.singleton.module.name`. For example if your war 
   is called business-app.war, your entry would look like `ha.singleton.module.name=business-app`. This helps Cron resolve the cluster-wide 
   HA singleton timer service it will create.
@@ -170,7 +169,7 @@ JBoss AS/EAP:
   fail to deploy and no jobs will run.
 
 Note: This is only supported in JBoss AS/EAP at the moment.
-On other application servers only the default mode `org.jboss.seam.cron.timerservice.mode=replicated` is supported, whereby each scheduled 
+On other application servers only the default mode (or `org.jboss.seam.cron.timerservice.mode=replicated`) is supported, whereby each scheduled 
 observer method will be executed on all server instances at the same time.
 If you are interested in support for HA cluster deployment on other application servers please get in touch and/or submit a pull request.
 
