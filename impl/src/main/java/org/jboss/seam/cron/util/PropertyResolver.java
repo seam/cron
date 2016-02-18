@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.util.Properties;
 import org.apache.commons.lang.StringUtils;
 import org.apache.deltaspike.core.api.config.ConfigResolver;
-import org.jboss.seam.cron.impl.scheduling.exception.SchedulerConfigurationException;
+import org.jboss.seam.cron.api.exception.SchedulerConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

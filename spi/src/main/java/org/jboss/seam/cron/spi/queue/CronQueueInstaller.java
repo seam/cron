@@ -26,7 +26,7 @@ import javax.enterprise.inject.spi.ProcessObserverMethod;
 import javax.inject.Inject;
 import org.jboss.seam.cron.api.queue.Queue;
 import org.jboss.seam.cron.api.restriction.AsyncRestriction;
-import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationException;
+import org.jboss.seam.cron.api.exception.CronProviderInitialisationException;
 import org.jboss.seam.cron.util.CdiUtils;
 import org.slf4j.Logger;
 

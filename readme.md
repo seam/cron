@@ -162,7 +162,9 @@ JBoss AS/EAP:
     </jboss-deployment-structure>
 ```
 * Note that HA Singleton mode will only be activated when using the standalone-ha.xml or standalone-full-ha.xml server configurations. 
-Otherwise it will default to the non-HA behavior of executing each job on all available nodes at once.
+Otherwise it will default to the non-HA behavior of executing each job on all available nodes at once. To force HA mode set 
+"ha.singleton.mode=mandatory" as a system property or in your cron.properties file, which will cause the deployment to fail if the
+HA singleton timer service fails to come online within 5 seconds of deployment.
 
 Note: This is only supported in JBoss AS/EAP at the moment.
 On other application servers each scheduled observer method will be executed on all server instances at the same time.

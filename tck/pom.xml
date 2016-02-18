@@ -53,6 +53,11 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>seam-cron-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.workplacesystems.utilsj</groupId>
             <artifactId>utilsj</artifactId>
         </dependency>

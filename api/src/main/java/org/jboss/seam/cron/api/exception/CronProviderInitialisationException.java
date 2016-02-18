@@ -14,31 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.cron.impl.scheduling.exception;
+package org.jboss.seam.cron.api.exception;
 
 /**
  * Exception thrown when there is a problem starting the Seam Cron module.
  * 
  * @author Peter Royle
  */
-public class CronProviderDestructionException
+public class CronProviderInitialisationException
         extends RuntimeException {
     /**
-     * Create a new instance of SchedulerInitialisationException with the given error message.
+     * Create a new instance of CronProviderInitialisationException with the given error message.
      *
      * @param message The error message.
      */
-    public CronProviderDestructionException(String message) {
+    public CronProviderInitialisationException(String message) {
         super(message);
     }
 
     /**
-     * Create a new instance of SchedulerInitialisationException with the given error message and cause.
+     * Create a new instance of CronProviderInitialisationException with the given error message and cause.
      *
      * @param message The error message.
      * @param cause   The orginal cause of the error.
      */
-    public CronProviderDestructionException(String message, Throwable cause) {
+    public CronProviderInitialisationException(String message, Throwable cause) {
         super(message, cause);
     }
 }

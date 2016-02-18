@@ -22,7 +22,7 @@ import javax.inject.Inject;
 
 import junit.framework.Assert;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.seam.cron.impl.scheduling.exception.InternalException;
+import org.jboss.seam.cron.api.exception.InternalException;
 import org.jboss.seam.cron.test.scheduling.beans.IncrementalScheduledBean;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.slf4j.Logger;

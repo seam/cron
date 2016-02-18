@@ -25,7 +25,7 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import org.jboss.seam.cron.api.asynchronous.Asynchronous;
 import org.jboss.seam.cron.api.queue.Queue;
-import org.jboss.seam.cron.impl.scheduling.exception.InternalException;
+import org.jboss.seam.cron.api.exception.InternalException;
 import org.jboss.seam.cron.spi.SeamCronExtension;
 import org.slf4j.Logger;
 

@@ -15,6 +15,8 @@ import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
+import org.jboss.seam.cron.api.exception.CronProviderInitialisationException;
+import org.jboss.seam.cron.util.PropertyResolver;
 import org.slf4j.Logger;
 
 /**
@@ -34,10 +36,41 @@ public class TimerScheduleProviderEjb extends TimerScheduleProviderBase {
 
     @PostConstruct
     public void initUnlessHAIsPresent() {
-        if (scheduleConfigs.isHaServiceStarted()) {
-            log.info("HA SchedulerBean already started, skipping initialization of " + TimerScheduleProviderEjb.class.getSimpleName());
+        log.info("initializing the default @Startup TimerScheduleProviderEjb");
+        // give the HA singleton time to start up
+        long maxTimetoWait = 5000;
+        long waitPart = 500;
+        while (maxTimetoWait > 0) {
+            log.info("Waiting for HA Singleton SchedulerBean to come online ({} left)", maxTimetoWait);
+            try {
+                Thread.sleep(waitPart);
+            } catch (InterruptedException ex) {
+                throw new CronProviderInitialisationException("Woken while waiting for HA scheduler to activate, bailing out.", ex);
+            }
+            if (scheduleConfigs.isHaServiceStarted()) {
+                // stop waiting
+                maxTimetoWait = -1;
+            } else {
+                maxTimetoWait -= waitPart;
+            }
+        }
+        // check our status agains the configuration and decide whether to start up the non-HA version or bail out with an error
+        final String haSingletonMode = PropertyResolver.resolve("ha.singleton.mode", false);
+        final boolean haMandatory = haSingletonMode != null && haSingletonMode.equalsIgnoreCase("mandatory");
+        log.info("HA Singleton Mode: {}", haSingletonMode);
+        log.info("HA Is Mandatory: {}", haMandatory);
+        if (haMandatory) {
+            log.info("Non-HA " + TimerScheduleProviderEjb.class.getSimpleName() + " is disabled since HA mode is set to mandatory. Skipping initialization");
+            if (!scheduleConfigs.isHaServiceStarted()) {
+                throw new CronProviderInitialisationException("HA Service specified as mandatory, but it failed to start in the time allocated");
+            }
         } else {
-            super.initScheduledTriggers();
+            if (scheduleConfigs.isHaServiceStarted()) {
+                log.info("HA SchedulerBean already started, skipping initialization of " + TimerScheduleProviderEjb.class.getSimpleName());
+            } else {
+                log.info("Starting the default, non-HA timer service bean " + TimerScheduleProviderEjb.class.getSimpleName());
+                super.initScheduledTriggers();
+            }
         }
     }
 }

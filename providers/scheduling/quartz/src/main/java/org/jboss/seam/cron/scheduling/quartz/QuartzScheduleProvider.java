@@ -25,10 +25,10 @@ import java.util.UUID;
 
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
+import org.jboss.seam.cron.api.exception.CronProviderDestructionException;
+import org.jboss.seam.cron.api.exception.CronProviderInitialisationException;
 
 import org.jboss.seam.cron.api.scheduling.Every;
-import org.jboss.seam.cron.impl.scheduling.exception.CronProviderDestructionException;
-import org.jboss.seam.cron.impl.scheduling.exception.CronProviderInitialisationException;
 import org.jboss.seam.cron.spi.CronProviderLifecycle;
 import org.jboss.seam.cron.spi.scheduling.trigger.IntervalTriggerDetail;
 import org.jboss.seam.cron.spi.scheduling.trigger.ScheduledTriggerDetail;
