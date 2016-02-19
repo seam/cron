@@ -42,6 +42,8 @@ public class HATimerService implements Service<String> {
     private static final Logger LOGGER = Logger.getLogger(HATimerService.class);
     private static final String deployModuleName = PropertyResolver.resolve("ha.singleton.module.name", true);
     public static final ServiceName SINGLETON_SERVICE_NAME = ServiceName.of(deployModuleName, "ha", "singleton", "timer");
+    private static final int MAX_WAIT = 40000;
+    private static final int WAIT_PART = 2000;
     
     /**
      * A flag whether the service is started.
@@ -61,13 +63,34 @@ public class HATimerService implements Service<String> {
             throw new StartException("The service is still started!");
         }
         LOGGER.info("Start HASingleton timer service '" + this.getClass().getName() + "'");
-
         final String node = System.getProperty("jboss.node.name");
-        try {
-            InitialContext ic = new InitialContext();
-            ((Scheduler) ic.lookup("global/" + deployModuleName + "/SchedulerBean!org.jboss.seam.cron.scheduling.timerservice.singleton.jboss.Scheduler")).initialize("HASingleton timer @" + node + " " + new Date());
-        } catch (NamingException e) {
-            throw new StartException("Could not initialize timer", e);
+        // make several attempts to start the bean, understanding that it may not be ready to go yet if we're still in the deployment phase
+        int waitedSoFar = 0;
+        boolean initialized = false;
+        int attempts = 0;
+        Exception exampleException = null;
+        while (!initialized && waitedSoFar < MAX_WAIT) {
+            attempts ++;
+            try {
+                InitialContext ic = new InitialContext();
+                ((Scheduler) ic.lookup("global/" + deployModuleName + "/SchedulerBean!org.jboss.seam.cron.scheduling.timerservice.singleton.jboss.Scheduler")).initialize("HASingleton timer @" + node + " " + new Date());
+                initialized = true;
+            } catch (NamingException e) {
+                exampleException = e;
+                throw new StartException("Could not initialize timer", e);
+            }
+            if (!initialized) {
+                try {
+                    Thread.sleep(WAIT_PART);
+                } catch (Exception e) {
+                    throw new StartException("Woken while waiting for scheduling bean to come onnline", e);
+                }
+            }
+        }
+        // .. but if we couldn't get it going after MAX_WAIT millis, there must be a problem
+        if (!initialized) {
+            throw new StartException("Could not initialize timer in " + deployModuleName + " after " + attempts 
+                    + " over " + MAX_WAIT + " milliseconds", exampleException);
         }
     }
 
