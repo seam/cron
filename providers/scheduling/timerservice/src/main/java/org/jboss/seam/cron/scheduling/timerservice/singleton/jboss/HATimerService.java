@@ -77,7 +77,7 @@ public class HATimerService implements Service<String> {
                 initialized = true;
             } catch (NamingException e) {
                 exampleException = e;
-                throw new StartException("Could not initialize timer", e);
+                LOGGER.info("Scheduler bean not found, so far we have waited " + waitedSoFar + " out of " + MAX_WAIT + ". May retry.");
             }
             if (!initialized) {
                 try {
