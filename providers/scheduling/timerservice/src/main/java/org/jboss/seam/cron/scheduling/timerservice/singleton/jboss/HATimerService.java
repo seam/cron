@@ -81,6 +81,7 @@ public class HATimerService implements Service<String> {
             }
             if (!initialized) {
                 try {
+                    waitedSoFar += WAIT_PART;
                     Thread.sleep(WAIT_PART);
                 } catch (Exception e) {
                     throw new StartException("Woken while waiting for scheduling bean to come onnline", e);
