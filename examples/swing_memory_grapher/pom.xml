@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.jboss.seam.cron</groupId>
-    <version>3.1.1-SNAPSHOT</version>
+    <version>3.1.2-SNAPSHOT</version>
     <artifactId>seam-cron-example-swing-graph</artifactId>
     <name>Seam Cron Example Swing Graph</name>
     <packaging>jar</packaging>
@@ -10,7 +10,7 @@
     <parent>
         <artifactId>seam-cron-parent</artifactId>
         <groupId>org.jboss.seam.cron</groupId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>3.1.2-SNAPSHOT</version>
         <relativePath>../../</relativePath>
     </parent>
     
