@@ -83,6 +83,24 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- (disables this from the parent pom ->) Sign project artifacts -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <configuration>
+                    <passphrase>${gpg.passphrase}</passphrase>
+                    <useAgent>${gpg.useAgent}</useAgent>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>help</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
