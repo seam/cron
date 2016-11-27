@@ -3,7 +3,7 @@
     <groupId>org.jboss.seam.cron</groupId>
     <artifactId>seam-cron-parent</artifactId>
     <packaging>pom</packaging>
-    <version>3.1.3-SNAPSHOT</version>
+    <version>3.1.3</version>
     <name>Seam Cron</name>
     <description>The parent and build aggregator for Seam Cron - Typesafe CDI Scheduling and Asynchronous method invocation</description>
     <url>http://seamframework.org/Seam3/CronModule</url>
