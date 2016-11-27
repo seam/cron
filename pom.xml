@@ -302,7 +302,7 @@
             <modules>
                 <module>examples/swing_memory_grapher</module>
                 <!--<module>docs/reference</module>-->
-                <module>dist</module>
+                <!--<module>dist</module>-->
             </modules>
         </profile>
         <profile>
