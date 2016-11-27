@@ -4,7 +4,7 @@
     <groupId>org.jboss.seam.cron</groupId>
     <artifactId>seam-cron-scheduling-timerservice-common</artifactId>
     <packaging>jar</packaging>
-    <version>3.1.7-SNAPSHOT</version>
+    <version>3.1.12-SNAPSHOT</version>
     <name>Seam Cron Scheduling Provider: Java EE Timer Service Shared Code</name>
     <description>Shared code for the various Java EE Timer Service providers of scheduling for Seam Cron.</description>
     <url>http://seamframework.org/Seam3/CronModule</url>
@@ -12,7 +12,7 @@
     <parent>
         <artifactId>seam-cron-parent</artifactId>
         <groupId>org.jboss.seam.cron</groupId>
-        <version>3.1.7-SNAPSHOT</version>
+        <version>3.1.12-SNAPSHOT</version>
         <relativePath>../../../</relativePath>
     </parent>
 
