@@ -4,7 +4,7 @@
     <groupId>org.jboss.seam.cron</groupId>
     <artifactId>seam-cron-spi</artifactId>
     <packaging>jar</packaging>
-    <version>3.1.2-SNAPSHOT</version>
+    <version>3.1.2</version>
     <name>Seam Cron SPI</name>
     <description>The Service Provider Interface for Seam Cron.</description>
     <url>http://seamframework.org/Seam3/CronModule</url>
@@ -12,7 +12,7 @@
     <parent>
         <artifactId>seam-cron-parent</artifactId>
         <groupId>org.jboss.seam.cron</groupId>
-        <version>3.1.2-SNAPSHOT</version>
+        <version>3.1.2</version>
         <relativePath>../</relativePath>
     </parent>
 
