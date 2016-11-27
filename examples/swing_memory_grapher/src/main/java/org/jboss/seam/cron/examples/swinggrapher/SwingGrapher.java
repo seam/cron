@@ -64,7 +64,6 @@ public class SwingGrapher
 
     /**
      * Called every minute to request garbage collection.
-     * @param second The observed event.
      */
     public void collectGarbage(@Observes @Every(Interval.MINUTE) Trigger minute)
     {

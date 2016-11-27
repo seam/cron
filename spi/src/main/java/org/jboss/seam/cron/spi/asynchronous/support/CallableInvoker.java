@@ -27,12 +27,12 @@ import org.jboss.seam.cron.spi.asynchronous.Invoker;
  * the #{@literal executeInvocationContext()} method is called. This comes in
  * handy when returning Futures (eg: #{@literal new FutureTask(
  new CallableInvoker(invoker))}).
- * </p><p>
+ * <p>
  * In the simplest case #{@literal executeInvocationContext()} could be called 
  * in the same thread prior to calling #{@literal call()}. This is useful when 
  * your method of executing in the background is also #{@link Runnable} or 
- * #{@link Callable} and can thus be used to return a #{@link RunnableFuture}.
- * </p><p>
+ * Callable and can thus be used to return a RunnableFuture.
+ * <p>
  * In more complex cases #{@literal executeInvocationContext()} could be called 
  * by a separate thread at any time before or after the current thread calls 
  * #{@literal call()}. This is useful when your method of executing in the background is 

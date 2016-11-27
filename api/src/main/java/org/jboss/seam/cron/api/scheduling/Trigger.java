@@ -23,7 +23,7 @@ package org.jboss.seam.cron.api.scheduling;
  * built-in @Every() schedules. Note that the presence of this superclass
  * implies that the following observation is possible:
  * <code>public void doSomething(@Observes @Every Trigger e)</code>
- * <p/><p>
+ * <p>
  * Such an observation is valid, and will respond to every single scheduled event
  * fired (including the built in events).
  *</p>

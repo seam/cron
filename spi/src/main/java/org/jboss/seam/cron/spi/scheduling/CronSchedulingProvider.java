@@ -39,7 +39,6 @@ public interface CronSchedulingProvider {
      * Given the details of a repeating-interval trigger, set up the underlying scheduling
      * engine to fire the appropriate trigger at the appropriate times.
      * 
-     * @param schedTriggerDetails Details of the interval and qualified trigger to fire.
      * @throws Exception Anything that the underlying provider might throw.
      */
     public void processIntervalTrigger(final String queueId, final IntervalTriggerDetail intervalTriggerDetails) throws Exception;

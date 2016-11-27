@@ -19,7 +19,7 @@ package org.jboss.seam.cron.api.scheduling;
 import javax.enterprise.event.Observes;
 
 /**
- * Represents the time intervals observable using #{@link Observes} #{@link Every(timeUnit)}
+ * Represents the time intervals observable using Observes Every(timeUnit)
  * @author Peter Royle
  */
 public enum Interval {

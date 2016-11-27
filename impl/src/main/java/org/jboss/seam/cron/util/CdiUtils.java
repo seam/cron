@@ -40,7 +40,7 @@ public class CdiUtils {
 
     /**
      * Utility method allowing managed instances of beans to provide entry points
-     * for non-managed beans (such as {@link WeldContainer}). Should only called
+     * for non-managed beans (such as WeldContainer). Should only called
      * once CDI has finished booting.
      * 
      * @param manager the BeanManager to use to access the managed instance

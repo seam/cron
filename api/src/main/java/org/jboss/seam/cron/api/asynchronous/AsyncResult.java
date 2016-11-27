@@ -25,12 +25,12 @@ import java.util.concurrent.TimeoutException;
 /**
  * <p>
  * This is a convenience implementation of #{@link Future} which can be used as the return 
- * value of an @#{@link Asynchronous} method. This is useful because it prompts Seam Cron
+ * value of an #{@link Asynchronous} method. This is useful because it prompts Seam Cron
  * to re-wrap the asynchronous method execution in a legitimate #{@link FutureTask} and return
  * that immediately to the calling method.
  * </p>
  * <p>
- * @#{@link Asynchronous} methods which do not have a return type of #{@link Future} must
+ * #{@link Asynchronous} methods which do not have a return type of #{@link Future} must
  * listen for the method's return value using CDI observers.
  * </p>
  * 
@@ -61,7 +61,6 @@ public class AsyncResult<T> implements Future<T> {
     /**
      * This "dummy" Future represents a calculation which has already been performed, and thus
      * cannot be canceled.
-     * @param bln Whether r not to attempt to cancel the task.
      * @return false every time
      */
     public boolean isCancelled() {

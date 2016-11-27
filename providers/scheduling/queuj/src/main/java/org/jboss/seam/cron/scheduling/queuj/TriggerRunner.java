@@ -36,8 +36,6 @@ public class TriggerRunner extends JavaProcessRunner {
      * Executes the firing of the trigger payload via a new #{@link TriggerSupport}
      * when told to do so by the QueuJ scheduler.
      * 
-     * @param context
-     * @throws JobExecutionException
      */
     public void execute(final TriggerSupplies triggerSupplies) {
         new TriggerSupport(triggerSupplies).fireTrigger();
