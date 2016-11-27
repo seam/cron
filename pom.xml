@@ -293,19 +293,6 @@
 
     <profiles>
         <profile>
-            <id>distribution</id>
-            <activation>
-                <property>
-                    <name>release</name>
-                </property>
-            </activation>
-            <modules>
-                <!--<module>examples/swing_memory_grapher</module>-->
-                <!--<module>docs/reference</module>-->
-                <!--<module>dist</module>-->
-            </modules>
-        </profile>
-        <profile>
             <id>swing-example</id>
             <activation>
                 <property>
