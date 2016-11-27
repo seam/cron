@@ -4,7 +4,7 @@
     <groupId>org.jboss.seam.cron</groupId>
     <artifactId>seam-cron-queue-queuj</artifactId>
     <packaging>jar</packaging>
-    <version>3.1.3</version>
+    <version>3.1.4-SNAPSHOT</version>
     <name>Seam Cron Queue Provider: QueuJ</name>
     <description>The Queuj provider of queues for Seam Cron.
     Allows properties to be set for @Asynchronous and @Scheduled methods to control their
@@ -15,7 +15,7 @@
     <parent>
         <artifactId>seam-cron-parent</artifactId>
         <groupId>org.jboss.seam.cron</groupId>
-        <version>3.1.3</version>
+        <version>3.1.4-SNAPSHOT</version>
         <relativePath>../../../</relativePath>
     </parent>
 
