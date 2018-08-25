@@ -10,12 +10,13 @@
 package org.jboss.seam.cron.scheduling.timerservice;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.ejb.Timer;
 import javax.inject.Inject;
-import org.jboss.seam.cron.api.exception.CronProviderInitialisationException;
 import org.jboss.seam.cron.util.PropertyResolver;
 import org.slf4j.Logger;
 
@@ -47,6 +48,25 @@ public class TimerScheduleProviderEjb extends TimerScheduleProviderBase {
         } else {
             log.info("Starting the default, non-HA timer service bean " + TimerScheduleProviderEjb.class.getSimpleName());
             super.initScheduledTriggers();
+        }
+    }
+    
+    @PreDestroy
+    public void shutdownUnlessHAIsPresent() {
+        log.info("stopping the default @Startup TimerScheduleProviderEjb");
+        // check our status agains the configuration and decide whether to start up the non-HA version or bail out with an error
+        final String haSingletonMode = PropertyResolver.resolve("org.jboss.seam.cron.timerservice.mode", false);
+        final boolean haMandatory = haSingletonMode != null && haSingletonMode.equalsIgnoreCase("ha");
+        log.info("HA Singleton Mode: {}", haSingletonMode);
+        log.info("HA Is Mandatory: {}", haMandatory);
+        if (haMandatory) {
+            log.info("Non-HA " + TimerScheduleProviderEjb.class.getSimpleName() + " is already disabled since HA mode is set to mandatory. Skipping initialization");
+        } else {
+            log.info("Stopping the default, non-HA timer service bean " + TimerScheduleProviderEjb.class.getSimpleName());
+            for (Timer timer : getTimerService().getTimers()) {
+                log.info("Stop Singleton EJB timer: " + timer.getInfo());
+                timer.cancel();
+            }
         }
     }
 }
