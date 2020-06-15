@@ -81,7 +81,7 @@
 
       <glassfish.el.version>2.2.1-b04</glassfish.el.version>
 
-      <hibernate.validator.version>4.1.0.Final</hibernate.validator.version>
+      <hibernate.validator.version>5.3.5.Final</hibernate.validator.version>
       <hibernate.core.version>4.0.0.Beta5</hibernate.core.version>
       <openjpa.version>2.0.0</openjpa.version>
 
